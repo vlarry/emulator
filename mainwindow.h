@@ -2,13 +2,12 @@
     #define MAINWINDOW_H
     //--------------------
     #include <QMainWindow>
-    #include <windows.h>
     #include <QDebug>
-    #include <QtSerialPort/QSerialPort>
-    #include <QtSerialPort/QSerialPortInfo>
+    #include <QSerialPort>
+    #include <QSerialPortInfo>
     #include <QMessageBox>
-    #include <QDataStream>
-    #include "ftd2xx.h"
+    #include "qswitch.h"
+    #include "qlamp.h"
     //----------
     namespace Ui
     {
@@ -25,12 +24,11 @@
 
         private:
             Ui::MainWindow* ui;
-            QLabel*         m_lblStatusBar;
-            FT_HANDLE       m_ftHandle;
+            QLabel*         m_lblMessage;
+
+        private:
+            void showMessage(const QString& message);
 
         public slots:
-            void refreshComPort();
-            void changeStateComPort(bool);
-            void send();
     };
 #endif // MAINWINDOW_H

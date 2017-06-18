@@ -25,9 +25,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-        qswitch.cpp
+        qswitch.cpp \
+    qlamp.cpp
 
 HEADERS  += mainwindow.h \
-            qswitch.h
+            qswitch.h \
+    qlamp.h
 
 FORMS    += mainwindow.ui
+
+win32::RC_FILE = \
+                 resource/icon.rc
+
+RESOURCES += \
+    resource.qrc
