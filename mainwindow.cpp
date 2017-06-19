@@ -24,7 +24,10 @@ MainWindow::MainWindow(QWidget* parent):
 
     refreshSerialPort();
 
-    ui->cbCmdList->addItem("0x45");
+    QList<QString> l = QCmdList::list();
+
+    foreach(QString cmd, l) // заполнение списка команд
+        ui->cbCmdList->addItem(cmd);
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -38,6 +41,7 @@ void MainWindow::initConnect()
     connect(ui->pbCtrlPort, SIGNAL(clicked(bool)), this, SLOT(ctrlSerialPort(bool)));
     connect(m_port, SIGNAL(readyRead()), this, SLOT(readData()));
     connect(ui->pbCmdSend, SIGNAL(clicked()), this, SLOT(writeData()));
+    connect(m_port, SIGNAL(bytesWritten(qint64)), this, SLOT(BytesWriten(qint64)));
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -114,6 +118,8 @@ void MainWindow::readData()
 //--------------------------
 void MainWindow::writeData()
 {
+    QCmd cmd(ui->cbCmdList->currentText(), ui->sbDeviceAddress->value());
+
     if(m_port->isOpen())
     {
         QString data = ui->cbCmdList->currentText();
@@ -123,4 +129,9 @@ void MainWindow::writeData()
         ui->pteConsole->appendPlainText("WRITE: 0x" + hex);
         m_port->write(hex);
     }
+}
+//---------------------------------------
+void MainWindow::BytesWriten(qint64 byte)
+{
+    qDebug() << "Send: " << byte;
 }

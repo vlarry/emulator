@@ -9,6 +9,7 @@
     #include <QSettings>
     #include "qswitch.h"
     #include "qlamp.h"
+    #include "qcmd.h"
     //----------
     namespace Ui
     {
@@ -39,5 +40,6 @@
             void ctrlSerialPort(bool state);
             void readData();
             void writeData();
+            void BytesWriten(qint64 byte);
     };
 #endif // MAINWINDOW_H
