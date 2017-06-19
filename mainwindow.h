@@ -6,6 +6,7 @@
     #include <QSerialPort>
     #include <QSerialPortInfo>
     #include <QMessageBox>
+    #include <QSettings>
     #include "qswitch.h"
     #include "qlamp.h"
     //----------
@@ -24,11 +25,19 @@
 
         private:
             Ui::MainWindow* ui;
+            QSerialPort*    m_port;
             QLabel*         m_lblMessage;
+            QSettings*      m_settings;
 
         private:
+            void initConnect();
+            void initSerialPort();
             void showMessage(const QString& message);
 
         public slots:
+            void refreshSerialPort();
+            void ctrlSerialPort(bool state);
+            void readData();
+            void writeData();
     };
 #endif // MAINWINDOW_H

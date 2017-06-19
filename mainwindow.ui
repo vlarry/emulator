@@ -1073,7 +1073,11 @@
      </widget>
     </item>
     <item>
-     <widget class="QPlainTextEdit" name="pteConsole"/>
+     <widget class="QPlainTextEdit" name="pteConsole">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
