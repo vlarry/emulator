@@ -50,9 +50,13 @@
             QVector<QByteArray> m_data;
             QString             m_code;
             quint8              m_address;
+            quint8              m_bytes;
 
         public:
             QCmd(QString code, quint8 address);
-            quint8 checksum(QVector<QByteArray> data, size_t size);
+
+            quint8           checksum(QVector<QByteArray> data, size_t size);
+            const QByteArray next();
+            size_t           bytes() const;
     };
 #endif // QCMD_H

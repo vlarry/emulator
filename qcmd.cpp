@@ -26,7 +26,8 @@ cmd_t QCmdList::cmd(const QString& key)
 //---------------------------------------
 QCmd::QCmd(QString code, quint8 address):
     m_code(code),
-    m_address(address)
+    m_address(address),
+    m_bytes(0)
 {
     quint8 cmd = (quint8)m_code.toInt();
     quint8 addr = m_address << 6;
@@ -60,4 +61,22 @@ quint8 QCmd::checksum(QVector<QByteArray> data, size_t size)
     chsum ^= 0xFF;
 
     return chsum;
+}
+//---------------------------
+const QByteArray QCmd::next()
+{
+    QByteArray ba;
+
+    if(m_bytes != m_data.count())
+        ba = m_data.at(m_bytes++);
+
+    return ba;
+}
+//------------------------
+size_t QCmd::bytes() const
+{
+    if(m_data.count() > 0 && m_data.count() != m_bytes - 1)
+        return m_bytes;
+
+    return -1;
 }

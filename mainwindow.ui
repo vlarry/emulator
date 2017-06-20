@@ -143,6 +143,9 @@
     </item>
     <item>
      <widget class="QGroupBox" name="groupDevices">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="title">
        <string>Devices</string>
       </property>
@@ -733,7 +736,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupDevice_2">
+          <widget class="QGroupBox" name="groupDevice_02">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>

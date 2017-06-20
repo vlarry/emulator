@@ -5,7 +5,8 @@ MainWindow::MainWindow(QWidget* parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m_port(Q_NULLPTR),
-    m_lblMessage(Q_NULLPTR)
+    m_lblMessage(Q_NULLPTR),
+    m_cmd(Q_NULLPTR)
 {
     ui->setupUi(this);
 
@@ -22,11 +23,14 @@ MainWindow::MainWindow(QWidget* parent):
     initSerialPort();
     initConnect();
 
+    ui->groupDevices->setDisabled(true);
+    ui->groupDevice_01->setDisabled(true);
+    ui->groupDevice_02->setDisabled(true);
+    ui->pbCmdSend->setDisabled(true);
+
     refreshSerialPort();
 
-    QList<QString> l = QCmdList::list();
-
-    foreach(QString cmd, l) // заполнение списка команд
+    foreach(QString cmd, QCmdList::list()) // заполнение списка команд
         ui->cbCmdList->addItem(cmd);
 }
 //-----------------------
@@ -94,6 +98,11 @@ void MainWindow::ctrlSerialPort(bool state)
         }
 
         ui->pbCtrlPort->setText(tr("Close"));
+        ui->groupDevices->setEnabled(true);
+        ui->groupDevice_01->setEnabled(true);
+        ui->groupDevice_02->setEnabled(true);
+        ui->pbCmdSend->setEnabled(true);
+
         showMessage(ui->cbPortNames->currentText() + " " + tr("is open"));
 
         m_port->setBaudRate(ui->cbBaudrate->currentText().toInt());
@@ -105,6 +114,11 @@ void MainWindow::ctrlSerialPort(bool state)
     {
         m_port->close();
         ui->pbCtrlPort->setText(tr("Open"));
+        ui->groupDevices->setDisabled(true);
+        ui->groupDevice_01->setDisabled(true);
+        ui->groupDevice_02->setDisabled(true);
+        ui->pbCmdSend->setDisabled(true);
+
         showMessage(ui->cbPortNames->currentText() + " " + tr("is close"));
     }
 }
@@ -118,20 +132,30 @@ void MainWindow::readData()
 //--------------------------
 void MainWindow::writeData()
 {
-    QCmd cmd(ui->cbCmdList->currentText().remove(QRegExp("0x")), (quint8)ui->sbDeviceAddress->value());
+    if(m_cmd == Q_NULLPTR)
+        m_cmd = new QCmd(ui->cbCmdList->currentText().remove(QRegExp("0x")), (quint8)ui->sbDeviceAddress->value());
 
-//    if(m_port->isOpen())
-//    {
-//        QString data = ui->cbCmdList->currentText();
-//        data = data.remove(QRegExp("0x"));
-//        int num = data.toInt(Q_NULLPTR, 16);
-//        QByteArray hex = QString::number(num, 16).toStdString().c_str();
-//        ui->pteConsole->appendPlainText("WRITE: 0x" + hex);
-//        m_port->write(hex);
-//    }
+    if(m_cmd->bytes() == 0)
+    {
+        m_port->setParity(QSerialPort::MarkParity); // install 9 bit - this is cmd
+    }
+
+    QByteArray byte = m_cmd->next();
+
+    if(!byte.isEmpty())
+    {
+        m_port->write(byte);
+        ui->pteConsole->appendPlainText("WRITE: 0x" + byte);
+    }
 }
 //---------------------------------------
 void MainWindow::BytesWriten(qint64 byte)
 {
-    qDebug() << "Send: " << byte;
+    Q_UNUSED(byte);
+
+    if(m_port->parity() == QSerialPort::MarkParity)
+        m_port->setParity(QSerialPort::SpaceParity); // reset 9bit - this is data
+
+    if(m_cmd->bytes() != -1)
+        this->writeData();
 }
