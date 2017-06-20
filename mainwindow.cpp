@@ -118,17 +118,17 @@ void MainWindow::readData()
 //--------------------------
 void MainWindow::writeData()
 {
-    QCmd cmd(ui->cbCmdList->currentText(), ui->sbDeviceAddress->value());
+    QCmd cmd(ui->cbCmdList->currentText().remove(QRegExp("0x")), (quint8)ui->sbDeviceAddress->value());
 
-    if(m_port->isOpen())
-    {
-        QString data = ui->cbCmdList->currentText();
-        data = data.remove(QRegExp("0x"));
-        int num = data.toInt(Q_NULLPTR, 16);
-        QByteArray hex = QString::number(num, 16).toStdString().c_str();
-        ui->pteConsole->appendPlainText("WRITE: 0x" + hex);
-        m_port->write(hex);
-    }
+//    if(m_port->isOpen())
+//    {
+//        QString data = ui->cbCmdList->currentText();
+//        data = data.remove(QRegExp("0x"));
+//        int num = data.toInt(Q_NULLPTR, 16);
+//        QByteArray hex = QString::number(num, 16).toStdString().c_str();
+//        ui->pteConsole->appendPlainText("WRITE: 0x" + hex);
+//        m_port->write(hex);
+//    }
 }
 //---------------------------------------
 void MainWindow::BytesWriten(qint64 byte)

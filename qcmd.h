@@ -49,9 +49,10 @@
         private:
             QVector<QByteArray> m_data;
             QString             m_code;
-            int                 m_address;
+            quint8              m_address;
 
         public:
-            QCmd(QString code, int address);
+            QCmd(QString code, quint8 address);
+            quint8 checksum(QVector<QByteArray> data, size_t size);
     };
 #endif // QCMD_H

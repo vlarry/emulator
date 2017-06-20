@@ -23,17 +23,41 @@ cmd_t QCmdList::cmd(const QString& key)
 {
     return m_list.value(key);
 }
-//------------------------------------
-QCmd::QCmd(QString code, int address):
+//---------------------------------------
+QCmd::QCmd(QString code, quint8 address):
     m_code(code),
     m_address(address)
 {
-    code.remove(QRegExp("0x"));
-    int num = code.toInt(Q_NULLPTR, 16);
-    QByteArray hex = QString::number(num, 16).toStdString().c_str();
-    uint8_t cmd = (uint8_t)hex.at(0);
+    quint8 cmd = (quint8)m_code.toInt();
+    quint8 addr = m_address << 6;
 
-    cmd |= address << 6;
+    cmd |= addr;
 
-    qDebug() << cmd;
+    QString hex;
+    hex.setNum(cmd, 16);
+
+    m_data.append(hex.toUpper().toLocal8Bit().data());
+
+    quint8 chsum = checksum(m_data, m_data.size());
+
+    hex.setNum(chsum, 16);
+
+    m_data.append(hex.toUpper().toLocal8Bit().data());
+
+    qDebug() << "Checksum: " << hex.toUpper();
+}
+//----------------------------------------------------------
+quint8 QCmd::checksum(QVector<QByteArray> data, size_t size)
+{
+    quint8 chsum = 0;
+
+    for(quint8 i = 0; i < size; ++i)
+    {
+        chsum += (quint8)data.at(i).toInt(Q_NULLPTR, 16);
+    }
+
+    chsum += size;
+    chsum ^= 0xFF;
+
+    return chsum;
 }

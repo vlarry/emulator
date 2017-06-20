@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>798</width>
+    <width>830</width>
     <height>680</height>
    </rect>
   </property>
@@ -204,6 +204,9 @@
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
+             <property name="maximum">
+              <number>3</number>
+             </property>
             </widget>
            </item>
            <item row="1" column="2">
@@ -327,6 +330,12 @@
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_off.png</normaloff>:/images/resource/images/switch_off.png</iconset>
                 </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
+                </property>
                </widget>
               </item>
               <item>
@@ -343,6 +352,12 @@
                 <property name="icon">
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_off.png</normaloff>:/images/resource/images/switch_off.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -361,6 +376,12 @@
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_off.png</normaloff>:/images/resource/images/switch_off.png</iconset>
                 </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
+                </property>
                </widget>
               </item>
               <item>
@@ -377,6 +398,12 @@
                 <property name="icon">
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_off.png</normaloff>:/images/resource/images/switch_off.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -395,6 +422,12 @@
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_off.png</normaloff>:/images/resource/images/switch_off.png</iconset>
                 </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
+                </property>
                </widget>
               </item>
               <item>
@@ -411,6 +444,12 @@
                 <property name="icon">
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_off.png</normaloff>:/images/resource/images/switch_off.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -429,6 +468,12 @@
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_off.png</normaloff>:/images/resource/images/switch_off.png</iconset>
                 </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
+                </property>
                </widget>
               </item>
               <item>
@@ -445,6 +490,12 @@
                 <property name="icon">
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_off.png</normaloff>:/images/resource/images/switch_off.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -463,6 +514,12 @@
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_off.png</normaloff>:/images/resource/images/switch_off.png</iconset>
                 </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
+                </property>
                </widget>
               </item>
               <item>
@@ -479,6 +536,12 @@
                 <property name="icon">
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_off.png</normaloff>:/images/resource/images/switch_off.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -741,6 +804,12 @@
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_on.png</normaloff>:/images/resource/images/switch_on.png</iconset>
                 </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
+                </property>
                </widget>
               </item>
               <item>
@@ -757,6 +826,12 @@
                 <property name="icon">
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_on.png</normaloff>:/images/resource/images/switch_on.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -775,6 +850,12 @@
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_on.png</normaloff>:/images/resource/images/switch_on.png</iconset>
                 </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
+                </property>
                </widget>
               </item>
               <item>
@@ -791,6 +872,12 @@
                 <property name="icon">
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_on.png</normaloff>:/images/resource/images/switch_on.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -809,6 +896,12 @@
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_on.png</normaloff>:/images/resource/images/switch_on.png</iconset>
                 </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
+                </property>
                </widget>
               </item>
               <item>
@@ -825,6 +918,12 @@
                 <property name="icon">
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_on.png</normaloff>:/images/resource/images/switch_on.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -843,6 +942,12 @@
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_on.png</normaloff>:/images/resource/images/switch_on.png</iconset>
                 </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
+                </property>
                </widget>
               </item>
               <item>
@@ -859,6 +964,12 @@
                 <property name="icon">
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_on.png</normaloff>:/images/resource/images/switch_on.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -877,6 +988,12 @@
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_on.png</normaloff>:/images/resource/images/switch_on.png</iconset>
                 </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
+                </property>
                </widget>
               </item>
               <item>
@@ -893,6 +1010,12 @@
                 <property name="icon">
                  <iconset resource="resource.qrc">
                   <normaloff>:/images/resource/images/switch_on.png</normaloff>:/images/resource/images/switch_on.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -1199,7 +1322,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>798</width>
+     <width>830</width>
      <height>21</height>
     </rect>
    </property>
