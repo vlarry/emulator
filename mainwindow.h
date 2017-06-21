@@ -24,10 +24,12 @@
             ~MainWindow();
 
         private:
-            Ui::MainWindow* ui;
-            QSerialPort*    m_port;
-            QLabel*         m_lblMessage;
-            QSettings*      m_settings;
+            Ui::MainWindow*     ui;
+            QSerialPort*        m_port;
+            QLabel*             m_lblMessage;
+            QSettings*          m_settings;
+            QVector<QByteArray> m_query;
+            quint8              m_count;
 
         private:
             void initConnect();

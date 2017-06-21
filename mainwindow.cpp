@@ -5,7 +5,8 @@ MainWindow::MainWindow(QWidget* parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m_port(Q_NULLPTR),
-    m_lblMessage(Q_NULLPTR)
+    m_lblMessage(Q_NULLPTR),
+    m_count(0)
 {
     ui->setupUi(this);
 
@@ -28,6 +29,8 @@ MainWindow::MainWindow(QWidget* parent):
     ui->pbCmdSend->setDisabled(true);
 
     refreshSerialPort();
+
+    ui->cbCmdList->addItems(QStringList() << tr("0x00") << tr("0x01") << tr("0x02"));
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -105,6 +108,7 @@ void MainWindow::ctrlSerialPort(bool state)
         m_port->setFlowControl(QSerialPort::NoFlowControl);
         m_port->setDataBits(QSerialPort::Data8);
         m_port->setStopBits(QSerialPort::OneStop);
+        m_port->setParity(QSerialPort::NoParity);
     }
     else
     {
@@ -128,7 +132,32 @@ void MainWindow::readData()
 //--------------------------
 void MainWindow::writeData()
 {
+    if(m_query.isEmpty())
+    {
+        QString str = ui->cbCmdList->currentText().remove(QRegExp("0x"));
+        quint8 cmd = (quint8)str.toInt(Q_NULLPTR, 16);
+        quint8 addr = (quint8)ui->sbDeviceAddress->value() << 6;
 
+        cmd |= addr;
+
+        m_port->setParity(QSerialPort::MarkParity); // enable 9 bit
+//        m_port->setParity(QSerialPort::SpaceParity); // reset 9 bit
+
+        quint8 chsum = (cmd + 1)^0xFF;
+
+        QString s_cmd, s_chsum;
+
+        s_cmd.setNum(cmd, 16);
+        s_chsum.setNum(chsum, 16);
+
+        m_query.append(QByteArray::fromHex(s_cmd.toLocal8Bit().data()));
+        m_query.append(QByteArray::fromHex(s_chsum.toLocal8Bit().data()));
+
+        qDebug() << "cmd: " << m_query.at(0) << ", chsum: " << m_query.at(1);
+    }
+
+    m_port->write(m_query.at(m_count));
+    ui->pteConsole->appendPlainText(tr("WRITE: ") + m_query.at(m_count).toHex());
 }
 //---------------------------------------
 void MainWindow::BytesWriten(qint64 byte)
@@ -137,4 +166,14 @@ void MainWindow::BytesWriten(qint64 byte)
 
     if(m_port->parity() == QSerialPort::MarkParity)
         m_port->setParity(QSerialPort::SpaceParity); // reset 9bit - this is data
+
+    m_count++;
+
+    if(m_count == m_query.count())
+    {
+        m_query.clear();
+        m_count = 0;
+    }
+    else
+        writeData();
 }
