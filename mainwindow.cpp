@@ -5,8 +5,7 @@ MainWindow::MainWindow(QWidget* parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m_port(Q_NULLPTR),
-    m_lblMessage(Q_NULLPTR),
-    m_cmd(Q_NULLPTR)
+    m_lblMessage(Q_NULLPTR)
 {
     ui->setupUi(this);
 
@@ -29,9 +28,6 @@ MainWindow::MainWindow(QWidget* parent):
     ui->pbCmdSend->setDisabled(true);
 
     refreshSerialPort();
-
-    foreach(QString cmd, QCmdList::list()) // заполнение списка команд
-        ui->cbCmdList->addItem(cmd);
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -132,21 +128,7 @@ void MainWindow::readData()
 //--------------------------
 void MainWindow::writeData()
 {
-    if(m_cmd == Q_NULLPTR)
-        m_cmd = new QCmd(ui->cbCmdList->currentText().remove(QRegExp("0x")), (quint8)ui->sbDeviceAddress->value());
 
-    if(m_cmd->bytes() == 0)
-    {
-        m_port->setParity(QSerialPort::MarkParity); // install 9 bit - this is cmd
-    }
-
-    QByteArray byte = m_cmd->next();
-
-    if(!byte.isEmpty())
-    {
-        m_port->write(byte);
-        ui->pteConsole->appendPlainText("WRITE: 0x" + byte);
-    }
 }
 //---------------------------------------
 void MainWindow::BytesWriten(qint64 byte)
@@ -155,7 +137,4 @@ void MainWindow::BytesWriten(qint64 byte)
 
     if(m_port->parity() == QSerialPort::MarkParity)
         m_port->setParity(QSerialPort::SpaceParity); // reset 9bit - this is data
-
-    if(m_cmd->bytes() != -1)
-        this->writeData();
 }

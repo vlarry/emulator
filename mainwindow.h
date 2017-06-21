@@ -9,7 +9,6 @@
     #include <QSettings>
     #include "qswitch.h"
     #include "qlamp.h"
-    #include "qcmd.h"
     //----------
     namespace Ui
     {
@@ -29,7 +28,6 @@
             QSerialPort*    m_port;
             QLabel*         m_lblMessage;
             QSettings*      m_settings;
-            QCmd*           m_cmd;
 
         private:
             void initConnect();
