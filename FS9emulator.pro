@@ -25,14 +25,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-        qswitch.cpp \
-    qlamp.cpp \
-    qcmd.cpp
+    qcmd.cpp \
+    ciodevice.cpp
 
 HEADERS  += mainwindow.h \
-            qswitch.h \
-    qlamp.h \
-    qcmd.h
+    qcmd.h \
+    ciodevice.h
 
 FORMS    += mainwindow.ui
 

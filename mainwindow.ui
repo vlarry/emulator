@@ -329,7 +329,7 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_5">
               <item>
-               <widget class="QSwitch" name="IN1_1">
+               <widget class="CIODevice" name="IN1_1">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -352,7 +352,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN1_2">
+               <widget class="CIODevice" name="IN1_2">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -375,7 +375,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN1_3">
+               <widget class="CIODevice" name="IN1_3">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -398,7 +398,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN1_4">
+               <widget class="CIODevice" name="IN1_4">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -421,7 +421,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN1_5">
+               <widget class="CIODevice" name="IN1_5">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -444,7 +444,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN1_6">
+               <widget class="CIODevice" name="IN1_6">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -467,7 +467,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN1_7">
+               <widget class="CIODevice" name="IN1_7">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -490,7 +490,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN1_8">
+               <widget class="CIODevice" name="IN1_8">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -513,7 +513,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN1_9">
+               <widget class="CIODevice" name="IN1_9">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -536,7 +536,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN1_10">
+               <widget class="CIODevice" name="IN1_10">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -559,7 +559,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN1_11">
+               <widget class="CIODevice" name="IN1_11">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -582,7 +582,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN1_12">
+               <widget class="CIODevice" name="IN1_12">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -662,7 +662,7 @@
                </spacer>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT1_1">
+               <widget class="CIODevice" name="OUT1_1">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -685,7 +685,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT1_2">
+               <widget class="CIODevice" name="OUT1_2">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -708,7 +708,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT1_3">
+               <widget class="CIODevice" name="OUT1_3">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -731,7 +731,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT1_4">
+               <widget class="CIODevice" name="OUT1_4">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -754,7 +754,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT1_5">
+               <widget class="CIODevice" name="OUT1_5">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -777,7 +777,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT1_6">
+               <widget class="CIODevice" name="OUT1_6">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -800,7 +800,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT1_7">
+               <widget class="CIODevice" name="OUT1_7">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -823,7 +823,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT1_8">
+               <widget class="CIODevice" name="OUT1_8">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -921,7 +921,7 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_7">
               <item>
-               <widget class="QSwitch" name="IN2_1">
+               <widget class="CIODevice" name="IN2_1">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -944,7 +944,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN2_2">
+               <widget class="CIODevice" name="IN2_2">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -967,7 +967,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN2_3">
+               <widget class="CIODevice" name="IN2_3">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -990,7 +990,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN2_4">
+               <widget class="CIODevice" name="IN2_4">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1013,7 +1013,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN2_5">
+               <widget class="CIODevice" name="IN2_5">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1036,7 +1036,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN2_6">
+               <widget class="CIODevice" name="IN2_6">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1059,7 +1059,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN2_7">
+               <widget class="CIODevice" name="IN2_7">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1082,7 +1082,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN2_8">
+               <widget class="CIODevice" name="IN2_8">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1105,7 +1105,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN2_9">
+               <widget class="CIODevice" name="IN2_9">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1128,7 +1128,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN2_10">
+               <widget class="CIODevice" name="IN2_10">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1151,7 +1151,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN2_11">
+               <widget class="CIODevice" name="IN2_11">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1174,7 +1174,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="IN2_12">
+               <widget class="CIODevice" name="IN2_12">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1254,7 +1254,7 @@
                </spacer>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT2_1">
+               <widget class="CIODevice" name="OUT2_1">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1277,7 +1277,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT2_2">
+               <widget class="CIODevice" name="OUT2_2">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1300,7 +1300,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT2_3">
+               <widget class="CIODevice" name="OUT2_3">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1323,7 +1323,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT2_4">
+               <widget class="CIODevice" name="OUT2_4">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1346,7 +1346,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT2_5">
+               <widget class="CIODevice" name="OUT2_5">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1369,7 +1369,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT2_6">
+               <widget class="CIODevice" name="OUT2_6">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1392,7 +1392,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT2_7">
+               <widget class="CIODevice" name="OUT2_7">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1415,7 +1415,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSwitch" name="OUT2_8">
+               <widget class="CIODevice" name="OUT2_8">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -1505,14 +1505,14 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QSwitch</class>
-   <extends>QToolButton</extends>
-   <header>qswitch.h</header>
-  </customwidget>
-  <customwidget>
    <class>QCmd</class>
    <extends>QComboBox</extends>
    <header>qcmd.h</header>
+  </customwidget>
+  <customwidget>
+   <class>CIODevice</class>
+   <extends>QToolButton</extends>
+   <header>ciodevice.h</header>
   </customwidget>
  </customwidgets>
  <resources>

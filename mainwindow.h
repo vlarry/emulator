@@ -8,8 +8,7 @@
     #include <QMessageBox>
     #include <QSettings>
     #include "qcmd.h"
-    #include "qswitch.h"
-    #include "qlamp.h"
+    #include "ciodevice.h"
     //----------
     namespace Ui
     {
