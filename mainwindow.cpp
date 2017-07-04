@@ -30,7 +30,9 @@ MainWindow::MainWindow(QWidget* parent):
 
     refreshSerialPort();
 
-    ui->cbCmdList->addItems(QStringList() << tr("0x00") << tr("0x01") << tr("0x02"));
+    emit ui->cbCmdList->changeDescription(ui->cbCmdList->itemData(0).toString());
+
+//    ui->cbCmdList->addItems(QStringList() << tr("0x00") << tr("0x01") << tr("0x02"));
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -45,6 +47,7 @@ void MainWindow::initConnect()
     connect(m_port, SIGNAL(readyRead()), this, SLOT(readData()));
     connect(ui->pbCmdSend, SIGNAL(clicked()), this, SLOT(writeData()));
     connect(m_port, SIGNAL(bytesWritten(qint64)), this, SLOT(BytesWriten(qint64)));
+    connect(ui->cbCmdList, SIGNAL(changeDescription(QString)), this, SLOT(cmdDescription(QString)));
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -176,4 +179,19 @@ void MainWindow::BytesWriten(qint64 byte)
     }
     else
         writeData();
+}
+//---------------------------------------------------------
+void MainWindow::cmdDescription(const QString& description)
+{
+    QString desc = description;
+    QPalette p(ui->lblCmdDescription->palette());
+
+    if(desc.toUpper() == tr("RESERVE"))
+        p.setColor(QPalette::WindowText, QColor(Qt::red));
+    else
+        p.setColor(QPalette::WindowText, QColor(Qt::blue));
+
+    ui->lblCmdDescription->setPalette(p);
+
+    ui->lblCmdDescription->setText(desc);
 }

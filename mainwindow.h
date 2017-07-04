@@ -7,6 +7,7 @@
     #include <QSerialPortInfo>
     #include <QMessageBox>
     #include <QSettings>
+    #include "qcmd.h"
     #include "qswitch.h"
     #include "qlamp.h"
     //----------
@@ -42,5 +43,6 @@
             void readData();
             void writeData();
             void BytesWriten(qint64 byte);
+            void cmdDescription(const QString& description);
     };
 #endif // MAINWINDOW_H
