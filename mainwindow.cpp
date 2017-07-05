@@ -130,7 +130,7 @@ void MainWindow::readData()
 {
     QByteArray ba = m_port->readAll();
 
-    ui->pteConsole->appendPlainText(tr("READ: 0x") + ba);
+    ui->pteConsole->appendPlainText(tr("READ: 0x") + ba.toHex().toUpper());
 }
 //--------------------------
 void MainWindow::writeData()
@@ -144,7 +144,6 @@ void MainWindow::writeData()
         cmd |= addr;
 
         m_port->setParity(QSerialPort::MarkParity); // enable 9 bit
-//        m_port->setParity(QSerialPort::SpaceParity); // reset 9 bit
 
         quint8 chsum = (cmd + 1)^0xFF;
 
@@ -155,12 +154,10 @@ void MainWindow::writeData()
 
         m_query.append(QByteArray::fromHex(s_cmd.toLocal8Bit().data()));
         m_query.append(QByteArray::fromHex(s_chsum.toLocal8Bit().data()));
-
-        qDebug() << "cmd: " << m_query.at(0) << ", chsum: " << m_query.at(1);
     }
 
     m_port->write(m_query.at(m_count));
-    ui->pteConsole->appendPlainText(tr("WRITE: ") + m_query.at(m_count).toHex());
+    ui->pteConsole->appendPlainText(tr("WRITE: ") + m_query.at(m_count).toHex().toUpper());
 }
 //---------------------------------------
 void MainWindow::BytesWriten(qint64 byte)
@@ -174,6 +171,8 @@ void MainWindow::BytesWriten(qint64 byte)
 
     if(m_count == m_query.count())
     {
+        ui->pteConsole->appendPlainText(tr("WRITE CMD: ") + ui->cbCmdList->currentData().toString());
+
         m_query.clear();
         m_count = 0;
     }
