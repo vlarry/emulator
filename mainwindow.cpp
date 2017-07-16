@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget* parent):
 
     refreshSerialPort();
 
-    emit ui->cbCmdList->changeDescription(ui->cbCmdList->itemData(0).toString());
+    ui->cbCmdList->slotActivated(0);
 
 //    ui->cbCmdList->addItems(QStringList() << tr("0x00") << tr("0x01") << tr("0x02"));
 }
