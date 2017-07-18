@@ -32,10 +32,16 @@
             QVector<QByteArray> m_responce; // массив байт ответа устройства
             quint8              m_query_count; // количество отправленных байт
             QString             m_cmd_last; // последняя отправленная команда
+            QVector<CIODevice*> input_dev_01;
+            QVector<CIODevice*> output_dev_01;
+            QVector<CIODevice*> input_dev_02;
+            QVector<CIODevice*> output_dev_02;
 
         private:
             void initConnect();
             void initSerialPort();
+            void initIO();
+            void setIO(const QVector<CIODevice*>& io_dev, bool type);
             void showMessage(const QString& message);
 
         public slots:
@@ -45,5 +51,6 @@
             void writeData();
             void BytesWriten(qint64 byte);
             void cmdDescription(const QString& description);
+            void addrChanged(int addr);
     };
 #endif // MAINWINDOW_H
