@@ -80,6 +80,11 @@ QString QCmd::description(int index) const
 {
     return m_cmd.value(this->itemText(index)).first;
 }
+//-----------------------------------------
+quint8 QCmd::size(const QString& cmd) const
+{
+    return m_cmd.value(cmd).second;
+}
 //---------------------------------
 void QCmd::slotActivated(int index)
 {

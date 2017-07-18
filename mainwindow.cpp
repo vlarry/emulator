@@ -6,7 +6,8 @@ MainWindow::MainWindow(QWidget* parent):
     ui(new Ui::MainWindow),
     m_port(Q_NULLPTR),
     m_lblMessage(Q_NULLPTR),
-    m_count(0)
+    m_query_count(0),
+    m_cmd_last("")
 {
     ui->setupUi(this);
 
@@ -130,14 +131,29 @@ void MainWindow::readData()
 {
     QByteArray ba = m_port->readAll();
 
-    ui->pteConsole->appendPlainText(tr("READ: 0x") + ba.toHex().toUpper());
+    m_responce.append(ba);
+
+    if(m_responce.size() == ui->cbCmdList->size(m_cmd_last))
+    {
+        QByteArray byte;
+
+        foreach(QByteArray b, m_responce)
+        {
+            byte += b;
+        }
+
+        ui->pteConsole->appendPlainText(tr("READ: 0x") + byte.toHex().toUpper());
+
+        m_responce.clear();
+    }
 }
 //--------------------------
 void MainWindow::writeData()
 {
     if(m_query.isEmpty())
     {
-        QString str = ui->cbCmdList->currentText().remove(QRegExp("0x"));
+        m_cmd_last  = ui->cbCmdList->currentText();
+        QString str = m_cmd_last.remove(QRegExp("0x"));
         quint8 cmd = (quint8)str.toInt(Q_NULLPTR, 16);
         quint8 addr = (quint8)ui->sbDeviceAddress->value() << 6;
 
@@ -156,8 +172,8 @@ void MainWindow::writeData()
         m_query.append(QByteArray::fromHex(s_chsum.toLocal8Bit().data()));
     }
 
-    m_port->write(m_query.at(m_count));
-    ui->pteConsole->appendPlainText(tr("WRITE: ") + m_query.at(m_count).toHex().toUpper());
+    m_port->write(m_query.at(m_query_count));
+    ui->pteConsole->appendPlainText(tr("WRITE: ") + m_query.at(m_query_count).toHex().toUpper());
 }
 //---------------------------------------
 void MainWindow::BytesWriten(qint64 byte)
@@ -167,14 +183,14 @@ void MainWindow::BytesWriten(qint64 byte)
     if(m_port->parity() == QSerialPort::MarkParity)
         m_port->setParity(QSerialPort::SpaceParity); // reset 9bit - this is data
 
-    m_count++;
+    m_query_count++;
 
-    if(m_count == m_query.count())
+    if(m_query_count == m_query.count())
     {
         ui->pteConsole->appendPlainText(tr("WRITE CMD: ") + ui->cbCmdList->description(ui->cbCmdList->currentIndex()));
 
         m_query.clear();
-        m_count = 0;
+        m_query_count = 0;
     }
     else
         writeData();

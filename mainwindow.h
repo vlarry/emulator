@@ -25,11 +25,13 @@
 
         private:
             Ui::MainWindow*     ui;
-            QSerialPort*        m_port;
-            QLabel*             m_lblMessage;
-            QSettings*          m_settings;
-            QVector<QByteArray> m_query;
-            quint8              m_count;
+            QSerialPort*        m_port; // COM-порт
+            QLabel*             m_lblMessage; // вывод сообщений в статус бар
+            QSettings*          m_settings; // настройки
+            QVector<QByteArray> m_query; // массив байт запроса
+            QVector<QByteArray> m_responce; // массив байт ответа устройства
+            quint8              m_query_count; // количество отправленных байт
+            QString             m_cmd_last; // последняя отправленная команда
 
         private:
             void initConnect();

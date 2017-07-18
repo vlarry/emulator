@@ -16,6 +16,7 @@
             QCmd(QWidget* parent = Q_NULLPTR);
 
             QString description(int index) const;
+            quint8  size(const QString& cmd) const; // количество байт в ответе
 
         public slots:
             void slotActivated(int index);
