@@ -9,7 +9,7 @@
     {
         Q_OBJECT
 
-        typedef QPair<QString, int>    param_t;
+        typedef QPair<QString, quint8> param_t;
         typedef QMap<QString, param_t> cmd_t;
 
         public:

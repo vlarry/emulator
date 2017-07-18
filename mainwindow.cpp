@@ -199,7 +199,19 @@ void MainWindow::readData()
 
     m_responce.append(ba);
 
-    if(m_responce.size() == ui->cbCmdList->size(m_cmd_last))
+    qDebug() << "responce size: " << m_responce.size();
+    qDebug() << "cmd size: " << ui->cbCmdList->size(m_cmd_last);
+
+    quint8 responce_size = 0, cmd_size;
+
+    for(QByteArray byte: m_responce)
+    {
+        responce_size += byte.size();
+    }
+
+    cmd_size = ui->cbCmdList->size(m_cmd_last);
+
+    if(responce_size == cmd_size)
     {
         QByteArray byte;
 
@@ -219,8 +231,8 @@ void MainWindow::writeData()
     if(m_query.isEmpty())
     {
         m_cmd_last  = ui->cbCmdList->currentText();
-        QString str = m_cmd_last.remove(QRegExp("0x"));
-        quint8 cmd = (quint8)str.toInt(Q_NULLPTR, 16);
+        QString str = m_cmd_last;
+        quint8 cmd = (quint8)str.remove(QRegExp("0x")).toInt(Q_NULLPTR, 16);
         quint8 addr = (quint8)ui->sbDeviceAddress->value() << 6;
 
         cmd |= addr;
