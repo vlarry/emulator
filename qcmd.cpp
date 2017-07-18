@@ -75,6 +75,11 @@ QCmd::QCmd(QWidget* parent):
 
     connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
 }
+//----------------------------------------
+QString QCmd::description(int index) const
+{
+    return m_cmd.value(this->itemText(index)).first;
+}
 //---------------------------------
 void QCmd::slotActivated(int index)
 {

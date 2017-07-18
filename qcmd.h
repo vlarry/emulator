@@ -15,6 +15,8 @@
         public:
             QCmd(QWidget* parent = Q_NULLPTR);
 
+            QString description(int index) const;
+
         public slots:
             void slotActivated(int index);
 

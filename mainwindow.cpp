@@ -171,7 +171,7 @@ void MainWindow::BytesWriten(qint64 byte)
 
     if(m_count == m_query.count())
     {
-        ui->pteConsole->appendPlainText(tr("WRITE CMD: ") + ui->cbCmdList->currentData().toString());
+        ui->pteConsole->appendPlainText(tr("WRITE CMD: ") + ui->cbCmdList->description(ui->cbCmdList->currentIndex()));
 
         m_query.clear();
         m_count = 0;
