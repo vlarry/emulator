@@ -136,7 +136,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
         case 0x00:
             for(quint8 i = 0; i < size; ++i)
             {
-                quint8 byte = data.at(i);
+                quint8 byte = data.toHex().at(i);
 
                 for(quint8 j = 0; j < 8; j += 2)
                 {
@@ -219,11 +219,10 @@ void MainWindow::ctrlSerialPort(bool state)
         QByteArray ba;
         QString s;
 
-        s.setNum(11162880, 16);
-
+        s.setNum(228, 16);
         ba.append(s).toHex();
 
-        cmdParser(ba, 3);
+        cmdParser(ba, 1);
     }
     else
     {
