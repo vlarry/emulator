@@ -98,7 +98,7 @@ void MainWindow::setIO(const QVector<CIODevice*>& io_dev, bool type)
         else
             io->set_type(false);
 
-        io->set_state(false);
+        io->set_state(CIODevice::STATE_OFF);
     }
 }
 //--------------------------------------------------
@@ -130,6 +130,43 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 {
     if(data.isEmpty())
         return;
+
+    switch(m_cmd_last.toInt())
+    {
+        case 0x00:
+            for(quint8 i = 0; i < size; ++i)
+            {
+                quint8 byte = data.at(i);
+
+                for(quint8 j = 0; j < 8; j += 2)
+                {
+                    quint8 channels = byte >> j;
+                    quint8 ch_state = channels & 0x03;
+                    quint8 ch_num   = j/2 + (i*4);
+
+                    qDebug() << "channel: " << ch_num << ", state: " << ch_state;
+
+                    CIODevice* io = m_input_dev.at(ch_num);
+
+                    switch(ch_state)
+                    {
+                        case 0x00: // сигнал отсутствует на входе
+                            io->set_state(CIODevice::STATE_OFF);
+                        break;
+
+                        case 0x01: // сигнал присутствует на схода
+                            io->set_state(CIODevice::STATE_ON);
+                        break;
+
+                        case 0x02: // ошибка
+                        case 0x03: // канала
+                            io->set_state(CIODevice::STATE_ERR);
+                        break;
+                    }
+                }
+            }
+        break;
+    }
 }
 //----------------------------------
 void MainWindow::refreshSerialPort()
@@ -178,6 +215,15 @@ void MainWindow::ctrlSerialPort(bool state)
         m_port->setDataBits(QSerialPort::Data8);
         m_port->setStopBits(QSerialPort::OneStop);
         m_port->setParity(QSerialPort::NoParity);
+
+        QByteArray ba;
+        QString s;
+
+        s.setNum(11162880, 16);
+
+        ba.append(s).toHex();
+
+        cmdParser(ba, 3);
     }
     else
     {
@@ -276,11 +322,11 @@ void MainWindow::addrChanged(int addr)
 
     for(CIODevice* io: m_input_dev)
     {
-        io->set_state(false);
+        io->set_state(CIODevice::STATE_OFF);
     }
 
     for(CIODevice* io: m_output_dev)
     {
-        io->set_state(false);
+        io->set_state(CIODevice::STATE_OFF);
     }
 }
