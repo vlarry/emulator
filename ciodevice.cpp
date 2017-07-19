@@ -40,14 +40,17 @@ void CIODevice::set_state(state_t state)
     {
         case STATE_OFF:
             this->setIcon(QIcon(icon_off_path));
+            this->setToolTip(tr("OFF"));
         break;
 
         case STATE_ON:
             this->setIcon(QIcon(icon_on_path));
+        this->setToolTip(tr("ON"));
         break;
 
         case STATE_ERR:
             this->setIcon(QIcon(icon_err_path));
+            this->setToolTip(tr("ERROR"));
         break;
     }
 }
