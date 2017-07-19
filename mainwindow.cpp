@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget* parent):
     ui(new Ui::MainWindow),
     m_port(Q_NULLPTR),
     m_lblMessage(Q_NULLPTR),
-    m_query_count(0),
     m_cmd_last("")
 {
     ui->setupUi(this);
@@ -132,6 +131,13 @@ void MainWindow::showMessage(const QString& message)
 {
     m_lblMessage->setText(message);
 }
+//-----------------------------------------------------------
+quint8 MainWindow::getChecksum(const QVector<QByteArray>& ba)
+{
+    quint8 check_sum = 0;
+
+    return check_sum;
+}
 //----------------------------------
 void MainWindow::refreshSerialPort()
 {
@@ -199,29 +205,12 @@ void MainWindow::readData()
 
     m_responce.append(ba);
 
-    qDebug() << "responce size: " << m_responce.size();
-    qDebug() << "cmd size: " << ui->cbCmdList->size(m_cmd_last);
-
-    quint8 responce_size = 0, cmd_size;
-
-    for(QByteArray byte: m_responce)
-    {
-        responce_size += byte.size();
-    }
-
-    cmd_size = ui->cbCmdList->size(m_cmd_last);
+    quint8 cmd_size = ui->cbCmdList->size(m_cmd_last);
+    quint8 responce_size = m_responce.size();
 
     if(responce_size == cmd_size)
     {
-        QByteArray byte;
-
-        foreach(QByteArray b, m_responce)
-        {
-            byte += b;
-        }
-
-        ui->pteConsole->appendPlainText(tr("READ: 0x") + byte.toHex().toUpper());
-
+        ui->pteConsole->appendPlainText(tr("READ DATA: 0x") + m_responce.toHex().toUpper());
         m_responce.clear();
     }
 }
@@ -250,8 +239,8 @@ void MainWindow::writeData()
         m_query.append(QByteArray::fromHex(s_chsum.toLocal8Bit().data()));
     }
 
-    m_port->write(m_query.at(m_query_count));
-    ui->pteConsole->appendPlainText(tr("WRITE: ") + m_query.at(m_query_count).toHex().toUpper());
+    m_port->write(m_query);
+    ui->pteConsole->appendPlainText(tr("WRITE DATA: 0x") + m_query.toHex().toUpper());
 }
 //---------------------------------------
 void MainWindow::BytesWriten(qint64 byte)
@@ -261,17 +250,9 @@ void MainWindow::BytesWriten(qint64 byte)
     if(m_port->parity() == QSerialPort::MarkParity)
         m_port->setParity(QSerialPort::SpaceParity); // reset 9bit - this is data
 
-    m_query_count++;
+    ui->pteConsole->appendPlainText(tr("WRITE CMD: ") + ui->cbCmdList->description(ui->cbCmdList->currentIndex()));
 
-    if(m_query_count == m_query.count())
-    {
-        ui->pteConsole->appendPlainText(tr("WRITE CMD: ") + ui->cbCmdList->description(ui->cbCmdList->currentIndex()));
-
-        m_query.clear();
-        m_query_count = 0;
-    }
-    else
-        writeData();
+    m_query.clear();
 }
 //---------------------------------------------------------
 void MainWindow::cmdDescription(const QString& description)

@@ -28,9 +28,8 @@
             QSerialPort*        m_port; // COM-порт
             QLabel*             m_lblMessage; // вывод сообщений в статус бар
             QSettings*          m_settings; // настройки
-            QVector<QByteArray> m_query; // массив байт запроса
-            QVector<QByteArray> m_responce; // массив байт ответа устройства
-            quint8              m_query_count; // количество отправленных байт
+            QByteArray          m_query; // массив байт запроса
+            QByteArray          m_responce; // массив байт ответа устройства
             QString             m_cmd_last; // последняя отправленная команда
             QVector<CIODevice*> input_dev_01;
             QVector<CIODevice*> output_dev_01;
@@ -38,11 +37,12 @@
             QVector<CIODevice*> output_dev_02;
 
         private:
-            void initConnect();
-            void initSerialPort();
-            void initIO();
-            void setIO(const QVector<CIODevice*>& io_dev, bool type);
-            void showMessage(const QString& message);
+            void   initConnect();
+            void   initSerialPort();
+            void   initIO();
+            void   setIO(const QVector<CIODevice*>& io_dev, bool type);
+            void   showMessage(const QString& message);
+            quint8 getChecksum(const QVector<QByteArray>& ba);
 
         public slots:
             void refreshSerialPort();
@@ -53,4 +53,6 @@
             void cmdDescription(const QString& description);
             void addrChanged(int addr);
     };
+    //--------------
+    #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)
 #endif // MAINWINDOW_H
