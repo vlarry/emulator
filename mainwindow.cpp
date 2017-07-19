@@ -125,6 +125,12 @@ quint8 MainWindow::getChecksum(const QByteArray& ba, const quint8 size)
 
     return check_sum;
 }
+//-------------------------------------------------------------------
+void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
+{
+    if(data.isEmpty())
+        return;
+}
 //----------------------------------
 void MainWindow::refreshSerialPort()
 {
@@ -201,7 +207,9 @@ void MainWindow::readData()
         quint8 check_sum = getChecksum(m_responce, m_responce.size() - 1);
 
         if(check_sum == m_responce.at(m_responce.size() - 1))
+        {
             qDebug() << "check sum is valid";
+        }
 
         m_responce.clear();
     }

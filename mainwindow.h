@@ -41,6 +41,7 @@
             void   setIO(const QVector<CIODevice*>& io_dev, bool type);
             void   showMessage(const QString& message);
             quint8 getChecksum(const QByteArray& ba, const quint8 size);
+            void   cmdParser(const QByteArray& data, const quint8 size);
 
         public slots:
             void refreshSerialPort();
