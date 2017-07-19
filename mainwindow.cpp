@@ -24,8 +24,7 @@ MainWindow::MainWindow(QWidget* parent):
     initConnect();
 
     ui->groupDevices->setDisabled(true);
-    ui->groupDevice_01->setDisabled(true);
-    ui->groupDevice_02->setDisabled(true);
+    ui->groupDevice->setDisabled(true);
     ui->pbCmdSend->setDisabled(true);
 
     refreshSerialPort();
@@ -64,54 +63,30 @@ void MainWindow::initSerialPort()
 //-----------------------
 void MainWindow::initIO()
 {
-    input_dev_01.append(ui->IN1_1);
-    input_dev_01.append(ui->IN1_2);
-    input_dev_01.append(ui->IN1_3);
-    input_dev_01.append(ui->IN1_4);
-    input_dev_01.append(ui->IN1_5);
-    input_dev_01.append(ui->IN1_6);
-    input_dev_01.append(ui->IN1_7);
-    input_dev_01.append(ui->IN1_8);
-    input_dev_01.append(ui->IN1_9);
-    input_dev_01.append(ui->IN1_10);
-    input_dev_01.append(ui->IN1_11);
-    input_dev_01.append(ui->IN1_12);
+    m_input_dev.append(ui->IN1);
+    m_input_dev.append(ui->IN2);
+    m_input_dev.append(ui->IN3);
+    m_input_dev.append(ui->IN4);
+    m_input_dev.append(ui->IN5);
+    m_input_dev.append(ui->IN6);
+    m_input_dev.append(ui->IN7);
+    m_input_dev.append(ui->IN8);
+    m_input_dev.append(ui->IN9);
+    m_input_dev.append(ui->IN10);
+    m_input_dev.append(ui->IN11);
+    m_input_dev.append(ui->IN12);
 
-    output_dev_01.append((ui->OUT1_1));
-    output_dev_01.append((ui->OUT1_2));
-    output_dev_01.append((ui->OUT1_3));
-    output_dev_01.append((ui->OUT1_4));
-    output_dev_01.append((ui->OUT1_5));
-    output_dev_01.append((ui->OUT1_6));
-    output_dev_01.append((ui->OUT1_7));
-    output_dev_01.append((ui->OUT1_8));
+    m_output_dev.append((ui->OUT1));
+    m_output_dev.append((ui->OUT2));
+    m_output_dev.append((ui->OUT3));
+    m_output_dev.append((ui->OUT4));
+    m_output_dev.append((ui->OUT5));
+    m_output_dev.append((ui->OUT6));
+    m_output_dev.append((ui->OUT7));
+    m_output_dev.append((ui->OUT8));
 
-    input_dev_02.append(ui->IN2_1);
-    input_dev_02.append(ui->IN2_2);
-    input_dev_02.append(ui->IN2_3);
-    input_dev_02.append(ui->IN2_4);
-    input_dev_02.append(ui->IN2_5);
-    input_dev_02.append(ui->IN2_6);
-    input_dev_02.append(ui->IN2_7);
-    input_dev_02.append(ui->IN2_8);
-    input_dev_02.append(ui->IN2_9);
-    input_dev_02.append(ui->IN2_10);
-    input_dev_02.append(ui->IN2_11);
-    input_dev_02.append(ui->IN2_12);
-
-    output_dev_02.append((ui->OUT2_1));
-    output_dev_02.append((ui->OUT2_2));
-    output_dev_02.append((ui->OUT2_3));
-    output_dev_02.append((ui->OUT2_4));
-    output_dev_02.append((ui->OUT2_5));
-    output_dev_02.append((ui->OUT2_6));
-    output_dev_02.append((ui->OUT2_7));
-    output_dev_02.append((ui->OUT2_8));
-
-    setIO(input_dev_01, false);
-    setIO(input_dev_02, false);
-    setIO(output_dev_01, true);
-    setIO(output_dev_02, true);
+    setIO(m_input_dev, false);
+    setIO(m_output_dev, true);
 }
 //------------------------------------------------------------------
 void MainWindow::setIO(const QVector<CIODevice*>& io_dev, bool type)
@@ -131,10 +106,22 @@ void MainWindow::showMessage(const QString& message)
 {
     m_lblMessage->setText(message);
 }
-//-----------------------------------------------------------
-quint8 MainWindow::getChecksum(const QVector<QByteArray>& ba)
+//---------------------------------------------------------------------
+quint8 MainWindow::getChecksum(const QByteArray& ba, const quint8 size)
 {
     quint8 check_sum = 0;
+    quint8 addr = (quint8)ui->sbDeviceAddress->value() << 6;
+    quint8 cmd_size = ui->cbCmdList->size(m_cmd_last);
+
+    check_sum |= addr;
+    check_sum += cmd_size - 1;
+
+    for(quint8 i = 0; i < size; ++i)
+    {
+        check_sum += ba.at(i);
+    }
+
+    check_sum ^= 0xFF;
 
     return check_sum;
 }
@@ -175,7 +162,7 @@ void MainWindow::ctrlSerialPort(bool state)
         ui->pbCtrlPort->setText(tr("Close"));
         ui->groupDevices->setEnabled(true);
 
-        (ui->sbDeviceAddress->value() == 0)?ui->groupDevice_01->setEnabled(true):ui->groupDevice_02->setEnabled(true);
+        ui->groupDevice->setEnabled(true);
         ui->pbCmdSend->setEnabled(true);
 
         showMessage(ui->cbPortNames->currentText() + " " + tr("is open"));
@@ -191,8 +178,7 @@ void MainWindow::ctrlSerialPort(bool state)
         m_port->close();
         ui->pbCtrlPort->setText(tr("Open"));
         ui->groupDevices->setDisabled(true);
-        ui->groupDevice_01->setDisabled(true);
-        ui->groupDevice_02->setDisabled(true);
+        ui->groupDevice->setDisabled(true);
         ui->pbCmdSend->setDisabled(true);
 
         showMessage(ui->cbPortNames->currentText() + " " + tr("is close"));
@@ -211,6 +197,12 @@ void MainWindow::readData()
     if(responce_size == cmd_size)
     {
         ui->pteConsole->appendPlainText(tr("READ DATA: 0x") + m_responce.toHex().toUpper());
+
+        quint8 check_sum = getChecksum(m_responce, m_responce.size() - 1);
+
+        if(check_sum == m_responce.at(m_responce.size() - 1))
+            qDebug() << "check sum is valid";
+
         m_responce.clear();
     }
 }
@@ -250,7 +242,7 @@ void MainWindow::BytesWriten(qint64 byte)
     if(m_port->parity() == QSerialPort::MarkParity)
         m_port->setParity(QSerialPort::SpaceParity); // reset 9bit - this is data
 
-    ui->pteConsole->appendPlainText(tr("WRITE CMD: ") + ui->cbCmdList->description(ui->cbCmdList->currentIndex()));
+    ui->pteConsole->appendPlainText(tr("SEND CMD: ") + ui->cbCmdList->description(ui->cbCmdList->currentIndex()));
 
     m_query.clear();
 }
@@ -272,19 +264,15 @@ void MainWindow::cmdDescription(const QString& description)
 //------------------------------------
 void MainWindow::addrChanged(int addr)
 {
-    if(addr == 0)
+    Q_UNUSED(addr);
+
+    for(CIODevice* io: m_input_dev)
     {
-        ui->groupDevice_01->setEnabled(true);
-        ui->groupDevice_02->setDisabled(true);
+        io->set_state(false);
     }
-    else if(addr == 1)
+
+    for(CIODevice* io: m_output_dev)
     {
-        ui->groupDevice_01->setDisabled(true);
-        ui->groupDevice_02->setEnabled(true);
-    }
-    else
-    {
-        ui->groupDevice_01->setDisabled(true);
-        ui->groupDevice_02->setDisabled(true);
+        io->set_state(false);
     }
 }

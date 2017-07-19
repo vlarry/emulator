@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>978</width>
+    <width>747</width>
     <height>680</height>
    </rect>
   </property>
@@ -272,7 +272,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupDevice_01">
+          <widget class="QGroupBox" name="groupDevice">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -329,7 +329,7 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_5">
               <item>
-               <widget class="CIODevice" name="IN1_1">
+               <widget class="CIODevice" name="IN1">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -348,7 +348,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="IN1_2">
+               <widget class="CIODevice" name="IN2">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -367,7 +367,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="IN1_3">
+               <widget class="CIODevice" name="IN3">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -386,7 +386,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="IN1_4">
+               <widget class="CIODevice" name="IN4">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -405,7 +405,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="IN1_5">
+               <widget class="CIODevice" name="IN5">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -424,7 +424,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="IN1_6">
+               <widget class="CIODevice" name="IN6">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -443,7 +443,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="IN1_7">
+               <widget class="CIODevice" name="IN7">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -462,7 +462,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="IN1_8">
+               <widget class="CIODevice" name="IN8">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -481,7 +481,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="IN1_9">
+               <widget class="CIODevice" name="IN9">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -500,7 +500,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="IN1_10">
+               <widget class="CIODevice" name="IN10">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -519,7 +519,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="IN1_11">
+               <widget class="CIODevice" name="IN11">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -538,7 +538,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="IN1_12">
+               <widget class="CIODevice" name="IN12">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -614,7 +614,7 @@
                </spacer>
               </item>
               <item>
-               <widget class="CIODevice" name="OUT1_1">
+               <widget class="CIODevice" name="OUT1">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -636,7 +636,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="OUT1_2">
+               <widget class="CIODevice" name="OUT2">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -658,7 +658,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="OUT1_3">
+               <widget class="CIODevice" name="OUT3">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -680,7 +680,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="OUT1_4">
+               <widget class="CIODevice" name="OUT4">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -702,7 +702,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="OUT1_5">
+               <widget class="CIODevice" name="OUT5">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -724,7 +724,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="OUT1_6">
+               <widget class="CIODevice" name="OUT6">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -746,7 +746,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="OUT1_7">
+               <widget class="CIODevice" name="OUT7">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -768,7 +768,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CIODevice" name="OUT1_8">
+               <widget class="CIODevice" name="OUT8">
                 <property name="minimumSize">
                  <size>
                   <width>24</width>
@@ -791,542 +791,6 @@
               </item>
               <item>
                <spacer name="horizontalSpacer_4">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupDevice_02">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="title">
-            <string>Device-02</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_6">
-              <item>
-               <spacer name="horizontalSpacer_6">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="QLabel" name="lblInputs_2">
-                <property name="text">
-                 <string>Inputs</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_7">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_7">
-              <item>
-               <widget class="CIODevice" name="IN2_1">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="IN2_2">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="IN2_3">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="IN2_4">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="IN2_5">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="IN2_6">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="IN2_7">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="IN2_8">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="IN2_9">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="IN2_10">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="IN2_11">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="IN2_12">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_8">
-              <item>
-               <spacer name="horizontalSpacer_12">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="QLabel" name="lblInputs_4">
-                <property name="text">
-                 <string>Outputs</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_13">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_9">
-              <item>
-               <spacer name="horizontalSpacer_9">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="CIODevice" name="OUT2_1">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="OUT2_2">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="OUT2_3">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="OUT2_4">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="OUT2_5">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="OUT2_6">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="OUT2_7">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CIODevice" name="OUT2_8">
-                <property name="minimumSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>24</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_8">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -1375,7 +839,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>978</width>
+     <width>747</width>
      <height>21</height>
     </rect>
    </property>

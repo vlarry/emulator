@@ -31,10 +31,8 @@
             QByteArray          m_query; // массив байт запроса
             QByteArray          m_responce; // массив байт ответа устройства
             QString             m_cmd_last; // последняя отправленная команда
-            QVector<CIODevice*> input_dev_01;
-            QVector<CIODevice*> output_dev_01;
-            QVector<CIODevice*> input_dev_02;
-            QVector<CIODevice*> output_dev_02;
+            QVector<CIODevice*> m_input_dev;
+            QVector<CIODevice*> m_output_dev;
 
         private:
             void   initConnect();
@@ -42,7 +40,7 @@
             void   initIO();
             void   setIO(const QVector<CIODevice*>& io_dev, bool type);
             void   showMessage(const QString& message);
-            quint8 getChecksum(const QVector<QByteArray>& ba);
+            quint8 getChecksum(const QByteArray& ba, const quint8 size);
 
         public slots:
             void refreshSerialPort();

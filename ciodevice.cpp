@@ -20,6 +20,8 @@ void CIODevice::set_state(bool state)
     QString icon_on_path;
     QString icon_off_path;
 
+    this->setChecked(m_state);
+
     if(m_type)
     {
         icon_on_path = ":/images/resource/images/lamp_active.png";
