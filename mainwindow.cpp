@@ -87,6 +87,11 @@ void MainWindow::initIO()
 
     setIO(m_input_dev, false);
     setIO(m_output_dev, true);
+
+    m_ain_dev.append(ui->leAIN1);
+    m_ain_dev.append(ui->leAIN2);
+    m_ain_dev.append(ui->leAIN3);
+    m_ain_dev.append(ui->leAIN4);
 }
 //------------------------------------------------------------------
 void MainWindow::setIO(const QVector<CIODevice*>& io_dev, bool type)
@@ -169,6 +174,22 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 
                     setChannel(io, ch_state);
                 }
+            }
+        break;
+
+        case 0x02:
+            Float_t ain;
+
+            for(quint8 i = 0; i < size; i += 4)
+            {
+                quint8 j;
+
+                for(j = 0; j < 4; ++j)
+                {
+                    ain.byte[j] = data.at(i + j);
+                }
+
+                m_ain_dev.at(i/4)->setText(QString::number(ain.number));
             }
         break;
     }
@@ -266,6 +287,49 @@ void MainWindow::ctrlSerialPort(bool state)
 //        m_cmd_last = ui->cbCmdList->currentText();
 //        cmdParser(ba_out, 1);
         // конец теста выходов
+
+        // тест входов ain
+//        Float_t f;
+
+//        QByteArray ba_ain;
+//        QString s_ain;
+
+//        f.number = 3.04f;
+
+//        for(quint8 i = 0; i < 4; ++i)
+//        {
+//            s_ain.setNum(f.byte[i], 16);
+//            ba_ain.append(QByteArray::fromHex(s_ain.toLocal8Bit()));
+//        }
+
+//        f.number = 1.11f;
+
+//        for(quint8 i = 0; i < 4; ++i)
+//        {
+//            s_ain.setNum(f.byte[i], 16);
+//            ba_ain.append(QByteArray::fromHex(s_ain.toLocal8Bit()));
+//        }
+
+//        f.number = 27.12f;
+
+//        for(quint8 i = 0; i < 4; ++i)
+//        {
+//            s_ain.setNum(f.byte[i], 16);
+//            ba_ain.append(QByteArray::fromHex(s_ain.toLocal8Bit()));
+//        }
+
+//        f.number = 0.0f;
+
+//        for(quint8 i = 0; i < 4; ++i)
+//        {
+//            s_ain.setNum(f.byte[i], 16);
+//            ba_ain.append(QByteArray::fromHex(s_ain.toLocal8Bit()));
+//        }
+
+//        m_cmd_last = tr("0x02");
+//        cmdParser(ba_ain, 16);
+
+        // конец теста входов ain
     }
     else
     {

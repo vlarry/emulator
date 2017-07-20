@@ -14,6 +14,12 @@
     {
         class MainWindow;
     }
+    //-----------
+    typedef union
+    {
+        quint8 byte[sizeof(float)];
+        float  number;
+    } Float_t;
     //----------------------------------
     class MainWindow: public QMainWindow
     {
@@ -33,6 +39,7 @@
             QString             m_cmd_last; // последняя отправленная команда
             QVector<CIODevice*> m_input_dev;
             QVector<CIODevice*> m_output_dev;
+            QVector<QLineEdit*> m_ain_dev;
 
         private:
             void   initConnect();
