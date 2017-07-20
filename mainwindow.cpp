@@ -131,7 +131,9 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
     if(data.isEmpty())
         return;
 
-    switch(m_cmd_last.toInt())
+    quint8 cmd = QString(m_cmd_last).remove(QRegExp("0x")).toInt();
+
+    switch(cmd)
     {
         case 0x00:
             for(quint8 i = 0; i < size; ++i)
@@ -149,23 +151,44 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 
                     CIODevice* io = m_input_dev.at(ch_num);
 
-                    switch(ch_state)
-                    {
-                        case 0x00: // сигнал отсутствует на входе
-                            io->set_state(CIODevice::STATE_OFF);
-                        break;
-
-                        case 0x01: // сигнал присутствует на схода
-                            io->set_state(CIODevice::STATE_ON);
-                        break;
-
-                        case 0x02: // ошибка
-                        case 0x03: // канала
-                            io->set_state(CIODevice::STATE_ERR);
-                        break;
-                    }
+                    setChannel(io, ch_state);
                 }
             }
+        break;
+
+        case 0x01:
+            if(size == 1)
+            {
+                quint8 channels = data.at(0);
+
+                for(quint8 i = 0; i < 8; ++i)
+                {
+                    quint8 ch_state = (channels >> i)&0x01;
+
+                    CIODevice* io = m_output_dev.at(i);
+
+                    setChannel(io, ch_state);
+                }
+            }
+        break;
+    }
+}
+//---------------------------------------------------------
+void MainWindow::setChannel(CIODevice* io, quint8 ch_state)
+{
+    switch(ch_state)
+    {
+        case 0x00: // сигнал отсутствует
+            io->set_state(CIODevice::STATE_OFF);
+        break;
+
+        case 0x01: // сигнал присутствует
+            io->set_state(CIODevice::STATE_ON);
+        break;
+
+        case 0x02: // ошибка
+        case 0x03: // канала
+            io->set_state(CIODevice::STATE_ERR);
         break;
     }
 }
@@ -218,20 +241,31 @@ void MainWindow::ctrlSerialPort(bool state)
         m_port->setParity(QSerialPort::NoParity);
 
         // тест входов
-        QByteArray ba;
-        QString s;
+//        QByteArray ba_in;
+//        QString s_in;
 
-        s.setNum(0, 16);
-        ba.append(QByteArray::fromHex(s.toLocal8Bit()));
+//        s_in.setNum(1, 16);
+//        ba_in.append(QByteArray::fromHex(s_in.toLocal8Bit()));
 
-        s.setNum(250, 16);
-        ba.append(QByteArray::fromHex(s.toLocal8Bit()));
+//        s_in.setNum(1, 16);
+//        ba_in.append(QByteArray::fromHex(s_in.toLocal8Bit()));
 
-        s.setNum(85, 16);
-        ba.append(QByteArray::fromHex(s.toLocal8Bit()));
+//        s_in.setNum(10, 16);
+//        ba_in.append(QByteArray::fromHex(s_in.toLocal8Bit()));
 
-        cmdParser(ba, 3);
+//        cmdParser(ba_in, 3);
         //конец теста входов
+
+        // тест выходов
+//        QByteArray ba_out;
+//        QString s_out;
+
+//        s_out.setNum(129, 16);
+//        ba_out.append(QByteArray::fromHex(s_out.toLocal8Bit()));
+
+//        m_cmd_last = ui->cbCmdList->currentText();
+//        cmdParser(ba_out, 1);
+        // конец теста выходов
     }
     else
     {
