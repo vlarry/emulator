@@ -59,6 +59,7 @@
             void BytesWriten(qint64 byte);
             void cmdDescription(const QString& description);
             void addrChanged(int addr);
+            void outputStateChanged(quint8 id, bool state);
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

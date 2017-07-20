@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget* parent):
     ui->statusBar->addWidget(m_lblMessage);
 
     initSerialPort();
+    initIO();
     initConnect();
 
     ui->groupDevices->setDisabled(true);
@@ -30,8 +31,6 @@ MainWindow::MainWindow(QWidget* parent):
     refreshSerialPort();
 
     ui->cbCmdList->slotActivated(0);
-
-    initIO();
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -48,6 +47,15 @@ void MainWindow::initConnect()
     connect(m_port, SIGNAL(bytesWritten(qint64)), this, SLOT(BytesWriten(qint64)));
     connect(ui->cbCmdList, SIGNAL(changeDescription(QString)), this, SLOT(cmdDescription(QString)));
     connect(ui->sbDeviceAddress, SIGNAL(valueChanged(int)), SLOT(addrChanged(int)));
+
+    connect(m_output_dev.at(0), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
+    connect(m_output_dev.at(1), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
+    connect(m_output_dev.at(2), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
+    connect(m_output_dev.at(3), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
+    connect(m_output_dev.at(4), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
+    connect(m_output_dev.at(5), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
+    connect(m_output_dev.at(6), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
+    connect(m_output_dev.at(7), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -63,6 +71,28 @@ void MainWindow::initSerialPort()
 //-----------------------
 void MainWindow::initIO()
 {
+    ui->IN1->set_id(0);
+    ui->IN2->set_id(1);
+    ui->IN3->set_id(2);
+    ui->IN4->set_id(3);
+    ui->IN5->set_id(4);
+    ui->IN6->set_id(5);
+    ui->IN7->set_id(6);
+    ui->IN8->set_id(7);
+    ui->IN9->set_id(8);
+    ui->IN10->set_id(9);
+    ui->IN11->set_id(10);
+    ui->IN12->set_id(11);
+
+    ui->OUT1->set_id(0);
+    ui->OUT2->set_id(1);
+    ui->OUT3->set_id(2);
+    ui->OUT4->set_id(3);
+    ui->OUT5->set_id(4);
+    ui->OUT6->set_id(5);
+    ui->OUT7->set_id(6);
+    ui->OUT8->set_id(7);
+
     m_input_dev.append(ui->IN1);
     m_input_dev.append(ui->IN2);
     m_input_dev.append(ui->IN3);
@@ -76,14 +106,14 @@ void MainWindow::initIO()
     m_input_dev.append(ui->IN11);
     m_input_dev.append(ui->IN12);
 
-    m_output_dev.append((ui->OUT1));
-    m_output_dev.append((ui->OUT2));
-    m_output_dev.append((ui->OUT3));
-    m_output_dev.append((ui->OUT4));
-    m_output_dev.append((ui->OUT5));
-    m_output_dev.append((ui->OUT6));
-    m_output_dev.append((ui->OUT7));
-    m_output_dev.append((ui->OUT8));
+    m_output_dev.append(ui->OUT1);
+    m_output_dev.append(ui->OUT2);
+    m_output_dev.append(ui->OUT3);
+    m_output_dev.append(ui->OUT4);
+    m_output_dev.append(ui->OUT5);
+    m_output_dev.append(ui->OUT6);
+    m_output_dev.append(ui->OUT7);
+    m_output_dev.append(ui->OUT8);
 
     setIO(m_input_dev, false);
     setIO(m_output_dev, true);
@@ -361,6 +391,7 @@ void MainWindow::readData()
         if(check_sum == m_responce.at(m_responce.size() - 1))
         {
             qDebug() << "check sum is valid";
+            cmdParser(m_responce, m_responce.size() - 1);
         }
 
         m_responce.clear();
@@ -434,5 +465,19 @@ void MainWindow::addrChanged(int addr)
     for(CIODevice* io: m_output_dev)
     {
         io->set_state(CIODevice::STATE_OFF);
+    }
+}
+//--------------------------------------------------------
+void MainWindow::outputStateChanged(quint8 id, bool state)
+{
+    if(id != 255)
+    {
+        quint8 offset = (state)?0x0E:0x06;
+        quint8 cmd    = offset + id;
+
+        ui->cbCmdList->setCurrentIndex(cmd);
+        cmdDescription(ui->cbCmdList->description(cmd));
+
+        writeData();
     }
 }

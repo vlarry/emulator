@@ -3,7 +3,8 @@
 CIODevice::CIODevice(QWidget* parent):
     QToolButton(parent),
     m_state(STATE_OFF),
-    m_type(false)
+    m_type(false),
+    m_id(255)
 {
     connect(this, SIGNAL(clicked(bool)), this, SLOT(slotState(bool)));
 }
@@ -54,6 +55,16 @@ void CIODevice::set_state(state_t state)
         break;
     }
 }
+//-------------------------------
+void CIODevice::set_id(quint8 id)
+{
+    m_id = id;
+}
+//------------------------------
+quint8 CIODevice::get_id() const
+{
+    return m_id;
+}
 //-----------------------------------
 void CIODevice::slotState(bool state)
 {
@@ -61,6 +72,10 @@ void CIODevice::slotState(bool state)
     if(m_type)
     {
         state_t st = (state)?STATE_ON:STATE_OFF;
+        quint8  id = this->get_id();
+
         set_state(st);
+
+        emit stateChanged(id, state);
     }
 }
