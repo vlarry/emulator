@@ -849,6 +849,18 @@
                </item>
                <item>
                 <widget class="QLineEdit" name="leAIN1">
+                 <property name="minimumSize">
+                  <size>
+                   <width>50</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>75</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
                  <property name="maxLength">
                   <number>7</number>
                  </property>
@@ -865,6 +877,12 @@
                </item>
                <item>
                 <widget class="QLineEdit" name="leAIN2">
+                 <property name="maximumSize">
+                  <size>
+                   <width>75</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
                  <property name="maxLength">
                   <number>7</number>
                  </property>
@@ -881,6 +899,12 @@
                </item>
                <item>
                 <widget class="QLineEdit" name="leAIN3">
+                 <property name="maximumSize">
+                  <size>
+                   <width>75</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
                  <property name="maxLength">
                   <number>7</number>
                  </property>
@@ -897,6 +921,12 @@
                </item>
                <item>
                 <widget class="QLineEdit" name="leAIN4">
+                 <property name="maximumSize">
+                  <size>
+                   <width>75</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
                  <property name="maxLength">
                   <number>7</number>
                  </property>
