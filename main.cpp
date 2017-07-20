@@ -4,7 +4,7 @@
 int main(int argc, char* argv[])
 {
     QCoreApplication::setOrganizationName("РПА");
-    QCoreApplication::setApplicationName("FS9 emulator");
+    QCoreApplication::setApplicationName("FS9Emulator");
 
     QApplication a(argc, argv);
 

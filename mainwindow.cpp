@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget* parent):
     m_lblMessage = new QLabel(ui->statusBar);
     ui->statusBar->addWidget(m_lblMessage);
 
+    m_settings = new QSettings("settings.cnf", QSettings::IniFormat);
+
     initSerialPort();
     initIO();
     initConnect();
@@ -31,6 +33,8 @@ MainWindow::MainWindow(QWidget* parent):
     refreshSerialPort();
 
     ui->cbCmdList->slotActivated(0);
+
+    loadSettings();
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -240,6 +244,74 @@ void MainWindow::setChannel(CIODevice* io, quint8 ch_state)
         case 0x02: // ошибка
         case 0x03: // канала
             io->set_state(CIODevice::STATE_ERR);
+        break;
+    }
+}
+//-----------------------------
+void MainWindow::loadSettings()
+{
+    QString port;
+    QString baudrate;
+
+    m_settings->beginGroup("COM");
+        port = m_settings->value(tr("port"), "").toString();
+        baudrate = m_settings->value(tr("baudrate"), 115200).toString();
+    m_settings->endGroup();
+
+    if(!port.isEmpty())
+    {
+        int index = ui->cbPortNames->findText(port);
+
+        if(index >= ui->cbPortNames->count())
+        {
+            if(ui->cbPortNames->count() > 0)
+                index = 0;
+            else
+                index = -1;
+        }
+
+        ui->cbPortNames->setCurrentIndex(index);
+    }
+
+    if(!baudrate.isEmpty())
+    {
+        int index = ui->cbBaudrate->findText(baudrate);
+
+        if(index >= ui->cbBaudrate->count())
+        {
+            if(ui->cbBaudrate->count() > 0)
+                index = 0;
+            else
+                index = -1;
+        }
+
+        ui->cbBaudrate->setCurrentIndex(index);
+    }
+}
+//-----------------------------
+void MainWindow::saveSettings()
+{
+    m_settings->beginGroup("COM");
+        m_settings->setValue(tr("port"), ui->cbPortNames->currentText());
+        m_settings->setValue(tr("baudrate"), ui->cbBaudrate->currentText());
+    m_settings->endGroup();
+}
+//-------------------------------------------
+void MainWindow::closeEvent(QCloseEvent* evt)
+{
+    saveSettings();
+    QMainWindow::closeEvent(evt);
+}
+//--------------------------------------------
+void MainWindow::keyPressEvent(QKeyEvent* evt)
+{
+    switch(evt->key())
+    {
+        case Qt::Key_C:
+            if(evt->modifiers() == Qt::ALT)
+            {
+                ui->pteConsole->clear();
+            }
         break;
     }
 }

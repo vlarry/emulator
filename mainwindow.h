@@ -50,6 +50,10 @@
             quint8 getChecksum(const QByteArray& ba, const quint8 size);
             void   cmdParser(const QByteArray& data, const quint8 size);
             void   setChannel(CIODevice *io, quint8 ch_state);
+            void   loadSettings();
+            void   saveSettings();
+            void   closeEvent(QCloseEvent* evt);
+            void   keyPressEvent(QKeyEvent* evt);
 
         public slots:
             void refreshSerialPort();
