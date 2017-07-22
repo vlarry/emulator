@@ -150,11 +150,10 @@ void MainWindow::showMessage(const QString& message)
 quint8 MainWindow::getChecksum(const QByteArray& ba, const quint8 size)
 {
     quint8 check_sum = 0;
-    quint8 addr      = ((quint8)ui->sbDeviceAddress->value()) << 6;
-    quint8 cmd_size  = ui->cbCmdList->size(m_cmd_last);
+//    quint8 addr      = ((quint8)ui->sbDeviceAddress->value()) << 6;
 
-    check_sum |= addr;
-    check_sum += cmd_size - 1;
+//    check_sum |= addr;
+    check_sum += size;
 
     for(quint8 i = 0; i < size; ++i)
     {
@@ -478,6 +477,25 @@ void MainWindow::writeData()
         m_cmd_last  = ui->cbCmdList->currentText();
         quint8 cmd  = (quint8)QString(m_cmd_last).remove(QRegExp("0x")).toInt(Q_NULLPTR, 16);
         quint8 addr = (quint8)ui->sbDeviceAddress->value() << 6;
+
+        qint8 channel_id                 = -1;
+        CIODevice::state_t channel_state = CIODevice::STATE_OFF;
+
+        if(cmd >= 0x06 && cmd <= 0x0D)
+        {
+            channel_id    = cmd - 0x06;
+            channel_state = CIODevice::STATE_OFF;
+        }
+        else if(cmd >= 0x0E && cmd <= 0x15)
+        {
+            channel_id    = cmd - 0x0E;
+            channel_state = CIODevice::STATE_ON;
+        }
+
+        if(channel_id != -1)
+        {
+            m_output_dev.at(channel_id)->set_state(channel_state);
+        }
 
         cmd |= addr;
 
