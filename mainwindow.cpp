@@ -6,7 +6,8 @@ MainWindow::MainWindow(QWidget* parent):
     ui(new Ui::MainWindow),
     m_port(Q_NULLPTR),
     m_lblMessage(Q_NULLPTR),
-    m_cmd_last("")
+    m_cmd_last(""),
+    m_query_count(0)
 {
     ui->setupUi(this);
 
@@ -458,9 +459,10 @@ void MainWindow::readData()
     {
         ui->pteConsole->appendPlainText(tr("READ DATA: 0x") + m_responce.toHex().toUpper());
 
-        quint8 check_sum = getChecksum(m_responce, m_responce.size() - 1);
+        quint8 checksum_calc = getChecksum(m_responce, m_responce.size() - 1);
+        quint8 checksum_read = m_responce.at(m_responce.size() - 1);
 
-        if(check_sum == m_responce.at(m_responce.size() - 1))
+        if(checksum_calc == checksum_read)
         {
             qDebug() << "check sum is valid";
             cmdParser(m_responce, m_responce.size() - 1);
@@ -490,12 +492,21 @@ void MainWindow::writeData()
         s_cmd.setNum(cmd, 16);
         s_chsum.setNum(chsum, 16);
 
-        m_query.append(QByteArray::fromHex(s_cmd.toLocal8Bit().data()));
-        m_query.append(QByteArray::fromHex(s_chsum.toLocal8Bit().data()));
+        QByteArray ba_cmd;
+        QByteArray ba_chsum;
+
+        ba_cmd   = QByteArray::fromHex(s_cmd.toLocal8Bit().data());
+        ba_chsum = QByteArray::fromHex(s_chsum.toLocal8Bit().data());
+
+        qDebug() << "ba cmd: " << ba_cmd;
+        qDebug() << "ba checksum: " << ba_chsum;
+
+        m_query.append(ba_cmd);
+        m_query.append(ba_chsum);
     }
 
-    m_port->write(m_query);
-    ui->pteConsole->appendPlainText(tr("WRITE DATA: 0x") + m_query.toHex().toUpper());
+    m_port->write(m_query.at(m_query_count));
+    ui->pteConsole->appendPlainText(tr("WRITE: ") + m_query.at(m_query_count).toHex().toUpper());
 }
 //---------------------------------------
 void MainWindow::BytesWriten(qint64 byte)
@@ -505,9 +516,17 @@ void MainWindow::BytesWriten(qint64 byte)
     if(m_port->parity() == QSerialPort::MarkParity)
         m_port->setParity(QSerialPort::SpaceParity); // reset 9bit - this is data
 
-    ui->pteConsole->appendPlainText(tr("SEND CMD: ") + ui->cbCmdList->description(ui->cbCmdList->currentIndex()));
+    m_query_count++;
 
-    m_query.clear();
+    if(m_query_count == m_query.count())
+    {
+        ui->pteConsole->appendPlainText(tr("WRITE CMD: ") + ui->cbCmdList->description(ui->cbCmdList->currentIndex()));
+
+        m_query.clear();
+        m_query_count = 0;
+    }
+    else
+        writeData();
 }
 //---------------------------------------------------------
 void MainWindow::cmdDescription(const QString& description)

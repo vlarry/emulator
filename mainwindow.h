@@ -34,7 +34,8 @@
             QSerialPort*        m_port; // COM-порт
             QLabel*             m_lblMessage; // вывод сообщений в статус бар
             QSettings*          m_settings; // настройки
-            QByteArray          m_query; // массив байт запроса
+            QVector<QByteArray> m_query; // массив байт запроса
+            quint8              m_query_count; // количество отправленных байт
             QByteArray          m_responce; // массив байт ответа устройства
             QString             m_cmd_last; // последняя отправленная команда
             QVector<CIODevice*> m_input_dev;
