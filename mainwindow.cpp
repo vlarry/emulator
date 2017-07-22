@@ -150,8 +150,8 @@ void MainWindow::showMessage(const QString& message)
 quint8 MainWindow::getChecksum(const QByteArray& ba, const quint8 size)
 {
     quint8 check_sum = 0;
-    quint8 addr = (quint8)ui->sbDeviceAddress->value() << 6;
-    quint8 cmd_size = ui->cbCmdList->size(m_cmd_last);
+    quint8 addr      = ((quint8)ui->sbDeviceAddress->value()) << 6;
+    quint8 cmd_size  = ui->cbCmdList->size(m_cmd_last);
 
     check_sum |= addr;
     check_sum += cmd_size - 1;
@@ -171,7 +171,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
     if(data.isEmpty())
         return;
 
-    quint8 cmd = QString(m_cmd_last).remove(QRegExp("0x")).toInt();
+    quint8 cmd  = (quint8)QString(m_cmd_last).remove(QRegExp("0x")).toInt(Q_NULLPTR, 16);
 
     switch(cmd)
     {
@@ -464,7 +464,6 @@ void MainWindow::readData()
 
         if(checksum_calc == checksum_read)
         {
-            qDebug() << "check sum is valid";
             cmdParser(m_responce, m_responce.size() - 1);
         }
 
@@ -477,8 +476,7 @@ void MainWindow::writeData()
     if(m_query.isEmpty())
     {
         m_cmd_last  = ui->cbCmdList->currentText();
-        QString str = m_cmd_last;
-        quint8 cmd = (quint8)str.remove(QRegExp("0x")).toInt(Q_NULLPTR, 16);
+        quint8 cmd  = (quint8)QString(m_cmd_last).remove(QRegExp("0x")).toInt(Q_NULLPTR, 16);
         quint8 addr = (quint8)ui->sbDeviceAddress->value() << 6;
 
         cmd |= addr;
@@ -497,9 +495,6 @@ void MainWindow::writeData()
 
         ba_cmd   = QByteArray::fromHex(s_cmd.toLocal8Bit().data());
         ba_chsum = QByteArray::fromHex(s_chsum.toLocal8Bit().data());
-
-        qDebug() << "ba cmd: " << ba_cmd;
-        qDebug() << "ba checksum: " << ba_chsum;
 
         m_query.append(ba_cmd);
         m_query.append(ba_chsum);
