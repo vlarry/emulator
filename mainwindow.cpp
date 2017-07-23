@@ -477,8 +477,10 @@ void MainWindow::writeData()
     if(m_query.isEmpty())
     {
         m_cmd_last  = ui->cbCmdList->currentText();
-        quint8 cmd  = (quint8)QString(m_cmd_last).remove(QRegExp("0x")).toInt(Q_NULLPTR, 16);
-        quint8 addr = (quint8)ui->sbDeviceAddress->value() << 6;
+
+        quint8 cmd = (quint8)(QString(m_cmd_last).remove(QRegExp(tr("0x"))).toInt(Q_NULLPTR, 16));
+
+        cmd |= ((quint8)ui->sbDeviceAddress->value()) << 6;
 
         qint8 channel_id                 = -1;
         CIODevice::state_t channel_state = CIODevice::STATE_OFF;
@@ -499,25 +501,53 @@ void MainWindow::writeData()
             m_output_dev.at(channel_id)->set_state(channel_state);
         }
 
-        cmd |= addr;
-
         m_port->setParity(QSerialPort::MarkParity); // enable 9 bit
 
-        quint8 chsum = (cmd + 1)^0xFF;
+        QString str;
 
-        QString s_cmd, s_chsum;
+        str.setNum(cmd, 16);
+        m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
 
-        s_cmd.setNum(cmd, 16);
-        s_chsum.setNum(chsum, 16);
+        if(m_cmd_last == tr("0x3E") || m_cmd_last == tr("0x3F"))
+        {
+            quint8 input_num = (quint8)ui->sbInput->value();
+            quint8 duration  = (quint8)ui->sbDuration->value();
+            quint8 period    = (quint8)ui->sbPeriods->value();
+            quint8 discret   = (quint8)ui->sbDiscret->value();
+            quint8 signal    = (quint8)ui->sbSignal->value();
+            quint8 noise     = (quint8)ui->sbNoise->value();
 
-        QByteArray ba_cmd;
-        QByteArray ba_chsum;
+            str.setNum(input_num, 16);
+            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
 
-        ba_cmd   = QByteArray::fromHex(s_cmd.toLocal8Bit().data());
-        ba_chsum = QByteArray::fromHex(s_chsum.toLocal8Bit().data());
+            str.setNum(duration, 16);
+            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
 
-        m_query.append(ba_cmd);
-        m_query.append(ba_chsum);
+            str.setNum(period, 16);
+            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
+
+            str.setNum(discret, 16);
+            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
+
+            str.setNum(signal, 16);
+            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
+
+            str.setNum(noise, 16);
+            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
+        }
+
+        QByteArray ba;
+
+        for(QByteArray b: m_query)
+        {
+            for(quint8 s: b)
+                ba.append(s);
+        }
+
+        quint8 checksum = getChecksum(ba, m_query.size()); // создать контрольную сумму
+
+        str.setNum(checksum, 16);
+        m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
     }
 
     m_port->write(m_query.at(m_query_count));
