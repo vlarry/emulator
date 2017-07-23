@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>811</width>
-    <height>616</height>
+    <height>621</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@
          </sizepolicy>
         </property>
         <property name="title">
-         <string>Serial port settings</string>
+         <string>Настройки последовательного порта</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -44,7 +44,7 @@
             <string>CTRL port</string>
            </property>
            <property name="text">
-            <string>Open</string>
+            <string>Открыть</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -63,7 +63,7 @@
          <item row="2" column="0" colspan="2">
           <widget class="QLabel" name="lblNameBaudrate">
            <property name="text">
-            <string>Baudrate</string>
+            <string>Скорость</string>
            </property>
           </widget>
          </item>
@@ -79,7 +79,7 @@
             <enum>Qt::NoContextMenu</enum>
            </property>
            <property name="text">
-            <string>Port</string>
+            <string>Порт</string>
            </property>
            <property name="textFormat">
             <enum>Qt::AutoText</enum>
@@ -153,7 +153,7 @@
        </sizepolicy>
       </property>
       <property name="title">
-       <string>Devices</string>
+       <string>Устройства</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
@@ -184,7 +184,7 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Command</string>
+                <string>Команда</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -200,7 +200,7 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Address</string>
+                <string>Адрес</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -226,7 +226,7 @@
                 <string>Command send</string>
                </property>
                <property name="text">
-                <string>Send</string>
+                <string>Отправить</string>
                </property>
               </widget>
              </item>
@@ -260,7 +260,7 @@
          <item>
           <widget class="QGroupBox" name="gboxFilter">
            <property name="title">
-            <string>Filter</string>
+            <string>Фильтр</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -322,6 +322,9 @@
                     </property>
                     <property name="maximum">
                      <number>100</number>
+                    </property>
+                    <property name="value">
+                     <number>3</number>
                     </property>
                    </widget>
                   </item>
@@ -488,7 +491,7 @@
             </sizepolicy>
            </property>
            <property name="title">
-            <string>Device</string>
+            <string>Устройство</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -512,7 +515,7 @@
               <item>
                <widget class="QLabel" name="lblInputs">
                 <property name="text">
-                 <string>Inputs</string>
+                 <string>Входы</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -784,7 +787,7 @@
               <item>
                <widget class="QLabel" name="lblInputs_3">
                 <property name="text">
-                 <string>Outputs</string>
+                 <string>Выходы</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>

@@ -36,6 +36,8 @@ MainWindow::MainWindow(QWidget* parent):
     ui->cbCmdList->slotActivated(0);
 
     loadSettings();
+
+    initFilter();
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -150,9 +152,7 @@ void MainWindow::showMessage(const QString& message)
 quint8 MainWindow::getChecksum(const QByteArray& ba, const quint8 size)
 {
     quint8 check_sum = 0;
-//    quint8 addr      = ((quint8)ui->sbDeviceAddress->value()) << 6;
 
-//    check_sum |= addr;
     check_sum += size;
 
     for(quint8 i = 0; i < size; ++i)
@@ -345,7 +345,7 @@ void MainWindow::ctrlSerialPort(bool state)
 
         if(!m_port->open(QSerialPort::ReadOnly | QSerialPort::WriteOnly))
         {
-            QMessageBox::critical(this, tr("Open serial port"), m_port->errorString());
+            QMessageBox::critical(this, tr("Открытие последовательного порта"), m_port->errorString());
             return;
         }
 
@@ -355,7 +355,7 @@ void MainWindow::ctrlSerialPort(bool state)
         ui->groupDevice->setEnabled(true);
         ui->pbCmdSend->setEnabled(true);
 
-        showMessage(ui->cbPortNames->currentText() + " " + tr("is open"));
+        showMessage(ui->cbPortNames->currentText() + " " + tr("открыт"));
 
         m_port->setBaudRate(ui->cbBaudrate->currentText().toInt());
         m_port->setFlowControl(QSerialPort::NoFlowControl);
@@ -436,12 +436,12 @@ void MainWindow::ctrlSerialPort(bool state)
     else
     {
         m_port->close();
-        ui->pbCtrlPort->setText(tr("Open"));
+        ui->pbCtrlPort->setText(tr("Открыть"));
         ui->groupDevices->setDisabled(true);
         ui->groupDevice->setDisabled(true);
         ui->pbCmdSend->setDisabled(true);
 
-        showMessage(ui->cbPortNames->currentText() + " " + tr("is close"));
+        showMessage(ui->cbPortNames->currentText() + " " + tr("закрыт"));
     }
 }
 //-------------------------
@@ -456,7 +456,7 @@ void MainWindow::readData()
 
     if(responce_size == cmd_size)
     {
-        ui->pteConsole->appendPlainText(tr("READ DATA: 0x") + m_responce.toHex().toUpper());
+        ui->pteConsole->appendPlainText(tr("ЧТЕНИЕ: 0x") + m_responce.toHex().toUpper());
 
         quint8 checksum_calc = getChecksum(m_responce, m_responce.size() - 1);
         quint8 checksum_read = m_responce.at(m_responce.size() - 1);
@@ -519,7 +519,7 @@ void MainWindow::writeData()
     }
 
     m_port->write(m_query.at(m_query_count));
-    ui->pteConsole->appendPlainText(tr("WRITE: ") + m_query.at(m_query_count).toHex().toUpper());
+    ui->pteConsole->appendPlainText(tr("ЗАПИСЬ: ") + m_query.at(m_query_count).toHex().toUpper());
 }
 //---------------------------------------
 void MainWindow::BytesWriten(qint64 byte)
@@ -533,7 +533,7 @@ void MainWindow::BytesWriten(qint64 byte)
 
     if(m_query_count == m_query.count())
     {
-        ui->pteConsole->appendPlainText(tr("WRITE CMD: ") + ui->cbCmdList->description(ui->cbCmdList->currentIndex()));
+        ui->pteConsole->appendPlainText(tr("ЗАПИСЬ КОМАНДЫ: ") + ui->cbCmdList->description(ui->cbCmdList->currentIndex()));
 
         m_query.clear();
         m_query_count = 0;
@@ -547,7 +547,7 @@ void MainWindow::cmdDescription(const QString& description)
     QString desc = description;
     QPalette p(ui->lblCmdDescription->palette());
 
-    if(desc.toUpper() == tr("RESERVE"))
+    if(desc.toUpper() == tr("РЕЗЕРВ"))
         p.setColor(QPalette::WindowText, QColor(Qt::red));
     else
         p.setColor(QPalette::WindowText, QColor(Qt::blue));
@@ -584,4 +584,9 @@ void MainWindow::outputStateChanged(quint8 id, bool state)
 
         writeData();
     }
+}
+//---------------------------
+void MainWindow::initFilter()
+{
+    ui->cboxTypeSignal->addItems(QStringList() << tr("Аналоговый") << tr("Цифровой"));
 }
