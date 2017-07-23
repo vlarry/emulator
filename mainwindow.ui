@@ -157,7 +157,7 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_15">
+        <layout class="QHBoxLayout" name="horizontalLayout_16">
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
@@ -267,7 +267,7 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_14">
+             <layout class="QHBoxLayout" name="horizontalLayout_15">
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_2">
                 <item>
@@ -362,7 +362,28 @@
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_3">
                 <item>
-                 <widget class="QComboBox" name="cboxTypeSignal"/>
+                 <layout class="QHBoxLayout" name="horizontalLayout_14">
+                  <item>
+                   <widget class="QLabel" name="lblInput">
+                    <property name="text">
+                     <string>Вход</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="sbInput">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="maximum">
+                     <number>7</number>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_8">

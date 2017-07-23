@@ -65,7 +65,7 @@
             void cmdDescription(const QString& description);
             void addrChanged(int addr);
             void outputStateChanged(quint8 id, bool state);
-            void initFilter(QString type);
+            void initFilter(QString text);
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)
