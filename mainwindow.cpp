@@ -37,7 +37,9 @@ MainWindow::MainWindow(QWidget* parent):
 
     loadSettings();
 
-    initFilter();
+    ui->cboxTypeSignal->addItems(QStringList() << tr("Аналоговый") << tr("Цифровой"));
+
+    initFilter(tr("Аналоговый"));
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -63,6 +65,9 @@ void MainWindow::initConnect()
     connect(m_output_dev.at(5), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
     connect(m_output_dev.at(6), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
     connect(m_output_dev.at(7), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
+
+    connect(ui->cboxTypeSignal, SIGNAL(currentTextChanged(QString)), this, SLOT(initFilter(QString)));
+    connect(ui->cbCmdList, SIGNAL(currentTextChanged(QString)), this, SLOT(initFilter(QString)));
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -585,8 +590,37 @@ void MainWindow::outputStateChanged(quint8 id, bool state)
         writeData();
     }
 }
-//---------------------------
-void MainWindow::initFilter()
+//---------------------------------------
+void MainWindow::initFilter(QString type)
 {
-    ui->cboxTypeSignal->addItems(QStringList() << tr("Аналоговый") << tr("Цифровой"));
+    int index = ui->cboxTypeSignal->findText(type);
+
+    if(index >= 0)
+    {
+        ui->cboxTypeSignal->setCurrentIndex(index);
+    }
+    else
+        ui->cboxTypeSignal->setCurrentIndex(0);
+
+    if(ui->cboxTypeSignal->currentText().toUpper() == tr("АНАЛОГОВЫЙ"))
+    {
+        ui->lblSignal->setText(tr("Сигнал"));
+        ui->lblNoise->setText(tr("Шум"));
+    }
+    else if(ui->cboxTypeSignal->currentText().toUpper() == tr("ЦИФРОВОЙ"))
+    {
+        ui->lblSignal->setText(tr("Единицы"));
+        ui->lblNoise->setText(tr("Нули"));
+    }
+
+    if(ui->cbCmdList->currentText() == tr("0x3E"))
+    {
+        ui->gboxFilter->setEnabled(true);
+    }
+    else if(ui->cbCmdList->currentText() == tr("0x3F"))
+    {
+        ui->gboxFilter->setEnabled(true);
+    }
+    else
+        ui->gboxFilter->setDisabled(true);
 }
