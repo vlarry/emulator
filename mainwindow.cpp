@@ -508,31 +508,24 @@ void MainWindow::writeData()
         str.setNum(cmd, 16);
         m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
 
-        if(m_cmd_last == tr("0x3E") || m_cmd_last == tr("0x3F"))
+        if(ui->cbCmdList->currentText() == tr("0x3C")) // Установить длительность сигнала
         {
-            quint8 input_num = (quint8)ui->sbInput->value();
-            quint8 duration  = (quint8)ui->sbDuration->value();
-            quint8 period    = (quint8)ui->sbPeriods->value();
-            quint8 discret   = (quint8)ui->sbDiscret->value();
-            quint8 signal    = (quint8)ui->sbSignal->value();
-            quint8 noise     = (quint8)ui->sbNoise->value();
-
-            str.setNum(input_num, 16);
+            str.setNum(ui->sbDuration->value(), 16);
             m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
-
-            str.setNum(duration, 16);
+        }
+        else if(ui->cbCmdList->currentText() == tr("0x3D")) // Установить количество периодов фильтрации
+        {
+            str.setNum(ui->sbPeriods->value(), 16);
             m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
-
-            str.setNum(period, 16);
+        }
+        else if(ui->cbCmdList->currentText() == tr("0x3E")) // Установить количество выборок за период
+        {
+            str.setNum(ui->sbDiscret->value(), 16);
             m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
-
-            str.setNum(discret, 16);
-            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
-
-            str.setNum(signal, 16);
-            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
-
-            str.setNum(noise, 16);
+        }
+        else if(ui->cbCmdList->currentText() == tr("0x3F")) // Установить длительность сигнала в мс для фильтрации
+        {
+            str.setNum(ui->sbSignal->value(), 16);
             m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
         }
 
@@ -620,19 +613,9 @@ void MainWindow::outputStateChanged(quint8 id, bool state)
 //---------------------------------------
 void MainWindow::initFilter(QString text)
 {
-    if(text == tr("0x3E"))
+    if(text == tr("0x3C") || text == tr("0x3D") || text == tr("0x3E") || text == tr("0x3F"))
     {
         ui->gboxFilter->setEnabled(true);
-
-        ui->lblSignal->setText(tr("Сигнал"));
-        ui->lblNoise->setText(tr("Шум"));
-    }
-    else if(text == tr("0x3F"))
-    {
-        ui->gboxFilter->setEnabled(true);
-
-        ui->lblSignal->setText(tr("Единицы"));
-        ui->lblNoise->setText(tr("Нули"));
     }
     else
         ui->gboxFilter->setDisabled(true);
