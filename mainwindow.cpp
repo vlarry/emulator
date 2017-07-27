@@ -37,6 +37,8 @@ MainWindow::MainWindow(QWidget* parent):
 
     loadSettings();
 
+    ui->cbInputType->addItems(QStringList() << tr("Аналоговый")  << tr("Цифровой"));
+
     initFilter(ui->cbCmdList->currentText());
 }
 //-----------------------
@@ -508,25 +510,34 @@ void MainWindow::writeData()
         str.setNum(cmd, 16);
         m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
 
-        if(ui->cbCmdList->currentText() == tr("0x3C")) // Установить длительность сигнала
+        if(ui->cbCmdList->currentText() == tr("0x3D"))
         {
             str.setNum(ui->sbDuration->value(), 16);
             m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
         }
-        else if(ui->cbCmdList->currentText() == tr("0x3D")) // Установить количество периодов фильтрации
+        else if(ui->cbCmdList->currentText() == tr("0x3E"))
         {
             str.setNum(ui->sbPeriods->value(), 16);
-            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
-        }
-        else if(ui->cbCmdList->currentText() == tr("0x3E")) // Установить количество выборок за период
-        {
+            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // количество периодов
+
             str.setNum(ui->sbDiscret->value(), 16);
-            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
-        }
-        else if(ui->cbCmdList->currentText() == tr("0x3F")) // Установить длительность сигнала в мс для фильтрации
-        {
+            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // дискретность
+
             str.setNum(ui->sbSignal->value(), 16);
-            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
+            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // длительность сигнала
+        }
+        else if(ui->cbCmdList->currentText() == tr("0x3F"))
+        {
+            str.setNum(ui->sbInput->value(), 16);
+            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // номер входа
+
+            quint8 type = (ui->cbInputType->currentText().toUpper() == tr("АНАЛОГОВЫЙ"))?0x00:0x01;
+
+            str.setNum(type, 16);
+            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // тип входа
+
+            str.setNum(ui->sbFaultInput->value(), 16);
+            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // погрешность периода
         }
 
         QByteArray ba;
@@ -613,10 +624,27 @@ void MainWindow::outputStateChanged(quint8 id, bool state)
 //---------------------------------------
 void MainWindow::initFilter(QString text)
 {
-    if(text == tr("0x3C") || text == tr("0x3D") || text == tr("0x3E") || text == tr("0x3F"))
+    if(text == tr("0x3D"))
     {
-        ui->gboxFilter->setEnabled(true);
+        ui->gboxInputSettings->setEnabled(true);
+        ui->sbDuration->setEnabled(true);
+        ui->gboxInput->setDisabled(true);
+        ui->gboxInputSettingsFilter->setDisabled(true);
+    }
+    if(text == tr("0x3E"))
+    {
+        ui->gboxInputSettings->setEnabled(true);
+        ui->sbDuration->setDisabled(true);
+        ui->gboxInput->setDisabled(true);
+        ui->gboxInputSettingsFilter->setEnabled(true);
+    }
+    if(text == tr("0x3F"))
+    {
+        ui->gboxInputSettings->setEnabled(true);
+        ui->sbDuration->setDisabled(true);
+        ui->gboxInput->setEnabled(true);
+        ui->gboxInputSettingsFilter->setDisabled(true);
     }
     else
-        ui->gboxFilter->setDisabled(true);
+        ui->gboxInputSettings->setDisabled(true);
 }

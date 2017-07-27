@@ -63,10 +63,10 @@ QCmd::QCmd(QWidget* parent):
     m_cmd.insert(tr("0x39"), qMakePair(tr("Резерв"), 0));
     m_cmd.insert(tr("0x3A"), qMakePair(tr("Резерв"), 0));
     m_cmd.insert(tr("0x3B"), qMakePair(tr("Резерв"), 0));
-    m_cmd.insert(tr("0x3C"), qMakePair(tr("Установить длительность сигнала"), 2));
-    m_cmd.insert(tr("0x3D"), qMakePair(tr("Установить количество периодов фильтрации"), 2));
-    m_cmd.insert(tr("0x3E"), qMakePair(tr("Установить количество выборок за период"), 2));
-    m_cmd.insert(tr("0x3F"), qMakePair(tr("Установить длительность сигнала в мс для фильтрации"), 2));
+    m_cmd.insert(tr("0x3C"), qMakePair(tr("Резерв"), 0));
+    m_cmd.insert(tr("0x3D"), qMakePair(tr("Установка длительности сигнала"), 2));
+    m_cmd.insert(tr("0x3E"), qMakePair(tr("Установка общих настроек фильтра"), 2));
+    m_cmd.insert(tr("0x3F"), qMakePair(tr("Установка настроек входа"), 2));
 
     foreach(QString cmd, m_cmd.keys())
     {
