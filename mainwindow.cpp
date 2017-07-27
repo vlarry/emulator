@@ -67,6 +67,7 @@ void MainWindow::initConnect()
     connect(m_output_dev.at(7), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
 
     connect(ui->cbCmdList, SIGNAL(currentTextChanged(QString)), this, SLOT(initFilter(QString)));
+    connect(ui->cbInputType, SIGNAL(currentTextChanged(QString)), this, SLOT(typeInput(QString)));
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -631,14 +632,14 @@ void MainWindow::initFilter(QString text)
         ui->gboxInput->setDisabled(true);
         ui->gboxInputSettingsFilter->setDisabled(true);
     }
-    if(text == tr("0x3E"))
+    else if(text == tr("0x3E"))
     {
         ui->gboxInputSettings->setEnabled(true);
         ui->sbDuration->setDisabled(true);
         ui->gboxInput->setDisabled(true);
         ui->gboxInputSettingsFilter->setEnabled(true);
     }
-    if(text == tr("0x3F"))
+    else if(text == tr("0x3F"))
     {
         ui->gboxInputSettings->setEnabled(true);
         ui->sbDuration->setDisabled(true);
@@ -647,4 +648,14 @@ void MainWindow::initFilter(QString text)
     }
     else
         ui->gboxInputSettings->setDisabled(true);
+}
+//--------------------------------------
+void MainWindow::typeInput(QString text)
+{
+    if(text.toUpper() == tr("АНАЛОГОВЫЙ"))
+    {
+        ui->lblTextFault->setText(tr("Погрешность, %"));
+    }
+    else
+        ui->lblTextFault->setText(tr("Кол-во лог 0/1, %"));
 }

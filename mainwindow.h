@@ -66,6 +66,7 @@
             void addrChanged(int addr);
             void outputStateChanged(quint8 id, bool state);
             void initFilter(QString text);
+            void typeInput(QString text);
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)
