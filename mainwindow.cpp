@@ -655,7 +655,13 @@ void MainWindow::typeInput(QString text)
     if(text.toUpper() == tr("АНАЛОГОВЫЙ"))
     {
         ui->lblTextFault->setText(tr("Погрешность, %"));
+        ui->sbFaultInput->setRange(10, 50);
+        ui->sbFaultInput->setSingleStep(10);
     }
     else
+    {
         ui->lblTextFault->setText(tr("Кол-во лог 0/1, %"));
+        ui->sbFaultInput->setRange(50, 100);
+        ui->sbFaultInput->setSingleStep(10);
+    }
 }
