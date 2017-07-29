@@ -228,7 +228,25 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                     ain.byte[j] = data.at(i + j);
                 }
 
-                m_ain_dev.at(i/4)->setText(QString::number(ain.number));
+                QString str = QString::number(ain.number);
+
+                if(i == 8)
+                    str += QChar(176); // добавляем знак цельсия к числу в третьей колонке
+
+                if(ui->sbDeviceAddress->value() == 0) // МДВВ-01
+                {
+                    if(i == 0) // первая ячейка AIN
+                        str += tr("В");
+                    else if(i == 4)
+                        str += tr("mA");
+                }
+                else if(ui->sbDeviceAddress->value() == 1) // МДВВ-02
+                {
+                    if(i == 0 || i == 4)
+                        str += QChar(176);
+                }
+
+                m_ain_dev.at(i/4)->setText(str);
             }
         break;
     }
