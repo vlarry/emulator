@@ -7,6 +7,7 @@
     #include <QSerialPortInfo>
     #include <QMessageBox>
     #include <QSettings>
+    #include <QTimer>
     #include "qcmd.h"
     #include "ciodevice.h"
     //----------
@@ -41,6 +42,8 @@
             QVector<CIODevice*> m_input_dev;
             QVector<CIODevice*> m_output_dev;
             QVector<QLineEdit*> m_ain_dev;
+            QTimer*             m_timerAutoRepeatInput;
+            QTimer*             m_timerAutoRepeatAIN;
 
         private:
             void   initConnect();
@@ -60,13 +63,18 @@
             void refreshSerialPort();
             void ctrlSerialPort(bool state);
             void readData();
-            void writeData();
+            void writeCmd();
+            void writeData(const QString& cmd_str = "");
             void BytesWriten(qint64 byte);
             void cmdDescription(const QString& description);
             void addrChanged(int addr);
             void outputStateChanged(quint8 id, bool state);
             void initFilter(QString text);
             void typeInput(QString text);
+            void autoRepeatInputs(bool state);
+            void autoRepeatAIN(bool state);
+            void autoRepeatTimInputs();
+            void autoRepeatTimAIN();
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

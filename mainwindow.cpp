@@ -7,7 +7,9 @@ MainWindow::MainWindow(QWidget* parent):
     m_port(Q_NULLPTR),
     m_lblMessage(Q_NULLPTR),
     m_cmd_last(""),
-    m_query_count(0)
+    m_query_count(0),
+    m_timerAutoRepeatInput(Q_NULLPTR),
+    m_timerAutoRepeatAIN(Q_NULLPTR)
 {
     ui->setupUi(this);
 
@@ -22,6 +24,9 @@ MainWindow::MainWindow(QWidget* parent):
     ui->statusBar->addWidget(m_lblMessage);
 
     m_settings = new QSettings("settings.cnf", QSettings::IniFormat);
+
+    m_timerAutoRepeatInput = new QTimer(this);
+    m_timerAutoRepeatAIN   = new QTimer(this);
 
     initSerialPort();
     initIO();
@@ -52,7 +57,7 @@ void MainWindow::initConnect()
     connect(ui->tbPortRefresh, SIGNAL(clicked()), this, SLOT(refreshSerialPort()));
     connect(ui->pbCtrlPort, SIGNAL(clicked(bool)), this, SLOT(ctrlSerialPort(bool)));
     connect(m_port, SIGNAL(readyRead()), this, SLOT(readData()));
-    connect(ui->pbCmdSend, SIGNAL(clicked()), this, SLOT(writeData()));
+    connect(ui->pbCmdSend, SIGNAL(clicked()), this, SLOT(writeCmd()));
     connect(m_port, SIGNAL(bytesWritten(qint64)), this, SLOT(BytesWriten(qint64)));
     connect(ui->cbCmdList, SIGNAL(changeDescription(QString)), this, SLOT(cmdDescription(QString)));
     connect(ui->sbDeviceAddress, SIGNAL(valueChanged(int)), SLOT(addrChanged(int)));
@@ -68,6 +73,11 @@ void MainWindow::initConnect()
 
     connect(ui->cbCmdList, SIGNAL(currentTextChanged(QString)), this, SLOT(initFilter(QString)));
     connect(ui->cbInputType, SIGNAL(currentTextChanged(QString)), this, SLOT(typeInput(QString)));
+
+    connect(ui->cboxRepeatInputs, SIGNAL(clicked(bool)), this, SLOT(autoRepeatInputs(bool)));
+    connect(ui->cboxRepeatAIN, SIGNAL(clicked(bool)), this, SLOT(autoRepeatAIN(bool)));
+    connect(m_timerAutoRepeatInput, SIGNAL(timeout()), this, SLOT(autoRepeatTimInputs()));
+    connect(m_timerAutoRepeatAIN, SIGNAL(timeout()), this, SLOT(autoRepeatTimAIN()));
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -228,7 +238,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                     ain.byte[j] = data.at(i + j);
                 }
 
-                QString str = QString::number(ain.number);
+                QString str = QString::number(ain.number, 'f', 2);
 
                 if(i == 8)
                     str += QChar(176); // добавляем знак цельсия к числу в третьей колонке
@@ -243,7 +253,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                 else if(ui->sbDeviceAddress->value() == 1) // МДВВ-02
                 {
                     if(i == 0 || i == 4)
-                        str += QChar(176);
+                        str += QChar(176); // добавление знака градусов
                 }
 
                 m_ain_dev.at(i/4)->setText(str);
@@ -377,6 +387,7 @@ void MainWindow::ctrlSerialPort(bool state)
 
         ui->groupDevice->setEnabled(true);
         ui->pbCmdSend->setEnabled(true);
+        ui->gboxAutorepeat->setEnabled(true);
 
         showMessage(ui->cbPortNames->currentText() + " " + tr("открыт"));
 
@@ -385,76 +396,6 @@ void MainWindow::ctrlSerialPort(bool state)
         m_port->setDataBits(QSerialPort::Data8);
         m_port->setStopBits(QSerialPort::OneStop);
         m_port->setParity(QSerialPort::NoParity);
-
-        // тест входов
-//        QByteArray ba_in;
-//        QString s_in;
-
-//        s_in.setNum(1, 16);
-//        ba_in.append(QByteArray::fromHex(s_in.toLocal8Bit()));
-
-//        s_in.setNum(1, 16);
-//        ba_in.append(QByteArray::fromHex(s_in.toLocal8Bit()));
-
-//        s_in.setNum(10, 16);
-//        ba_in.append(QByteArray::fromHex(s_in.toLocal8Bit()));
-
-//        cmdParser(ba_in, 3);
-        //конец теста входов
-
-        // тест выходов
-//        QByteArray ba_out;
-//        QString s_out;
-
-//        s_out.setNum(129, 16);
-//        ba_out.append(QByteArray::fromHex(s_out.toLocal8Bit()));
-
-//        m_cmd_last = ui->cbCmdList->currentText();
-//        cmdParser(ba_out, 1);
-        // конец теста выходов
-
-        // тест входов ain
-//        Float_t f;
-
-//        QByteArray ba_ain;
-//        QString s_ain;
-
-//        f.number = 3.04f;
-
-//        for(quint8 i = 0; i < 4; ++i)
-//        {
-//            s_ain.setNum(f.byte[i], 16);
-//            ba_ain.append(QByteArray::fromHex(s_ain.toLocal8Bit()));
-//        }
-
-//        f.number = 1.11f;
-
-//        for(quint8 i = 0; i < 4; ++i)
-//        {
-//            s_ain.setNum(f.byte[i], 16);
-//            ba_ain.append(QByteArray::fromHex(s_ain.toLocal8Bit()));
-//        }
-
-//        f.number = 27.12f;
-
-//        for(quint8 i = 0; i < 4; ++i)
-//        {
-//            s_ain.setNum(f.byte[i], 16);
-//            ba_ain.append(QByteArray::fromHex(s_ain.toLocal8Bit()));
-//        }
-
-//        f.number = 0.0f;
-
-//        for(quint8 i = 0; i < 4; ++i)
-//        {
-//            s_ain.setNum(f.byte[i], 16);
-//            ba_ain.append(QByteArray::fromHex(s_ain.toLocal8Bit()));
-//        }
-
-//        m_cmd_last = tr("0x02");
-//        cmdParser(ba_ain, 16);
-
-        // конец теста входов ain
     }
     else
     {
@@ -463,6 +404,7 @@ void MainWindow::ctrlSerialPort(bool state)
         ui->groupDevices->setDisabled(true);
         ui->groupDevice->setDisabled(true);
         ui->pbCmdSend->setDisabled(true);
+        ui->gboxAutorepeat->setDisabled(true);
 
         showMessage(ui->cbPortNames->currentText() + " " + tr("закрыт"));
     }
@@ -492,12 +434,20 @@ void MainWindow::readData()
         m_responce.clear();
     }
 }
-//--------------------------
-void MainWindow::writeData()
+//-------------------------
+void MainWindow::writeCmd()
+{
+    writeData(ui->cbCmdList->currentText());
+}
+//------------------------------------------------
+void MainWindow::writeData(const QString& cmd_str)
 {
     if(m_query.isEmpty())
     {
-        m_cmd_last  = ui->cbCmdList->currentText();
+        if(cmd_str.isEmpty())
+            return;
+
+        m_cmd_last  = cmd_str;
 
         quint8 cmd = (quint8)(QString(m_cmd_last).remove(QRegExp(tr("0x"))).toInt(Q_NULLPTR, 16));
 
@@ -529,12 +479,12 @@ void MainWindow::writeData()
         str.setNum(cmd, 16);
         m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
 
-        if(ui->cbCmdList->currentText() == tr("0x3D"))
+        if(m_cmd_last == tr("0x3D"))
         {
             str.setNum(ui->sbDuration->value(), 16);
             m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
         }
-        else if(ui->cbCmdList->currentText() == tr("0x3E"))
+        else if(m_cmd_last == tr("0x3E"))
         {
             str.setNum(ui->sbPeriods->value(), 16);
             m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // количество периодов
@@ -545,7 +495,7 @@ void MainWindow::writeData()
             str.setNum(ui->sbSignal->value(), 16);
             m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // длительность сигнала
         }
-        else if(ui->cbCmdList->currentText() == tr("0x3F"))
+        else if(m_cmd_last == tr("0x3F"))
         {
             str.setNum(ui->sbInput->value(), 16);
             m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // номер входа
@@ -574,6 +524,7 @@ void MainWindow::writeData()
     }
 
     m_port->write(m_query.at(m_query_count));
+
     ui->pteConsole->appendPlainText(tr("ЗАПИСЬ: ") + m_query.at(m_query_count).toHex().toUpper());
 }
 //---------------------------------------
@@ -637,7 +588,7 @@ void MainWindow::outputStateChanged(quint8 id, bool state)
         ui->cbCmdList->setCurrentIndex(cmd);
         cmdDescription(ui->cbCmdList->description(cmd));
 
-        writeData();
+        writeCmd();
     }
 }
 //---------------------------------------
@@ -682,4 +633,62 @@ void MainWindow::typeInput(QString text)
         ui->sbFaultInput->setRange(50, 100);
         ui->sbFaultInput->setSingleStep(10);
     }
+}
+//-------------------------------------------
+void MainWindow::autoRepeatInputs(bool state)
+{
+    if(state)
+    {
+        if(ui->cboxRepeatAIN->isChecked())
+        {
+            m_timerAutoRepeatAIN->stop();
+            ui->cboxRepeatAIN->setChecked(false);
+        }
+
+        ui->pbCmdSend->setDisabled(true);
+
+        m_timerAutoRepeatInput->start(ui->sbRepeatInputs->value());
+    }
+    else
+    {
+        m_timerAutoRepeatInput->stop();
+        ui->pbCmdSend->setEnabled(true);
+    }
+}
+//----------------------------------------
+void MainWindow::autoRepeatAIN(bool state)
+{
+    if(state)
+    {
+        if(ui->cboxRepeatInputs->isChecked())
+        {
+            m_timerAutoRepeatInput->stop();
+            ui->cboxRepeatInputs->setChecked(false);
+        }
+
+        ui->pbCmdSend->setDisabled(true);
+
+        m_timerAutoRepeatAIN->start(ui->sbRepeatAIN->value());
+    }
+    else
+    {
+        m_timerAutoRepeatAIN->stop();
+        ui->pbCmdSend->setEnabled(true);
+    }
+}
+//------------------------------------
+void MainWindow::autoRepeatTimInputs()
+{
+    writeData(tr("0x00"));
+
+    if(ui->cboxRepeatInputs->isChecked())
+        m_timerAutoRepeatInput->start(ui->sbRepeatInputs->value());
+}
+//---------------------------------
+void MainWindow::autoRepeatTimAIN()
+{
+    writeData(tr("0x02"));
+
+    if(ui->cboxRepeatAIN->isChecked())
+        m_timerAutoRepeatAIN->start(ui->sbRepeatAIN->value());
 }
