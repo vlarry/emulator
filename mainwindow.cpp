@@ -45,6 +45,8 @@ MainWindow::MainWindow(QWidget* parent):
     ui->cbInputType->addItems(QStringList() << tr("Аналоговый")  << tr("Цифровой"));
 
     initFilter(ui->cbCmdList->currentText());
+
+    addrChanged(ui->sbDeviceAddress->value());
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -565,7 +567,20 @@ void MainWindow::cmdDescription(const QString& description)
 //------------------------------------
 void MainWindow::addrChanged(int addr)
 {
-    Q_UNUSED(addr);
+//    Q_UNUSED(addr);
+
+    if(addr == 0)
+    {
+        ui->lblAIN1->setText(tr("Напряжение"));
+        ui->lblAIN2->setText(tr("Ток"));
+        ui->lblAIN3->setText(tr("Температура"));
+    }
+    else if(addr == 1)
+    {
+        ui->lblAIN1->setText(tr("Температура"));
+        ui->lblAIN2->setText(tr("Температура"));
+        ui->lblAIN3->setText(tr("Температура"));
+    }
 
     for(CIODevice* io: m_input_dev)
     {
