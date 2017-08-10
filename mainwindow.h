@@ -8,6 +8,9 @@
     #include <QMessageBox>
     #include <QSettings>
     #include <QTimer>
+    #include <QFile>
+    #include <QDate>
+    #include <QTextStream>
     #include "qcmd.h"
     #include "ciodevice.h"
     //----------
@@ -44,6 +47,8 @@
             QVector<QLineEdit*> m_ain_dev;
             QTimer*             m_timerAutoRepeatInput;
             QTimer*             m_timerAutoRepeatAIN;
+            QTimer*             m_timerTimeoutQuery;
+            QFile*              m_file_ain;
 
         private:
             void   initConnect();
@@ -58,6 +63,7 @@
             void   saveSettings();
             void   closeEvent(QCloseEvent* evt);
             void   keyPressEvent(QKeyEvent* evt);
+            void   fileAinOpen();
 
         public slots:
             void refreshSerialPort();

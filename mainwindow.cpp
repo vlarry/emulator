@@ -9,7 +9,9 @@ MainWindow::MainWindow(QWidget* parent):
     m_cmd_last(""),
     m_query_count(0),
     m_timerAutoRepeatInput(Q_NULLPTR),
-    m_timerAutoRepeatAIN(Q_NULLPTR)
+    m_timerAutoRepeatAIN(Q_NULLPTR),
+    m_timerTimeoutQuery(Q_NULLPTR),
+    m_file_ain(Q_NULLPTR)
 {
     ui->setupUi(this);
 
@@ -27,6 +29,9 @@ MainWindow::MainWindow(QWidget* parent):
 
     m_timerAutoRepeatInput = new QTimer(this);
     m_timerAutoRepeatAIN   = new QTimer(this);
+    m_timerTimeoutQuery    = new QTimer(this);
+
+    m_file_ain = new QFile;
 
     initSerialPort();
     initIO();
@@ -47,10 +52,15 @@ MainWindow::MainWindow(QWidget* parent):
     initFilter(ui->cbCmdList->currentText());
 
     addrChanged(ui->sbDeviceAddress->value());
+
+    fileAinOpen();
 }
 //-----------------------
 MainWindow::~MainWindow()
 {
+    if(m_file_ain->isOpen())
+        m_file_ain->close();
+
     delete ui;
 }
 //----------------------------
@@ -230,6 +240,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 
         case 0x02:
             Float_t ain;
+            QTextStream in(m_file_ain);
 
             for(quint8 i = 0; i < size; i += 4)
             {
@@ -241,6 +252,9 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                 }
 
                 QString str = QString::number(ain.number, 'f', 2);
+
+                // запись аналоговых величин в файл
+                in << QString(str + '\t');
 
                 if(i == 8)
                     str += QChar(176); // добавляем знак цельсия к числу в третьей колонке
@@ -260,6 +274,8 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 
                 m_ain_dev.at(i/4)->setText(str);
             }
+
+            in << '\n';
         break;
     }
 }
@@ -350,6 +366,18 @@ void MainWindow::keyPressEvent(QKeyEvent* evt)
         break;
     }
 }
+//----------------------------
+void MainWindow::fileAinOpen()
+{
+    QDate date;
+
+    m_file_ain->setFileName(tr("AIN_") + date.currentDate().toString("dd_MM_yyyy") + tr(".txt"));
+
+    if(!m_file_ain->open(QIODevice::Append | QIODevice::Text))
+    {
+        showMessage(tr("Ошибка: ") + m_file_ain->errorString());
+    }
+}
 //----------------------------------
 void MainWindow::refreshSerialPort()
 {
@@ -393,6 +421,8 @@ void MainWindow::ctrlSerialPort(bool state)
 
         showMessage(ui->cbPortNames->currentText() + " " + tr("открыт"));
 
+        fileAinOpen();
+
         m_port->setBaudRate(ui->cbBaudrate->currentText().toInt());
         m_port->setFlowControl(QSerialPort::NoFlowControl);
         m_port->setDataBits(QSerialPort::Data8);
@@ -407,6 +437,8 @@ void MainWindow::ctrlSerialPort(bool state)
         ui->groupDevice->setDisabled(true);
         ui->pbCmdSend->setDisabled(true);
         ui->gboxAutorepeat->setDisabled(true);
+
+        m_file_ain->close();
 
         showMessage(ui->cbPortNames->currentText() + " " + tr("закрыт"));
     }
