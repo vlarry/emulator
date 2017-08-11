@@ -603,15 +603,21 @@ void MainWindow::addrChanged(int addr)
 
     if(addr == 0)
     {
+        ui->groupDevice->setTitle(tr("Устройство МДВВ-01"));
         ui->lblAIN1->setText(tr("Напряжение"));
         ui->lblAIN2->setText(tr("Ток"));
         ui->lblAIN3->setText(tr("Температура"));
     }
     else if(addr == 1)
     {
+        ui->groupDevice->setTitle(tr("Устройство МДВВ-02"));
         ui->lblAIN1->setText(tr("Температура"));
         ui->lblAIN2->setText(tr("Температура"));
         ui->lblAIN3->setText(tr("Температура"));
+    }
+    else
+    {
+        ui->groupDevice->setTitle(tr("Неопределенное устройство"));
     }
 
     for(CIODevice* io: m_input_dev)
