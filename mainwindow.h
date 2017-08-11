@@ -45,10 +45,12 @@
             QVector<CIODevice*> m_input_dev;
             QVector<CIODevice*> m_output_dev;
             QVector<QLineEdit*> m_ain_dev;
+            QVector<QString>    m_queue_cmd;
             QTimer*             m_timerAutoRepeatInput;
             QTimer*             m_timerAutoRepeatAIN;
             QTimer*             m_timerTimeoutQuery;
             QFile*              m_file_ain;
+            bool                m_block_send;
 
         private:
             void   initConnect();
@@ -64,13 +66,17 @@
             void   closeEvent(QCloseEvent* evt);
             void   keyPressEvent(QKeyEvent* evt);
             void   fileAinOpen();
+            void   blockSend();
+            void   unblockSend();
+            bool   is_blockSend();
 
         public slots:
             void refreshSerialPort();
             void ctrlSerialPort(bool state);
             void readData();
-            void writeCmd();
-            void writeData(const QString& cmd_str = "");
+            void sendCmd();
+            void sendData(const QString& data = "");
+            void write(const QString& cmd_str = "");
             void BytesWriten(qint64 byte);
             void cmdDescription(const QString& description);
             void addrChanged(int addr);
@@ -81,6 +87,7 @@
             void autoRepeatAIN(bool state);
             void autoRepeatTimInputs();
             void autoRepeatTimAIN();
+            void timeoutTim();
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

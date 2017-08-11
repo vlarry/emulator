@@ -11,7 +11,8 @@ MainWindow::MainWindow(QWidget* parent):
     m_timerAutoRepeatInput(Q_NULLPTR),
     m_timerAutoRepeatAIN(Q_NULLPTR),
     m_timerTimeoutQuery(Q_NULLPTR),
-    m_file_ain(Q_NULLPTR)
+    m_file_ain(Q_NULLPTR),
+    m_block_send(false)
 {
     ui->setupUi(this);
 
@@ -69,7 +70,7 @@ void MainWindow::initConnect()
     connect(ui->tbPortRefresh, SIGNAL(clicked()), this, SLOT(refreshSerialPort()));
     connect(ui->pbCtrlPort, SIGNAL(clicked(bool)), this, SLOT(ctrlSerialPort(bool)));
     connect(m_port, SIGNAL(readyRead()), this, SLOT(readData()));
-    connect(ui->pbCmdSend, SIGNAL(clicked()), this, SLOT(writeCmd()));
+    connect(ui->pbCmdSend, SIGNAL(clicked()), this, SLOT(sendCmd()));
     connect(m_port, SIGNAL(bytesWritten(qint64)), this, SLOT(BytesWriten(qint64)));
     connect(ui->cbCmdList, SIGNAL(changeDescription(QString)), this, SLOT(cmdDescription(QString)));
     connect(ui->sbDeviceAddress, SIGNAL(valueChanged(int)), SLOT(addrChanged(int)));
@@ -90,6 +91,7 @@ void MainWindow::initConnect()
     connect(ui->cboxRepeatAIN, SIGNAL(clicked(bool)), this, SLOT(autoRepeatAIN(bool)));
     connect(m_timerAutoRepeatInput, SIGNAL(timeout()), this, SLOT(autoRepeatTimInputs()));
     connect(m_timerAutoRepeatAIN, SIGNAL(timeout()), this, SLOT(autoRepeatTimAIN()));
+    connect(m_timerTimeoutQuery, SIGNAL(timeout()), this, SLOT(timeoutTim()));
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -378,6 +380,25 @@ void MainWindow::fileAinOpen()
         showMessage(tr("Ошибка: ") + m_file_ain->errorString());
     }
 }
+//--------------------------
+void MainWindow::blockSend()
+{
+    m_block_send = true;
+
+    m_timerTimeoutQuery->start(100); // таймаут отправки 100 мс
+}
+//----------------------------
+void MainWindow::unblockSend()
+{
+    m_block_send = false;
+
+    m_timerTimeoutQuery->stop(); // останавливаем таймер таймаута
+}
+//-----------------------------
+bool MainWindow::is_blockSend()
+{
+    return m_block_send;
+}
 //----------------------------------
 void MainWindow::refreshSerialPort()
 {
@@ -466,15 +487,55 @@ void MainWindow::readData()
         }
 
         m_responce.clear();
+        sendData(); // подтверждаем принятие данных отправкой пустого сообщения
     }
 }
-//-------------------------
-void MainWindow::writeCmd()
+//------------------------
+void MainWindow::sendCmd()
 {
-    writeData(ui->cbCmdList->currentText());
+    sendData(ui->cbCmdList->currentText());
 }
-//------------------------------------------------
-void MainWindow::writeData(const QString& cmd_str)
+//--------------------------------------------
+void MainWindow::sendData(const QString& data)
+{
+//    ui->pteConsole->appendPlainText(data);
+    if(!is_blockSend()) // если не блокирована передача
+    {
+        if(!data.isEmpty())
+        {
+            m_cmd_last = data;
+
+            blockSend(); // блокируем передачу
+            write(data); // отправляем данные
+        }
+    }
+    else
+    {
+        if(!data.isEmpty())
+        {
+            m_queue_cmd.append(data);
+        }
+        else
+        {
+            unblockSend(); // снимаем блокировку передачи
+
+            if(!m_queue_cmd.isEmpty())
+            {
+                QString cmd_cur = m_queue_cmd.takeFirst();
+
+                if(!cmd_cur.isEmpty())
+                {
+                    m_cmd_last = cmd_cur;
+
+                    blockSend(); // блокируем передачу
+                    write(cmd_cur);
+                }
+            }
+        }
+    }
+}
+//--------------------------------------------
+void MainWindow::write(const QString& cmd_str)
 {
     if(m_query.isEmpty())
     {
@@ -573,13 +634,14 @@ void MainWindow::BytesWriten(qint64 byte)
 
     if(m_query_count == m_query.count())
     {
-        ui->pteConsole->appendPlainText(tr("ЗАПИСЬ КОМАНДЫ: ") + ui->cbCmdList->description(ui->cbCmdList->currentIndex()));
+        int index = (QString(m_cmd_last).remove(QRegExp(tr("0x"))).toInt(Q_NULLPTR, 16));
+        ui->pteConsole->appendPlainText(tr("ЗАПИСЬ КОМАНДЫ: ") + ui->cbCmdList->description(index));
 
         m_query.clear();
         m_query_count = 0;
     }
     else
-        writeData();
+        write();
 }
 //---------------------------------------------------------
 void MainWindow::cmdDescription(const QString& description)
@@ -638,10 +700,11 @@ void MainWindow::outputStateChanged(quint8 id, bool state)
         quint8 offset = (state)?0x0E:0x06;
         quint8 cmd    = offset + id;
 
-        ui->cbCmdList->setCurrentIndex(cmd);
-        cmdDescription(ui->cbCmdList->description(cmd));
+        QString str;
 
-        writeCmd();
+        str.setNum(cmd, 16);
+
+        sendData(((cmd >= 16)?tr("0x"):tr("0x0")) + str.toUpper());
     }
 }
 //---------------------------------------
@@ -692,20 +755,11 @@ void MainWindow::autoRepeatInputs(bool state)
 {
     if(state)
     {
-        if(ui->cboxRepeatAIN->isChecked())
-        {
-            m_timerAutoRepeatAIN->stop();
-            ui->cboxRepeatAIN->setChecked(false);
-        }
-
-        ui->pbCmdSend->setDisabled(true);
-
         m_timerAutoRepeatInput->start(ui->sbRepeatInputs->value());
     }
     else
     {
         m_timerAutoRepeatInput->stop();
-        ui->pbCmdSend->setEnabled(true);
     }
 }
 //----------------------------------------
@@ -713,26 +767,17 @@ void MainWindow::autoRepeatAIN(bool state)
 {
     if(state)
     {
-        if(ui->cboxRepeatInputs->isChecked())
-        {
-            m_timerAutoRepeatInput->stop();
-            ui->cboxRepeatInputs->setChecked(false);
-        }
-
-        ui->pbCmdSend->setDisabled(true);
-
         m_timerAutoRepeatAIN->start(ui->sbRepeatAIN->value());
     }
     else
     {
         m_timerAutoRepeatAIN->stop();
-        ui->pbCmdSend->setEnabled(true);
     }
 }
 //------------------------------------
 void MainWindow::autoRepeatTimInputs()
 {
-    writeData(tr("0x00"));
+    sendData(tr("0x00"));
 
     if(ui->cboxRepeatInputs->isChecked())
         m_timerAutoRepeatInput->start(ui->sbRepeatInputs->value());
@@ -740,8 +785,14 @@ void MainWindow::autoRepeatTimInputs()
 //---------------------------------
 void MainWindow::autoRepeatTimAIN()
 {
-    writeData(tr("0x02"));
+    sendData(tr("0x02"));
 
     if(ui->cboxRepeatAIN->isChecked())
         m_timerAutoRepeatAIN->start(ui->sbRepeatAIN->value());
+}
+//---------------------------
+void MainWindow::timeoutTim()
+{
+    unblockSend();
+    sendData();
 }
