@@ -259,19 +259,29 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                 in << QString(str + '\t');
 
                 if(i == 8)
-                    str += QChar(176); // добавляем знак цельсия к числу в третьей колонке
+                {
+                    str += " " + QString(QChar(176)) + "C"; // добавляем знак цельсия к числу в третьей колонке
+
+                    m_ain_dev.at(2)->setToolTip(tr("Внутрення температура"));
+                }
 
                 if(ui->sbDeviceAddress->value() == 0) // МДВВ-01
                 {
                     if(i == 0) // первая ячейка AIN
-                        str += tr("В");
+                        str += tr(" В");
                     else if(i == 4)
-                        str += tr("mA");
+                        str += tr(" mA");
+
+                    m_ain_dev.at(0)->setToolTip(tr("Наличие питания 5VP"));
+                    m_ain_dev.at(1)->setToolTip(tr("Ток потребления"));
                 }
                 else if(ui->sbDeviceAddress->value() == 1) // МДВВ-02
                 {
                     if(i == 0 || i == 4)
-                        str += QChar(176); // добавление знака градусов
+                        str += " " + QString(QChar(176)) + "C"; // добавление знака градусов
+
+                    m_ain_dev.at(0)->setToolTip(tr("Температура по первому каналу"));
+                    m_ain_dev.at(1)->setToolTip(tr("Температура по второму каналу"));
                 }
 
                 m_ain_dev.at(i/4)->setText(str);
@@ -458,6 +468,12 @@ void MainWindow::ctrlSerialPort(bool state)
         ui->groupDevice->setDisabled(true);
         ui->pbCmdSend->setDisabled(true);
         ui->gboxAutorepeat->setDisabled(true);
+
+        ui->cboxRepeatInputs->setChecked(false);
+        ui->cboxRepeatAIN->setChecked(false);
+
+        m_timerAutoRepeatInput->stop();
+        m_timerAutoRepeatAIN->stop();
 
         m_file_ain->close();
 

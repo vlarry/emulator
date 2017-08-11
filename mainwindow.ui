@@ -3357,7 +3357,7 @@
                     </size>
                    </property>
                    <property name="maxLength">
-                    <number>7</number>
+                    <number>10</number>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -3396,7 +3396,7 @@
                     </size>
                    </property>
                    <property name="maxLength">
-                    <number>7</number>
+                    <number>10</number>
                    </property>
                    <property name="frame">
                     <bool>true</bool>
@@ -3435,7 +3435,7 @@
                     </size>
                    </property>
                    <property name="maxLength">
-                    <number>7</number>
+                    <number>10</number>
                    </property>
                    <property name="frame">
                     <bool>true</bool>
@@ -3474,7 +3474,7 @@
                     </size>
                    </property>
                    <property name="maxLength">
-                    <number>7</number>
+                    <number>10</number>
                    </property>
                    <property name="frame">
                     <bool>true</bool>
