@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>850</width>
-    <height>704</height>
+    <width>1057</width>
+    <height>624</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,133 +17,161 @@
    <string/>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_46">
+   <layout class="QVBoxLayout" name="verticalLayout_29">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_11">
+     <layout class="QHBoxLayout" name="horizontalLayout_18">
       <item>
-       <widget class="QGroupBox" name="grboxComPort">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="title">
-         <string>Настройки последовательного порта</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="flat">
-         <bool>false</bool>
-        </property>
-        <layout class="QGridLayout" name="gridLayout">
-         <property name="topMargin">
-          <number>5</number>
-         </property>
-         <property name="bottomMargin">
-          <number>5</number>
-         </property>
-         <item row="0" column="6">
-          <widget class="QPushButton" name="pbCtrlPort">
-           <property name="toolTip">
-            <string>CTRL port</string>
+       <layout class="QHBoxLayout" name="horizontalLayout_11">
+        <item>
+         <widget class="QGroupBox" name="grboxComPort">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="title">
+           <string>Настройки последовательного порта</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+          <layout class="QGridLayout" name="gridLayout">
+           <property name="topMargin">
+            <number>5</number>
            </property>
-           <property name="text">
-            <string>Открыть</string>
+           <property name="bottomMargin">
+            <number>5</number>
            </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-           <property name="autoDefault">
-            <bool>false</bool>
-           </property>
-           <property name="flat">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0" colspan="2">
-          <widget class="QLabel" name="lblNameBaudrate">
-           <property name="text">
-            <string>Скорость</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="lblNamePort">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>2</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="contextMenuPolicy">
-            <enum>Qt::NoContextMenu</enum>
-           </property>
-           <property name="text">
-            <string>Порт</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::AutoText</enum>
-           </property>
-           <property name="scaledContents">
-            <bool>false</bool>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="4" colspan="2">
-          <widget class="QToolButton" name="tbPortRefresh">
-           <property name="toolTip">
-            <string>Refresh</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resource.qrc">
-             <normaloff>:/images/resource/images/refresh.png</normaloff>:/images/resource/images/refresh.png</iconset>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="3">
-          <widget class="QComboBox" name="cbPortNames">
-           <property name="toolTip">
-            <string>List ports</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="3">
-          <widget class="QComboBox" name="cbBaudrate">
-           <property name="toolTip">
-            <string>Baudrate</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
+           <item row="0" column="6">
+            <widget class="QPushButton" name="pbCtrlPort">
+             <property name="toolTip">
+              <string>CTRL port</string>
+             </property>
+             <property name="text">
+              <string>Открыть</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <property name="autoDefault">
+              <bool>false</bool>
+             </property>
+             <property name="flat">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0" colspan="2">
+            <widget class="QLabel" name="lblNameBaudrate">
+             <property name="text">
+              <string>Скорость</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="lblNamePort">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>2</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="contextMenuPolicy">
+              <enum>Qt::NoContextMenu</enum>
+             </property>
+             <property name="text">
+              <string>Порт</string>
+             </property>
+             <property name="textFormat">
+              <enum>Qt::AutoText</enum>
+             </property>
+             <property name="scaledContents">
+              <bool>false</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="wordWrap">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="4" colspan="2">
+            <widget class="QToolButton" name="tbPortRefresh">
+             <property name="toolTip">
+              <string>Refresh</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="resource.qrc">
+               <normaloff>:/images/resource/images/refresh.png</normaloff>:/images/resource/images/refresh.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QComboBox" name="cbPortNames">
+             <property name="toolTip">
+              <string>List ports</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <widget class="QComboBox" name="cbBaudrate">
+             <property name="toolTip">
+              <string>Baudrate</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_16">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
       <item>
-       <spacer name="horizontalSpacer_16">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <widget class="QCheckBox" name="cboxTerminal">
+          <property name="text">
+           <string>Терминал</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -161,106 +189,114 @@
       <property name="title">
        <string>Устройства</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_45">
-       <property name="topMargin">
-        <number>5</number>
-       </property>
-       <property name="bottomMargin">
-        <number>5</number>
-       </property>
+      <layout class="QVBoxLayout" name="verticalLayout_28">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_18">
+        <layout class="QHBoxLayout" name="horizontalLayout_60">
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_5">
-           <property name="spacing">
-            <number>0</number>
-           </property>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout">
+            <layout class="QHBoxLayout" name="horizontalLayout_34">
              <item>
-              <layout class="QGridLayout" name="gridLayout_2">
-               <property name="sizeConstraint">
-                <enum>QLayout::SetDefaultConstraint</enum>
-               </property>
-               <property name="verticalSpacing">
-                <number>6</number>
-               </property>
-               <item row="1" column="1">
-                <widget class="QCmd" name="cbCmdList">
-                 <property name="toolTip">
-                  <string>Command list</string>
+              <layout class="QHBoxLayout" name="horizontalLayout">
+               <item>
+                <layout class="QGridLayout" name="gridLayout_2">
+                 <property name="sizeConstraint">
+                  <enum>QLayout::SetDefaultConstraint</enum>
                  </property>
-                </widget>
+                 <property name="verticalSpacing">
+                  <number>6</number>
+                 </property>
+                 <item row="1" column="1">
+                  <widget class="QCmd" name="cbCmdList">
+                   <property name="toolTip">
+                    <string>Command list</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="lblCommand">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Команда</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="lblDeviceAddress">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Адрес</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QSpinBox" name="sbDeviceAddress">
+                   <property name="toolTip">
+                    <string>Device address</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                   <property name="maximum">
+                    <number>3</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QPushButton" name="pbCmdSend">
+                   <property name="toolTip">
+                    <string>Command send</string>
+                   </property>
+                   <property name="text">
+                    <string>Отправить</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="2">
+                  <widget class="QLabel" name="lblCmdDescription">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="scaledContents">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="lblCommand">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
+               <item>
+                <spacer name="horizontalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
                  </property>
-                 <property name="text">
-                  <string>Команда</string>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
                  </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="lblDeviceAddress">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string>Адрес</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QSpinBox" name="sbDeviceAddress">
-                 <property name="toolTip">
-                  <string>Device address</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                 <property name="maximum">
-                  <number>3</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QPushButton" name="pbCmdSend">
-                 <property name="toolTip">
-                  <string>Command send</string>
-                 </property>
-                 <property name="text">
-                  <string>Отправить</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <widget class="QLabel" name="lblCmdDescription">
-                 <property name="text">
-                  <string/>
-                 </property>
-                 <property name="scaledContents">
-                  <bool>true</bool>
-                 </property>
-                </widget>
+                </spacer>
                </item>
               </layout>
              </item>
              <item>
-              <spacer name="horizontalSpacer">
+              <spacer name="horizontalSpacer_12">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
@@ -272,6 +308,87 @@
                </property>
               </spacer>
              </item>
+             <item>
+              <widget class="QGroupBox" name="gboxAutorepeat">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="title">
+                <string>Автоповтор</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_6">
+                <property name="topMargin">
+                 <number>5</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>5</number>
+                </property>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_20">
+                  <item>
+                   <widget class="QCheckBox" name="cboxRepeatInputs">
+                    <property name="text">
+                     <string>Входы</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="sbRepeatInputs">
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="minimum">
+                     <number>10</number>
+                    </property>
+                    <property name="maximum">
+                     <number>1000</number>
+                    </property>
+                    <property name="singleStep">
+                     <number>10</number>
+                    </property>
+                    <property name="value">
+                     <number>20</number>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_19">
+                  <item>
+                   <widget class="QCheckBox" name="cboxRepeatAIN">
+                    <property name="text">
+                     <string>AIN</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="sbRepeatAIN">
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="minimum">
+                     <number>10</number>
+                    </property>
+                    <property name="maximum">
+                     <number>1000</number>
+                    </property>
+                    <property name="singleStep">
+                     <number>10</number>
+                    </property>
+                    <property name="value">
+                     <number>20</number>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
             </layout>
            </item>
            <item>
@@ -282,121 +399,63 @@
              <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
-               <height>40</height>
+               <height>18</height>
               </size>
              </property>
             </spacer>
            </item>
-          </layout>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_12">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
-            <widget class="QGroupBox" name="gboxAutorepeat">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
+            <widget class="QGroupBox" name="groupBox_2">
              <property name="title">
-              <string>Автоповтор</string>
+              <string>DSDIN</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_6">
-              <property name="topMargin">
-               <number>5</number>
-              </property>
-              <property name="bottomMargin">
-               <number>5</number>
-              </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_33">
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_20">
-                <item>
-                 <widget class="QCheckBox" name="cboxRepeatInputs">
-                  <property name="text">
-                   <string>Входы</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="sbRepeatInputs">
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                  <property name="minimum">
-                   <number>10</number>
-                  </property>
-                  <property name="maximum">
-                   <number>1000</number>
-                  </property>
-                  <property name="singleStep">
-                   <number>10</number>
-                  </property>
-                  <property name="value">
-                   <number>20</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+               <widget class="QLabel" name="lblStateDSIDIN">
+                <property name="text">
+                 <string>Состояние</string>
+                </property>
+               </widget>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_19">
-                <item>
-                 <widget class="QCheckBox" name="cboxRepeatAIN">
-                  <property name="text">
-                   <string>AIN</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="sbRepeatAIN">
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                  <property name="minimum">
-                   <number>10</number>
-                  </property>
-                  <property name="maximum">
-                   <number>1000</number>
-                  </property>
-                  <property name="singleStep">
-                   <number>10</number>
-                  </property>
-                  <property name="value">
-                   <number>20</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+               <widget class="QLineEdit" name="leStateDSDIN">
+                <property name="maxLength">
+                 <number>50</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_44">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLabel" name="lblTimeDSDIN">
+                <property name="text">
+                 <string>Время</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="leTimeDSDIN">
+                <property name="maxLength">
+                 <number>8</number>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
            </item>
           </layout>
          </item>
@@ -3527,19 +3586,7 @@
       <zorder>groupDevice</zorder>
       <zorder>line</zorder>
       <zorder></zorder>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPlainTextEdit" name="pteConsole">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
+      <zorder>groupBox_2</zorder>
      </widget>
     </item>
    </layout>
@@ -3549,7 +3596,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>850</width>
+     <width>1057</width>
      <height>21</height>
     </rect>
    </property>
@@ -3563,6 +3610,28 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="dwTerminal">
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2">
+    <layout class="QVBoxLayout" name="verticalLayout_15">
+     <item>
+      <widget class="QPlainTextEdit" name="pteConsole">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
