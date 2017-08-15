@@ -88,6 +88,7 @@
             void autoRepeatTimInputs();
             void autoRepeatTimAIN();
             void timeoutTim();
+            void visiblityTerminal(bool visible);
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

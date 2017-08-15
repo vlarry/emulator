@@ -92,6 +92,9 @@ void MainWindow::initConnect()
     connect(m_timerAutoRepeatInput, SIGNAL(timeout()), this, SLOT(autoRepeatTimInputs()));
     connect(m_timerAutoRepeatAIN, SIGNAL(timeout()), this, SLOT(autoRepeatTimAIN()));
     connect(m_timerTimeoutQuery, SIGNAL(timeout()), this, SLOT(timeoutTim()));
+
+    connect(ui->dwTerminal, SIGNAL(visibilityChanged(bool)), this, SLOT(visiblityTerminal(bool)));
+    connect(ui->cboxTerminal, SIGNAL(toggled(bool)), this, SLOT(visiblityTerminal(bool)));
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -201,6 +204,15 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 
     quint8 cmd  = (quint8)QString(m_cmd_last).remove(QRegExp("0x")).toInt(Q_NULLPTR, 16);
 
+    Float_t ain;
+    QTextStream in(m_file_ain);
+
+    union
+    {
+        quint16 time;
+        quint8  byte[2];
+    } dsdin;
+
     switch(cmd)
     {
         case 0x00:
@@ -241,9 +253,6 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
         break;
 
         case 0x02:
-            Float_t ain;
-            QTextStream in(m_file_ain);
-
             for(quint8 i = 0; i < size; i += 4)
             {
                 quint8 j;
@@ -288,6 +297,37 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             }
 
             in << '\n';
+        break;
+
+        case 0x1F:
+            if(size == 3)
+            {
+                quint8 byte = data.at(0);
+
+                switch(byte)
+                {
+                    case 0xA1:
+                        ui->leStateDSDIN->setText(tr("Установлен уровень \"0\""));
+                    break;
+
+                    case 0xF5:
+                        ui->leStateDSDIN->setText(tr("Установлен уровень \"1\""));
+                    break;
+
+                    case 0xB8:
+                        ui->leStateDSDIN->setText(tr("Срабатывание не зафиксировано"));
+                    break;
+
+                    case 0xEA:
+                        ui->leStateDSDIN->setText(tr("Функция не поддерживается"));
+                    break;
+                }
+
+                dsdin.byte[0] = data.at(1);
+                dsdin.byte[1] = data.at(2);
+
+                ui->leTimeDSDIN->setText(QString::number(dsdin.time));
+            }
         break;
     }
 }
@@ -811,4 +851,10 @@ void MainWindow::timeoutTim()
 {
     unblockSend();
     sendData();
+}
+//----------------------------------------------
+void MainWindow::visiblityTerminal(bool visible)
+{
+    ui->cboxTerminal->setChecked(visible);
+    ui->dwTerminal->setVisible(visible);
 }

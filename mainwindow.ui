@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1057</width>
-    <height>624</height>
+    <height>637</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -423,7 +423,13 @@
               <item>
                <widget class="QLineEdit" name="leStateDSDIN">
                 <property name="maxLength">
-                 <number>50</number>
+                 <number>100</number>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -451,6 +457,12 @@
                <widget class="QLineEdit" name="leTimeDSDIN">
                 <property name="maxLength">
                  <number>8</number>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -3586,7 +3598,6 @@
       <zorder>groupDevice</zorder>
       <zorder>line</zorder>
       <zorder></zorder>
-      <zorder>groupBox_2</zorder>
      </widget>
     </item>
    </layout>
