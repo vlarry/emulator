@@ -262,14 +262,14 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                     ain.byte[j] = data.at(i + j);
                 }
 
-                QString str = QString::number(ain.number, 'f', 2);
+                QString str;
 
                 // запись аналоговых величин в файл
-                in << QString(str + '\t');
+                in << QString(QString::number(ain.number) + '\t');
 
                 if(i == 8)
                 {
-                    str += " " + QString(QChar(176)) + "C"; // добавляем знак цельсия к числу в третьей колонке
+                    str = QString::number(ain.number, 'f', 2) + " " + QString(QChar(176)) + "C";
 
                     m_ain_dev.at(2)->setToolTip(tr("Внутрення температура"));
                 }
@@ -277,9 +277,13 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                 if(ui->sbDeviceAddress->value() == 0) // МДВВ-01
                 {
                     if(i == 0) // первая ячейка AIN
-                        str += tr(" В");
+                    {
+                        str = QString::number(ain.number, 'f', 2) + tr(" В");
+                    }
                     else if(i == 4)
-                        str += tr(" mA");
+                    {
+                        str = QString::number(ain.number*1000, 'f', 3) + tr(" mA");
+                    }
 
                     m_ain_dev.at(0)->setToolTip(tr("Наличие питания 5VP"));
                     m_ain_dev.at(1)->setToolTip(tr("Ток потребления"));
@@ -287,7 +291,9 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                 else if(ui->sbDeviceAddress->value() == 1) // МДВВ-02
                 {
                     if(i == 0 || i == 4)
-                        str += " " + QString(QChar(176)) + "C"; // добавление знака градусов
+                    {
+                        str = QString::number(ain.number, 'f', 2) + " " + QString(QChar(176)) + "C"; // добавление знака градусов
+                    }
 
                     m_ain_dev.at(0)->setToolTip(tr("Температура по первому каналу"));
                     m_ain_dev.at(1)->setToolTip(tr("Температура по второму каналу"));
