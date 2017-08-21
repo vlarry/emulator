@@ -636,12 +636,7 @@ void MainWindow::write(const QString& cmd_str)
         str.setNum(cmd, 16);
         m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
 
-        if(m_cmd_last == tr("0x3D"))
-        {
-            str.setNum(ui->sbDuration->value(), 16);
-            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
-        }
-        else if(m_cmd_last == tr("0x3E"))
+        if(m_cmd_last == tr("0x3E"))
         {
             str.setNum(ui->sbPeriods->value(), 16);
             m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // количество периодов
@@ -661,6 +656,9 @@ void MainWindow::write(const QString& cmd_str)
 
             str.setNum(type, 16);
             m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // тип входа
+
+            str.setNum(ui->sbDuration->value(), 16);
+            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // длительность периода
 
             str.setNum(ui->sbFaultInput->value(), 16);
             m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // погрешность периода
