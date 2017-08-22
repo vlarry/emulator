@@ -644,6 +644,26 @@ void MainWindow::write(const QString& cmd_str)
         str.setNum(cmd, 16);
         m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
 
+        if(m_cmd_last == tr("0x05") && ui->sbDeviceAddress->value() == 2) // только для устройства МИК-01
+        {
+            for(quint8 i = 0; i < 3; ++i) // 3 байта на 12 входов
+            {
+                quint8 byte = 0x00;
+
+                for(quint8 j = 0; j < 8; j += 2) // 8 бит с шагом 2 (т.е. 2 бита на описание состояния одного выхода)
+                {
+                    CIODevice* out   = m_output_dev.at(i*4 + j/2);
+                    quint8     state = (out->get_state() == CIODevice::STATE_OFF)?0x00:
+                                       (out->get_state() == CIODevice::STATE_ON)?0x01:0x02;
+
+                    state = state << j;
+                    byte |= state;
+                }
+
+                str.setNum(byte, 16);
+                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
+            }
+        }
         if(m_cmd_last == tr("0x3E"))
         {
             str.setNum(ui->sbPeriods->value(), 16);

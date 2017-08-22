@@ -79,6 +79,11 @@ quint8 CIODevice::get_id() const
 {
     return m_id;
 }
+//---------------------------------------------
+CIODevice::state_t CIODevice::get_state() const
+{
+    return m_state;
+}
 //-----------------------------------
 void CIODevice::slotState(bool state)
 {
