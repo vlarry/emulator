@@ -131,6 +131,10 @@ void MainWindow::initIO()
     ui->OUT6->set_id(5);
     ui->OUT7->set_id(6);
     ui->OUT8->set_id(7);
+    ui->OUT8->set_id(8);
+    ui->OUT8->set_id(9);
+    ui->OUT8->set_id(10);
+    ui->OUT8->set_id(11);
 
     m_input_dev.append(ui->IN1);
     m_input_dev.append(ui->IN2);
@@ -153,6 +157,10 @@ void MainWindow::initIO()
     m_output_dev.append(ui->OUT6);
     m_output_dev.append(ui->OUT7);
     m_output_dev.append(ui->OUT8);
+    m_output_dev.append(ui->OUT9);
+    m_output_dev.append(ui->OUT10);
+    m_output_dev.append(ui->OUT11);
+    m_output_dev.append(ui->OUT12);
 
     setIO(m_input_dev, false);
     setIO(m_output_dev, true);
@@ -722,6 +730,7 @@ void MainWindow::cmdDescription(const QString& description)
 void MainWindow::addrChanged(int addr)
 {
 //    Q_UNUSED(addr);
+    quint8 out_count = 0;
 
     if(addr == 0)
     {
@@ -729,6 +738,8 @@ void MainWindow::addrChanged(int addr)
         ui->lblAIN1->setText(tr("Напряжение"));
         ui->lblAIN2->setText(tr("Ток"));
         ui->lblAIN3->setText(tr("Температура"));
+
+        out_count = 6;
     }
     else if(addr == 1)
     {
@@ -736,6 +747,14 @@ void MainWindow::addrChanged(int addr)
         ui->lblAIN1->setText(tr("Температура"));
         ui->lblAIN2->setText(tr("Температура"));
         ui->lblAIN3->setText(tr("Температура"));
+
+        out_count = 7;
+    }
+    else if(addr == 2)
+    {
+        ui->groupDevice->setTitle(tr("Устройство МИК-01"));
+
+        out_count = 12;
     }
     else
     {
@@ -745,17 +764,27 @@ void MainWindow::addrChanged(int addr)
     for(CIODevice* io: m_input_dev)
     {
         io->set_state(CIODevice::STATE_OFF);
+        io->set_dev_addr(ui->sbDeviceAddress->value());
     }
 
     for(CIODevice* io: m_output_dev)
     {
         io->set_state(CIODevice::STATE_OFF);
+        io->set_dev_addr(ui->sbDeviceAddress->value());
+    }
+
+    for(quint8 i = 0; i < 12; ++i)
+    {
+        if(i < out_count)
+            m_output_dev.at(i)->setEnabled(true);
+        else
+            m_output_dev.at(i)->setDisabled(true);
     }
 }
 //--------------------------------------------------------
 void MainWindow::outputStateChanged(quint8 id, bool state)
 {
-    if(id != 255)
+    if(id != 255 && ui->sbDeviceAddress->value() != 0x02)
     {
         quint8 offset = (state)?0x0E:0x06;
         quint8 cmd    = offset + id;

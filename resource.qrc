@@ -6,5 +6,6 @@
         <file>resource/images/switch_off.png</file>
         <file>resource/images/switch_on.png</file>
         <file>resource/images/error.png</file>
+        <file>resource/images/lamp_alt.png</file>
     </qresource>
 </RCC>
