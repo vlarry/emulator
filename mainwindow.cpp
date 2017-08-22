@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget* parent):
     m_timerAutoRepeatInput(Q_NULLPTR),
     m_timerAutoRepeatAIN(Q_NULLPTR),
     m_timerTimeoutQuery(Q_NULLPTR),
+    m_timerRefreshPort(Q_NULLPTR),
     m_file_ain(Q_NULLPTR),
     m_block_send(false)
 {
@@ -31,6 +32,7 @@ MainWindow::MainWindow(QWidget* parent):
     m_timerAutoRepeatInput = new QTimer(this);
     m_timerAutoRepeatAIN   = new QTimer(this);
     m_timerTimeoutQuery    = new QTimer(this);
+    m_timerRefreshPort     = new QTimer(this);
 
     m_file_ain = new QFile;
 
@@ -42,11 +44,10 @@ MainWindow::MainWindow(QWidget* parent):
     ui->groupDevice->setDisabled(true);
     ui->pbCmdSend->setDisabled(true);
 
+    loadSettings();
     refreshSerialPort();
 
     ui->cbCmdList->slotActivated(0);
-
-    loadSettings();
 
     ui->cbInputType->addItems(QStringList() << tr("Аналоговый")  << tr("Цифровой"));
 
@@ -68,6 +69,7 @@ MainWindow::~MainWindow()
 void MainWindow::initConnect()
 {
     connect(ui->tbPortRefresh, SIGNAL(clicked()), this, SLOT(refreshSerialPort()));
+    connect(m_timerRefreshPort, SIGNAL(timeout()), this, SLOT(refreshSerialPort()));
     connect(ui->pbCtrlPort, SIGNAL(clicked(bool)), this, SLOT(ctrlSerialPort(bool)));
     connect(m_port, SIGNAL(readyRead()), this, SLOT(readData()));
     connect(ui->pbCmdSend, SIGNAL(clicked()), this, SLOT(sendCmd()));
@@ -367,28 +369,12 @@ void MainWindow::setChannel(CIODevice* io, quint8 ch_state)
 //-----------------------------
 void MainWindow::loadSettings()
 {
-    QString port;
     QString baudrate;
 
     m_settings->beginGroup("COM");
-        port = m_settings->value(tr("port"), "").toString();
-        baudrate = m_settings->value(tr("baudrate"), 115200).toString();
+        m_port_name = m_settings->value(tr("port"), "").toString();
+        baudrate    = m_settings->value(tr("baudrate"), 115200).toString();
     m_settings->endGroup();
-
-    if(!port.isEmpty())
-    {
-        int index = ui->cbPortNames->findText(port);
-
-        if(index >= ui->cbPortNames->count())
-        {
-            if(ui->cbPortNames->count() > 0)
-                index = 0;
-            else
-                index = -1;
-        }
-
-        ui->cbPortNames->setCurrentIndex(index);
-    }
 
     if(!baudrate.isEmpty())
     {
@@ -476,12 +462,32 @@ void MainWindow::refreshSerialPort()
         ui->pbCtrlPort->setDisabled(true);
         ui->groupDevices->setDisabled(true);
         ui->pteConsole->setDisabled(true);
+
+        m_timerRefreshPort->start(100); // опрос наличия подлкюченных последовательных портов каждые 100мс
     }
     else
     {
+        qint8 index = -1;
+
+        if(m_port_name.isEmpty())
+        {
+            index = ui->cbPortNames->findText(m_port_name);
+
+            if(index == -1)
+            {
+                index = 0;
+            }
+        }
+        else
+            index = 0;
+
+        ui->cbPortNames->setCurrentIndex(index);
+
         ui->pbCtrlPort->setEnabled(true);
         ui->groupDevices->setEnabled(true);
         ui->pteConsole->setEnabled(true);
+
+        m_timerRefreshPort->stop();
     }
 }
 //-----------------------------------------
@@ -743,6 +749,12 @@ void MainWindow::cmdDescription(const QString& description)
         p.setColor(QPalette::WindowText, QColor(Qt::blue));
 
     ui->lblCmdDescription->setPalette(p);
+    ui->lblCmdDescription->setToolTip(desc);
+
+    if(desc.count() > 25)
+    {
+        desc = desc.mid(0, 25) + "...";
+    }
 
     ui->lblCmdDescription->setText(desc);
 }

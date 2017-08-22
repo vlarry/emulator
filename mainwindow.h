@@ -49,8 +49,10 @@
             QTimer*             m_timerAutoRepeatInput;
             QTimer*             m_timerAutoRepeatAIN;
             QTimer*             m_timerTimeoutQuery;
+            QTimer*             m_timerRefreshPort;
             QFile*              m_file_ain;
             bool                m_block_send;
+            QString             m_port_name; // имя порта по умолчанию
 
         private:
             void   initConnect();
