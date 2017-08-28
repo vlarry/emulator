@@ -452,22 +452,33 @@ bool MainWindow::is_blockSend()
 //----------------------------------
 void MainWindow::refreshSerialPort()
 {
-    ui->cbPortNames->clear();
+    quint8 count = 0;
+    QStringList port_list;
 
     foreach(const QSerialPortInfo& port_info, QSerialPortInfo::availablePorts())
-        ui->cbPortNames->addItem(port_info.portName());
-
-    if(ui->cbPortNames->count() == 0)
     {
+        port_list << port_info.portName();
+        count++;
+    }
+
+    if(count == 0)
+    {
+        if(m_port->isOpen())
+        {
+            ctrlSerialPort(false);
+        }
+
+        ui->cbPortNames->clear();
         ui->pbCtrlPort->setDisabled(true);
         ui->groupDevices->setDisabled(true);
         ui->pteConsole->setDisabled(true);
-
-        m_timerRefreshPort->start(100); // опрос наличия подлкюченных последовательных портов каждые 100мс
     }
-    else
+    else if(count != 0 && ui->cbPortNames->count() == 0)
     {
         qint8 index = -1;
+
+        if(!port_list.isEmpty())
+            ui->cbPortNames->addItems(port_list);
 
         if(m_port_name.isEmpty())
         {
@@ -482,13 +493,14 @@ void MainWindow::refreshSerialPort()
             index = 0;
 
         ui->cbPortNames->setCurrentIndex(index);
+        m_port_name = ui->cbPortNames->currentText(); // сохраняем порт
 
         ui->pbCtrlPort->setEnabled(true);
         ui->groupDevices->setEnabled(true);
         ui->pteConsole->setEnabled(true);
-
-        m_timerRefreshPort->stop();
     }
+
+    m_timerRefreshPort->start(500); // опрос наличия подлкюченных последовательных портов каждые 500мс
 }
 //-----------------------------------------
 void MainWindow::ctrlSerialPort(bool state)
@@ -539,6 +551,8 @@ void MainWindow::ctrlSerialPort(bool state)
 
         showMessage(ui->cbPortNames->currentText() + " " + tr("закрыт"));
     }
+
+    ui->pbCtrlPort->setChecked(state);
 }
 //-------------------------
 void MainWindow::readData()
