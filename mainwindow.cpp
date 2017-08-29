@@ -315,6 +315,50 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             in << '\n';
         break;
 
+        case 0x03:
+            for(quint8 i = 0; i < size; ++i)
+            {
+                quint8 byte = data.at(i);
+
+                for(quint8 j = 0; j < 8; ++j)
+                {
+                    quint8 channels = byte;
+
+                    channels >>= j;
+
+                    quint8 ch_state = channels & 0x01;
+                    quint8 ch_num   = j + (i*8);
+
+                    if(ch_num == m_input_dev.count())
+                        return;
+
+                    CIODevice* io = m_input_dev.at(ch_num);
+
+                    setChannel(io, ch_state);
+                }
+            }
+        break;
+
+        case 0x04:
+            for(quint8 i = 0; i < size; ++i)
+            {
+                quint8 byte = data.at(i);
+
+                for(quint8 j = 0; j < 8; j += 2)
+                {
+                    quint8 channels = byte;
+
+                    channels >>= j;
+
+                    quint8 ch_state = channels & 0x03;
+                    quint8 ch_num   = j/2 + (i*4);
+
+                    CIODevice* io = m_output_dev.at(ch_num);
+
+                    setChannel(io, ch_state);
+                }
+            }
+        break;
         case 0x1F:
             if(size == 3)
             {
@@ -362,7 +406,19 @@ void MainWindow::setChannel(CIODevice* io, quint8 ch_state)
 
         case 0x02: // ошибка
         case 0x03: // канала
-            io->set_state(CIODevice::STATE_ERR);
+            CIODevice::state_t state;
+            quint8 addr = io->get_addr();
+
+            if(addr == 2) // устройство МИК-01
+            {
+                state = CIODevice::STATE_ALT;
+            }
+            else
+            {
+                state = CIODevice::STATE_ERR;
+            }
+
+            io->set_state(state);
         break;
     }
 }

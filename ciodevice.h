@@ -23,6 +23,7 @@
             void set_id(quint8 id);
             void set_dev_addr(quint8 addr);
 
+            quint8  get_addr() const;
             quint8  get_id() const;
             state_t get_state() const;
 

@@ -74,6 +74,11 @@ void CIODevice::set_dev_addr(quint8 addr)
 {
     m_dev_addr = addr;
 }
+//--------------------------------
+quint8 CIODevice::get_addr() const
+{
+    return m_dev_addr;
+}
 //------------------------------
 quint8 CIODevice::get_id() const
 {
