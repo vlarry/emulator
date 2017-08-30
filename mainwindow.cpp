@@ -40,9 +40,6 @@ MainWindow::MainWindow(QWidget* parent):
     initIO();
     initConnect();
 
-    ui->groupDevices->setDisabled(true);
-    ui->pbCmdSend->setDisabled(true);
-
     loadSettings();
     refreshSerialPort();
 
@@ -547,15 +544,13 @@ void MainWindow::refreshSerialPort()
 
     if(count == 0)
     {
+        ui->cbPortNames->clear();
+        ui->pbCtrlPort->setDisabled(true);
+
         if(m_port->isOpen())
         {
             ctrlSerialPort(false);
         }
-
-        ui->cbPortNames->clear();
-        ui->pbCtrlPort->setDisabled(true);
-        ui->groupDevices->setDisabled(true);
-        ui->pteConsole->setDisabled(true);
     }
     else if(count != 0 && ui->cbPortNames->count() == 0)
     {
@@ -577,11 +572,9 @@ void MainWindow::refreshSerialPort()
             index = 0;
 
         ui->cbPortNames->setCurrentIndex(index);
-        m_port_name = ui->cbPortNames->currentText(); // сохраняем порт
-
         ui->pbCtrlPort->setEnabled(true);
-        ui->groupDevices->setEnabled(true);
-        ui->pteConsole->setEnabled(true);
+
+        m_port_name = ui->cbPortNames->currentText(); // сохраняем порт
     }
 
     m_timerRefreshPort->start(500); // опрос наличия подлкюченных последовательных портов каждые 500мс
@@ -600,10 +593,11 @@ void MainWindow::ctrlSerialPort(bool state)
         }
 
         ui->pbCtrlPort->setText(tr("Close"));
-        ui->groupDevices->setEnabled(true);
 
+        ui->groupDevices->setEnabled(true);
         ui->pbCmdSend->setEnabled(true);
         ui->gboxAutorepeat->setEnabled(true);
+        ui->twPeriphery->setEnabled(true);
 
         showMessage(ui->cbPortNames->currentText() + " " + tr("открыт"));
 
@@ -618,10 +612,13 @@ void MainWindow::ctrlSerialPort(bool state)
     else
     {
         m_port->close();
+
         ui->pbCtrlPort->setText(tr("Открыть"));
+
         ui->groupDevices->setDisabled(true);
         ui->pbCmdSend->setDisabled(true);
         ui->gboxAutorepeat->setDisabled(true);
+        ui->twPeriphery->setDisabled(true);
 
         ui->cboxRepeatInputs->setChecked(false);
         ui->cboxRepeatAIN->setChecked(false);
