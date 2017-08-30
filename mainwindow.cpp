@@ -41,7 +41,6 @@ MainWindow::MainWindow(QWidget* parent):
     initConnect();
 
     ui->groupDevices->setDisabled(true);
-    ui->groupDevice->setDisabled(true);
     ui->pbCmdSend->setDisabled(true);
 
     loadSettings();
@@ -574,7 +573,6 @@ void MainWindow::ctrlSerialPort(bool state)
         ui->pbCtrlPort->setText(tr("Close"));
         ui->groupDevices->setEnabled(true);
 
-        ui->groupDevice->setEnabled(true);
         ui->pbCmdSend->setEnabled(true);
         ui->gboxAutorepeat->setEnabled(true);
 
@@ -593,7 +591,6 @@ void MainWindow::ctrlSerialPort(bool state)
         m_port->close();
         ui->pbCtrlPort->setText(tr("Открыть"));
         ui->groupDevices->setDisabled(true);
-        ui->groupDevice->setDisabled(true);
         ui->pbCmdSend->setDisabled(true);
         ui->gboxAutorepeat->setDisabled(true);
 
@@ -836,7 +833,7 @@ void MainWindow::addrChanged(int addr)
 
     if(addr == 0)
     {
-        ui->groupDevice->setTitle(tr("Устройство МДВВ-01"));
+        ui->groupDevices->setTitle(tr("Устройство МДВВ-01"));
         ui->lblAIN1->setText(tr("Напряжение"));
         ui->lblAIN2->setText(tr("Ток"));
         ui->lblAIN3->setText(tr("Температура"));
@@ -845,7 +842,7 @@ void MainWindow::addrChanged(int addr)
     }
     else if(addr == 1)
     {
-        ui->groupDevice->setTitle(tr("Устройство МДВВ-02"));
+        ui->groupDevices->setTitle(tr("Устройство МДВВ-02"));
         ui->lblAIN1->setText(tr("Температура"));
         ui->lblAIN2->setText(tr("Температура"));
         ui->lblAIN3->setText(tr("Температура"));
@@ -854,13 +851,13 @@ void MainWindow::addrChanged(int addr)
     }
     else if(addr == 2)
     {
-        ui->groupDevice->setTitle(tr("Устройство МИК-01"));
+        ui->groupDevices->setTitle(tr("Устройство МИК-01"));
 
         out_count = 12;
     }
     else
     {
-        ui->groupDevice->setTitle(tr("Неопределенное устройство"));
+        ui->groupDevices->setTitle(tr("Неопределенное устройство"));
     }
 
     for(CIODevice* io: m_input_dev)
