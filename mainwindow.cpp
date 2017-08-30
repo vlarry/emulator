@@ -50,6 +50,8 @@ MainWindow::MainWindow(QWidget* parent):
 
     ui->cbInputType->addItems(QStringList() << tr("Аналоговый")  << tr("Цифровой"));
 
+    ui->twPeriphery->setCurrentIndex(0);
+
     initFilter(ui->cbCmdList->currentText());
 
     addrChanged(ui->sbDeviceAddress->value());
@@ -358,6 +360,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                 }
             }
         break;
+
         case 0x1F:
             if(size == 3)
             {
@@ -386,6 +389,32 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                 dsdin.byte[1] = data.at(2);
 
                 ui->leTimeDSDIN->setText(QString::number(dsdin.time));
+            }
+        break;
+
+        case 0x3D:
+            if(size == 6)
+            {
+                union
+                {
+                    quint16 count;
+                    quint8  byte[2];
+                } err_count;
+
+                err_count.byte[data.at(0)];
+                err_count.byte[data.at(1)];
+
+                ui->leErrorAddr->setText(QString::number(err_count.count));
+
+                err_count.byte[data.at(2)];
+                err_count.byte[data.at(3)];
+
+                ui->leErrorCmd->setText(QString::number(err_count.count));
+
+                err_count.byte[data.at(4)];
+                err_count.byte[data.at(5)];
+
+                ui->leErrorChecksum->setText(QString::number(err_count.count));
             }
         break;
     }
@@ -883,16 +912,21 @@ void MainWindow::addrChanged(int addr)
 //--------------------------------------------------------
 void MainWindow::outputStateChanged(quint8 id, bool state)
 {
-    if(id != 255 && ui->sbDeviceAddress->value() != 0x02)
+    if(id != 255)
     {
-        quint8 offset = (state)?0x0E:0x06;
-        quint8 cmd    = offset + id;
+        if(ui->sbDeviceAddress->value() != 0x02)
+        {
+            quint8 offset = (state)?0x0E:0x06;
+            quint8 cmd    = offset + id;
 
-        QString str;
+            QString str;
 
-        str.setNum(cmd, 16);
+            str.setNum(cmd, 16);
 
-        sendData(((cmd >= 16)?tr("0x"):tr("0x0")) + str.toUpper());
+            sendData(((cmd >= 16)?tr("0x"):tr("0x0")) + str.toUpper());
+        }
+        else
+            write(tr("0x05"));
     }
 }
 //---------------------------------------
