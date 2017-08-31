@@ -217,9 +217,11 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 
     union
     {
-        quint16 time;
+        quint16 data;
         quint8  byte[2];
-    } dsdin;
+    } temp;
+
+    temp.data = 0;
 
     switch(cmd)
     {
@@ -382,36 +384,30 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                     break;
                 }
 
-                dsdin.byte[0] = data.at(1);
-                dsdin.byte[1] = data.at(2);
+                temp.byte[0] = data.at(1);
+                temp.byte[1] = data.at(2);
 
-                ui->leTimeDSDIN->setText(QString::number(dsdin.time));
+                ui->leTimeDSDIN->setText(QString::number(temp.data));
             }
         break;
 
         case 0x3D:
             if(size == 6)
             {
-                union
-                {
-                    quint16 count;
-                    quint8  byte[2];
-                } err_count;
+                temp.byte[data.at(0)];
+                temp.byte[data.at(1)];
 
-                err_count.byte[data.at(0)];
-                err_count.byte[data.at(1)];
+                ui->leErrorAddr->setText(QString::number(temp.data));
 
-                ui->leErrorAddr->setText(QString::number(err_count.count));
+                temp.byte[data.at(2)];
+                temp.byte[data.at(3)];
 
-                err_count.byte[data.at(2)];
-                err_count.byte[data.at(3)];
+                ui->leErrorCmd->setText(QString::number(temp.data));
 
-                ui->leErrorCmd->setText(QString::number(err_count.count));
+                temp.byte[data.at(4)];
+                temp.byte[data.at(5)];
 
-                err_count.byte[data.at(4)];
-                err_count.byte[data.at(5)];
-
-                ui->leErrorChecksum->setText(QString::number(err_count.count));
+                ui->leErrorChecksum->setText(QString::number(temp.data));
             }
         break;
     }
