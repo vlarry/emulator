@@ -67,6 +67,7 @@
             void   saveSettings();
             void   closeEvent(QCloseEvent* evt);
             void   keyPressEvent(QKeyEvent* evt);
+            void   keyReleaseEvent(QKeyEvent* evt);
             void   fileAinOpen();
             void   blockSend();
             void   unblockSend();

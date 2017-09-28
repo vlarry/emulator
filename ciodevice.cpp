@@ -1,4 +1,5 @@
 #include "ciodevice.h"
+bool CIODevice::m_ctrl = false;
 //------------------------------------
 CIODevice::CIODevice(QWidget* parent):
     QToolButton(parent),
@@ -95,26 +96,45 @@ void CIODevice::slotState(bool state)
     // изменение состояния - только для выходов
     if(m_type)
     {
-        if(m_state == STATE_ON)
+        if(m_dev_addr == 0x02 && m_ctrl == true) // только для МИК-01 - переход в альтернативный режим при нажатии на
+        {                                       // клавишу CTRL
+            m_state = STATE_ALT;
+        }
+        else
         {
-            if(m_dev_addr == 2)
+            if(m_state == STATE_ON)
             {
-                m_state = STATE_ALT;
-            }
-            else
                 m_state = STATE_OFF;
-        }
-        else if(m_state == STATE_OFF)
-        {
-            m_state = STATE_ON;
-        }
-        else if(m_state == STATE_ALT)
-        {
-            m_state = STATE_OFF;
+            }
+            else if(m_state == STATE_OFF)
+            {
+                m_state = STATE_ON;
+            }
+            else if(m_state == STATE_ALT)
+            {
+                m_state = STATE_OFF;
+            }
         }
 
         set_state(m_state);
 
         emit stateChanged(m_id, state);
     }
+}
+//--------------------------------------------
+void CIODevice::set_modifier(int key_modifier)
+{
+    if(key_modifier == Qt::ControlModifier)
+    {
+        m_ctrl = true;
+    }
+    else
+    {
+        m_ctrl = false;
+    }
+}
+//---------------------------
+int CIODevice::get_modifier()
+{
+    return m_ctrl;
 }

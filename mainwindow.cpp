@@ -555,6 +555,11 @@ void MainWindow::closeEvent(QCloseEvent* evt)
 //--------------------------------------------
 void MainWindow::keyPressEvent(QKeyEvent* evt)
 {
+    if(evt->modifiers() == Qt::ControlModifier)
+    {
+        CIODevice::set_modifier(Qt::ControlModifier);
+    }
+
     switch(evt->key())
     {
         case Qt::Key_C:
@@ -564,6 +569,14 @@ void MainWindow::keyPressEvent(QKeyEvent* evt)
             }
         break;
     }
+
+    QMainWindow::keyPressEvent(evt);
+}
+//----------------------------------------------
+void MainWindow::keyReleaseEvent(QKeyEvent *evt)
+{
+    CIODevice::set_modifier(0);
+    QMainWindow::keyReleaseEvent(evt);
 }
 //----------------------------
 void MainWindow::fileAinOpen()

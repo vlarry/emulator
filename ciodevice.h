@@ -2,6 +2,8 @@
     #define CIODEVICE_H
     //--------------------
     #include <QToolButton>
+    #include <QMouseEvent>
+    #include <QDebug>
     //---------------------------------
     class CIODevice: public QToolButton
     {
@@ -27,6 +29,9 @@
             quint8  get_id() const;
             state_t get_state() const;
 
+            static void set_modifier(int key_modifier);
+            static int  get_modifier();
+
         private slots:
             void slotState(bool state);
 
@@ -38,5 +43,7 @@
             quint8  m_id;
             bool    m_type; // тип - вход или выход (false - вход, true - выход)
             quint8  m_dev_addr; // адрес устройства
+
+            static bool m_ctrl;
     };
 #endif // CIODEVICE_H
