@@ -83,6 +83,10 @@ void MainWindow::initConnect()
     connect(m_output_dev.at(5), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
     connect(m_output_dev.at(6), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
     connect(m_output_dev.at(7), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
+    connect(m_output_dev.at(8), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
+    connect(m_output_dev.at(9), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
+    connect(m_output_dev.at(10), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
+    connect(m_output_dev.at(11), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
 
     connect(ui->cbCmdList, SIGNAL(currentTextChanged(QString)), this, SLOT(initFilter(QString)));
     connect(ui->cbInputType, SIGNAL(currentTextChanged(QString)), this, SLOT(typeInput(QString)));
@@ -131,10 +135,10 @@ void MainWindow::initIO()
     ui->OUT6->set_id(5);
     ui->OUT7->set_id(6);
     ui->OUT8->set_id(7);
-    ui->OUT8->set_id(8);
-    ui->OUT8->set_id(9);
-    ui->OUT8->set_id(10);
-    ui->OUT8->set_id(11);
+    ui->OUT9->set_id(8);
+    ui->OUT10->set_id(9);
+    ui->OUT11->set_id(10);
+    ui->OUT12->set_id(11);
 
     m_input_dev.append(ui->IN1);
     m_input_dev.append(ui->IN2);
@@ -215,6 +219,8 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
     Float_t ain;
     QTextStream in(m_file_ain);
 
+    QString s;
+
     union
     {
         quint16 data;
@@ -281,7 +287,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                 {
                     str = QString::number(ain.number, 'f', 2) + " " + QString(QChar(176)) + "C";
 
-                    m_ain_dev.at(2)->setToolTip(tr("Внутрення температура"));
+                    m_ain_dev.at(2)->setToolTip(tr("Внутрення температура процессора"));
                 }
 
                 if(ui->sbDeviceAddress->value() == 0) // МДВВ-01
@@ -289,14 +295,29 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                     if(i == 0) // первая ячейка AIN
                     {
                         str = QString::number(ain.number, 'f', 2) + tr(" В");
+                        m_ain_dev.at(0)->setToolTip(tr("Наличие питания 5VP"));
                     }
                     else if(i == 4)
                     {
                         str = QString::number(ain.number*1000, 'f', 3) + tr(" mA");
+                        m_ain_dev.at(1)->setToolTip(tr("Ток потребления"));
                     }
+                    else if(i == 12)
+                    {
+                        QPalette p = m_ain_dev[3]->palette();
 
-                    m_ain_dev.at(0)->setToolTip(tr("Наличие питания 5VP"));
-                    m_ain_dev.at(1)->setToolTip(tr("Ток потребления"));
+                        p.setColor(QPalette::Text, QColor(Qt::black));
+
+                        if(ain.number == 126.0f || ain.number == 127.0f)
+                        {
+                            p.setColor(QPalette::Text, QColor(Qt::red));
+                        }
+
+                        m_ain_dev[3]->setPalette(p);
+
+                        str = QString::number(ain.number, 'f', 2) + " " + QString(QChar(176)) + "C";
+                        m_ain_dev.at(2)->setToolTip(tr("Внутрення температура, DS18B20"));
+                    }
                 }
                 else if(ui->sbDeviceAddress->value() == 1) // МДВВ-02
                 {
@@ -358,6 +379,55 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                     setChannel(io, ch_state);
                 }
             }
+        break;
+
+        case 0x1E:
+            ui->leDeviceID->setEnabled(true);
+            ui->leDeviceNumber->setEnabled(true);
+            ui->leDeviceLotNum->setEnabled(true);
+            ui->leDeviceFirmwareVar->setEnabled(true);
+            ui->leDeviceFirmwareDate->setEnabled(true);
+
+            ui->twPeriphery->setCurrentIndex(1);
+
+            s = "0x";
+
+            if(data.at(0) < 16)
+                s += "0";
+
+            s += QString::number(data.at(0), 16);
+
+            if(data.at(0) == 0x48)
+            {
+                s += " " + tr("(МДВВ-01)");
+            }
+            else if(data.at(0) == 0x49)
+            {
+                s += " " + tr("(МДВВ-02)");
+            }
+            else if(data.at(0) == 0x50)
+            {
+                s += " " + tr("(МИК-01)");
+            }
+
+            ui->leDeviceID->setText(s);
+
+            temp.byte[0] = data.at(1);
+            temp.byte[1] = data.at(2);
+
+            ui->leDeviceNumber->setText(QString::number(temp.data, 10));
+            ui->leDeviceLotNum->setText(QString::number(data.at(3), 10));
+            ui->leDeviceFirmwareVar->setText(QString::number(data.at(4), 10));
+
+            s = QString::number(data.at(7), 10) + ".";
+
+            if(data.at(6) < 10)
+                s += "0";
+
+            s += QString::number(data.at(6), 10);
+
+            s += ".20" + QString::number(data.at(5), 10);
+            ui->leDeviceFirmwareDate->setText(s);
         break;
 
         case 0x1F:

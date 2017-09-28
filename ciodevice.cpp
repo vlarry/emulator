@@ -12,7 +12,7 @@ CIODevice::CIODevice(QWidget* parent):
 //---------------------------------
 void CIODevice::set_type(bool type)
 {
-    m_type  = type;
+    m_type = type;
 }
 //--------------------------------------
 void CIODevice::set_state(state_t state)

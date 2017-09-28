@@ -33,7 +33,7 @@ QCmd::QCmd(QWidget* parent):
     m_cmd.insert(tr("0x1B"), qMakePair(tr("Резерв"), 0));
     m_cmd.insert(tr("0x1C"), qMakePair(tr("Резерв"), 0));
     m_cmd.insert(tr("0x1D"), qMakePair(tr("Резерв"), 0));
-    m_cmd.insert(tr("0x1E"), qMakePair(tr("Чтение ID"), 5));
+    m_cmd.insert(tr("0x1E"), qMakePair(tr("Чтение ID"), 9));
     m_cmd.insert(tr("0x1F"), qMakePair(tr("Чтение времени срабатывания выделенного входного дискретного канала"), 4));
     m_cmd.insert(tr("0x20"), qMakePair(tr("Резерв"), 0));
     m_cmd.insert(tr("0x21"), qMakePair(tr("Резерв"), 0));
