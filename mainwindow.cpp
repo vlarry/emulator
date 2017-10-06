@@ -546,6 +546,10 @@ void MainWindow::loadSettings()
         ui->cbKeyboard->setChecked(m_settings->value(tr("visiblity"), true).toBool());
     m_settings->endGroup();
 
+    m_settings->beginGroup("GUI");
+        restoreGeometry(m_settings->value(tr("geometry")).toByteArray());
+    m_settings->endGroup();
+
     if(!baudrate.isEmpty())
     {
         int index = ui->cbBaudrate->findText(baudrate);
@@ -575,6 +579,10 @@ void MainWindow::saveSettings()
 
     m_settings->beginGroup("KEYBOARD");
         m_settings->setValue(tr("visiblity"), ui->cbKeyboard->isChecked());
+    m_settings->endGroup();
+
+    m_settings->beginGroup("GUI");
+        m_settings->setValue(tr("geometry"), this->saveGeometry());
     m_settings->endGroup();
 }
 //-------------------------------------------
