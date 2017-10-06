@@ -13,7 +13,8 @@ MainWindow::MainWindow(QWidget* parent):
     m_timerTimeoutQuery(Q_NULLPTR),
     m_timerRefreshPort(Q_NULLPTR),
     m_file_ain(Q_NULLPTR),
-    m_block_send(false)
+    m_block_send(false),
+    m_keyboard(Q_NULLPTR)
 {
     ui->setupUi(this);
 
@@ -54,6 +55,8 @@ MainWindow::MainWindow(QWidget* parent):
     addrChanged(ui->sbDeviceAddress->value());
 
     fileAinOpen();
+
+    ui->cbKeyboard->hide();
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -99,6 +102,7 @@ void MainWindow::initConnect()
 
     connect(ui->dwTerminal, SIGNAL(visibilityChanged(bool)), this, SLOT(visiblityTerminal(bool)));
     connect(ui->cboxTerminal, SIGNAL(toggled(bool)), this, SLOT(visiblityTerminal(bool)));
+    connect(ui->cbKeyboard, SIGNAL(toggled(bool)), this, SLOT(visiblityKeyboard(bool)));
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -232,38 +236,44 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
     switch(cmd)
     {
         case 0x00:
-            for(quint8 i = 0; i < size; ++i)
+            if(ui->sbDeviceAddress->value() != MIK_01)
             {
-                quint8 byte = data.at(i);
-
-                for(quint8 j = 0; j < 8; j += 2)
+                for(quint8 i = 0; i < size; ++i)
                 {
-                    quint8 channels = byte;
+                    quint8 byte = data.at(i);
 
-                    channels >>= j;
+                    for(quint8 j = 0; j < 8; j += 2)
+                    {
+                        quint8 channels = byte;
 
-                    quint8 ch_state = channels & 0x03;
-                    quint8 ch_num   = j/2 + (i*4);
+                        channels >>= j;
 
-                    CIODevice* io = m_input_dev.at(ch_num);
+                        quint8 ch_state = channels & 0x03;
+                        quint8 ch_num   = j/2 + (i*4);
 
-                    setChannel(io, ch_state);
+                        CIODevice* io = m_input_dev.at(ch_num);
+
+                        setChannel(io, ch_state);
+                    }
                 }
             }
         break;
 
         case 0x01:
-            if(size == 1)
+            if(ui->sbDeviceAddress->value() != MIK_01)
             {
-                quint8 channels = data.at(0);
-
-                for(quint8 i = 0; i < 8; ++i)
+                if(size == 1)
                 {
-                    quint8 ch_state = (channels >> i)&0x01;
+                    quint8 channels = data.at(0);
 
-                    CIODevice* io = m_output_dev.at(i);
+                    for(quint8 i = 0; i < 8; ++i)
+                    {
+                        quint8 ch_state = (channels >> i)&0x01;
 
-                    setChannel(io, ch_state);
+                        CIODevice* io = m_output_dev.at(i);
+
+                        setChannel(io, ch_state);
+                    }
                 }
             }
         break;
@@ -290,7 +300,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                     m_ain_dev.at(2)->setToolTip(tr("Внутрення температура процессора"));
                 }
 
-                if(ui->sbDeviceAddress->value() == 0) // МДВВ-01
+                if(ui->sbDeviceAddress->value() == MDVV_01) // МДВВ-01
                 {
                     if(i == 0) // первая ячейка AIN
                     {
@@ -319,7 +329,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                         m_ain_dev.at(2)->setToolTip(tr("Внутрення температура, DS18B20"));
                     }
                 }
-                else if(ui->sbDeviceAddress->value() == 1) // МДВВ-02
+                else if(ui->sbDeviceAddress->value() == MDVV_02) // МДВВ-02
                 {
                     if(i == 0 || i == 4)
                     {
@@ -337,46 +347,50 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
         break;
 
         case 0x03:
-            for(quint8 i = 0; i < size; ++i)
+            if(ui->sbDeviceAddress->value() == MIK_01)
             {
-                quint8 byte = data.at(i);
-
-                for(quint8 j = 0; j < 8; ++j)
+                for(quint8 i = 0; i < size; ++i)
                 {
-                    quint8 channels = byte;
+                    quint8 byte = data.at(i);
 
-                    channels >>= j;
+                    for(quint8 j = 0; j < 8; ++j)
+                    {
+                        quint8 channels = byte;
 
-                    quint8 ch_state = channels & 0x01;
-                    quint8 ch_num   = j + (i*8);
+                        channels >>= j;
 
-                    if(ch_num == m_input_dev.count())
-                        return;
+                        quint8 ch_state = channels & 0x01;
+                        quint8 ch_num   = j + (i*8);
 
-                    CIODevice* io = m_input_dev.at(ch_num);
+                        if(ch_num == m_input_dev.count())
+                            return;
 
-                    setChannel(io, ch_state);
+                        m_keyboard->setStateKey(ch_num, ch_state);
+                    }
                 }
             }
         break;
 
         case 0x04:
-            for(quint8 i = 0; i < size; ++i)
+            if(ui->sbDeviceAddress->value() == MIK_01)
             {
-                quint8 byte = data.at(i);
-
-                for(quint8 j = 0; j < 8; j += 2)
+                for(quint8 i = 0; i < size; ++i)
                 {
-                    quint8 channels = byte;
+                    quint8 byte = data.at(i);
 
-                    channels >>= j;
+                    for(quint8 j = 0; j < 8; j += 2)
+                    {
+                        quint8 channels = byte;
 
-                    quint8 ch_state = channels & 0x03;
-                    quint8 ch_num   = j/2 + (i*4);
+                        channels >>= j;
 
-                    CIODevice* io = m_output_dev.at(ch_num);
+                        quint8 ch_state = channels & 0x03;
+                        quint8 ch_num   = j/2 + (i*4);
 
-                    setChannel(io, ch_state);
+                        CIODevice* io = m_output_dev.at(ch_num);
+
+                        setChannel(io, ch_state);
+                    }
                 }
             }
         break;
@@ -523,6 +537,15 @@ void MainWindow::loadSettings()
         baudrate    = m_settings->value(tr("baudrate"), 115200).toString();
     m_settings->endGroup();
 
+    m_settings->beginGroup("TERMINAL");
+        ui->cboxTerminal->setChecked(m_settings->value(tr("visiblity"), true).toBool());
+        visiblityTerminal(ui->cboxTerminal->isChecked());
+    m_settings->endGroup();
+
+    m_settings->beginGroup("KEYBOARD");
+        ui->cbKeyboard->setChecked(m_settings->value(tr("visiblity"), true).toBool());
+    m_settings->endGroup();
+
     if(!baudrate.isEmpty())
     {
         int index = ui->cbBaudrate->findText(baudrate);
@@ -544,6 +567,14 @@ void MainWindow::saveSettings()
     m_settings->beginGroup("COM");
         m_settings->setValue(tr("port"), ui->cbPortNames->currentText());
         m_settings->setValue(tr("baudrate"), ui->cbBaudrate->currentText());
+    m_settings->endGroup();
+
+    m_settings->beginGroup("TERMINAL");
+        m_settings->setValue(tr("visiblity"), ui->cboxTerminal->isChecked());
+    m_settings->endGroup();
+
+    m_settings->beginGroup("KEYBOARD");
+        m_settings->setValue(tr("visiblity"), ui->cbKeyboard->isChecked());
     m_settings->endGroup();
 }
 //-------------------------------------------
@@ -822,7 +853,7 @@ void MainWindow::write(const QString& cmd_str)
         str.setNum(cmd, 16);
         m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
 
-        if(m_cmd_last == tr("0x05") && ui->sbDeviceAddress->value() == 2) // только для устройства МИК-01
+        if(m_cmd_last == tr("0x05") && ui->sbDeviceAddress->value() == MIK_01) // только для устройства МИК-01
         {
             for(quint8 i = 0; i < 3; ++i) // 3 байта на 12 входов
             {
@@ -936,7 +967,16 @@ void MainWindow::addrChanged(int addr)
 //    Q_UNUSED(addr);
     quint8 out_count = 0;
 
-    if(addr == 0)
+    ui->cbKeyboard->hide(); // Вызов клавиатуры МИК-01 становится видимым при выборе адреса 0х02
+    ui->gboxInputs->setEnabled(true);
+
+    if(m_keyboard != Q_NULLPTR)
+    {
+        if(!m_keyboard->isHidden())
+            m_keyboard->hide();
+    }
+
+    if(addr == MDVV_01)
     {
         ui->groupDevices->setTitle(tr("Устройство МДВВ-01"));
         ui->lblAIN1->setText(tr("Напряжение"));
@@ -945,7 +985,7 @@ void MainWindow::addrChanged(int addr)
 
         out_count = 6;
     }
-    else if(addr == 1)
+    else if(addr == MDVV_02)
     {
         ui->groupDevices->setTitle(tr("Устройство МДВВ-02"));
         ui->lblAIN1->setText(tr("Температура"));
@@ -954,9 +994,38 @@ void MainWindow::addrChanged(int addr)
 
         out_count = 7;
     }
-    else if(addr == 2)
+    else if(addr == MIK_01)
     {
         ui->groupDevices->setTitle(tr("Устройство МИК-01"));
+        ui->cbKeyboard->show();
+        ui->gboxInputs->setDisabled(true);
+
+        if(m_keyboard == Q_NULLPTR)
+        {
+            m_keyboard = new QKeyboard(this);
+
+            connect(m_keyboard, SIGNAL(closeKeyboard(bool)), this, SLOT(visiblityKeyboard(bool)));
+
+            if(ui->cbKeyboard->isChecked())
+            {
+                m_keyboard->show();
+            }
+            else
+            {
+                m_keyboard->hide();
+            }
+        }
+        else
+        {
+            if(ui->cbKeyboard->isChecked())
+            {
+                m_keyboard->show();
+            }
+            else
+            {
+                m_keyboard->hide();
+            }
+        }
 
         out_count = 12;
     }
@@ -990,7 +1059,7 @@ void MainWindow::outputStateChanged(quint8 id, bool state)
 {
     if(id != 255)
     {
-        if(ui->sbDeviceAddress->value() != 0x02)
+        if(ui->sbDeviceAddress->value() != MIK_01)
         {
             quint8 offset = (state)?0x0E:0x06;
             quint8 cmd    = offset + id;
@@ -1075,7 +1144,14 @@ void MainWindow::autoRepeatAIN(bool state)
 //------------------------------------
 void MainWindow::autoRepeatTimInputs()
 {
-    sendData(tr("0x00"));
+    if(ui->sbDeviceAddress->value() != MIK_01) // устройство не МИК-01
+    {
+        sendData(tr("0x00")); // чтение дискретных каналов входов
+    }
+    else // устройство МИК-01
+    {
+        sendData(tr("0x03")); // чтение регистра расширения дискретных каналов входов (клавиатура)
+    }
 
     if(ui->cboxRepeatInputs->isChecked())
         m_timerAutoRepeatInput->start(ui->sbRepeatInputs->value());
@@ -1099,4 +1175,24 @@ void MainWindow::visiblityTerminal(bool visible)
 {
     ui->cboxTerminal->setChecked(visible);
     ui->dwTerminal->setVisible(visible);
+}
+//----------------------------------------------
+void MainWindow::visiblityKeyboard(bool visible)
+{
+    ui->cbKeyboard->setChecked(visible);
+
+    if(visible)
+    {
+        if(m_keyboard != Q_NULLPTR)
+        {
+            m_keyboard->show();
+        }
+    }
+    else
+    {
+        if(m_keyboard != Q_NULLPTR)
+        {
+            m_keyboard->hide();
+        }
+    }
 }

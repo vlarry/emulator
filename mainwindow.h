@@ -13,6 +13,7 @@
     #include <QTextStream>
     #include "qcmd.h"
     #include "ciodevice.h"
+    #include "qkeyboard.h"
     //----------
     namespace Ui
     {
@@ -24,6 +25,13 @@
         quint8 byte[sizeof(float)];
         float  number;
     } Float_t;
+    //--
+    enum DEVICE_Type
+    {
+        MDVV_01 = 0x00,
+        MDVV_02 = 0x01,
+        MIK_01  = 0x02
+    };
     //----------------------------------
     class MainWindow: public QMainWindow
     {
@@ -53,6 +61,7 @@
             QFile*              m_file_ain;
             bool                m_block_send;
             QString             m_port_name; // имя порта по умолчанию
+            QKeyboard*          m_keyboard;
 
         private:
             void   initConnect();
@@ -92,6 +101,7 @@
             void autoRepeatTimAIN();
             void timeoutTim();
             void visiblityTerminal(bool visible);
+            void visiblityKeyboard(bool visible);
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

@@ -26,13 +26,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         mainwindow.cpp \
     qcmd.cpp \
-    ciodevice.cpp
+    ciodevice.cpp \
+    qkeyboard.cpp \
+    qkey.cpp
 
 HEADERS  += mainwindow.h \
     qcmd.h \
-    ciodevice.h
+    ciodevice.h \
+    qkeyboard.h \
+    qkey.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    keyboard.ui
 
 win32::RC_FILE = \
                  resource/icon.rc
