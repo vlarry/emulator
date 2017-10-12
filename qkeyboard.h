@@ -18,6 +18,7 @@
             explicit QKeyboard(QMainWindow* parent = Q_NULLPTR);
             ~QKeyboard();
             void setStateKey(int channel, bool state);
+            int  key_count() const;
 
         private:
             void closeEvent(QCloseEvent* event);

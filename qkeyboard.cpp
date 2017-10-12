@@ -47,6 +47,11 @@ void QKeyboard::setStateKey(int channel, bool state)
         m_keys.at(channel)->changeState(state);
     }
 }
+//------------------------------
+int QKeyboard::key_count() const
+{
+    return m_keys.count();
+}
 //--------------------------------------------
 void QKeyboard::closeEvent(QCloseEvent* event)
 {

@@ -57,6 +57,13 @@ MainWindow::MainWindow(QWidget* parent):
     fileAinOpen();
 
     ui->cbKeyboard->hide();
+
+    QDir dir;
+
+    if(!dir.exists(dir.currentPath() + "/AIN"))
+    {
+        dir.mkdir(dir.currentPath() + "/AIN");
+    }
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -362,9 +369,6 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                         quint8 ch_state = channels & 0x01;
                         quint8 ch_num   = j + (i*8);
 
-                        if(ch_num == m_input_dev.count())
-                            return;
-
                         m_keyboard->setStateKey(ch_num, ch_state);
                     }
                 }
@@ -621,8 +625,14 @@ void MainWindow::keyReleaseEvent(QKeyEvent *evt)
 void MainWindow::fileAinOpen()
 {
     QDate date;
+    QDir  dir;
 
-    m_file_ain->setFileName(tr("AIN_") + date.currentDate().toString("dd_MM_yyyy") + tr(".txt"));
+    if(!dir.exists(dir.currentPath() + "/AIN"))
+    {
+        dir.mkdir(dir.currentPath() + "/AIN");
+    }
+
+    m_file_ain->setFileName(tr("AIN/AIN_") + date.currentDate().toString("dd_MM_yyyy") + tr(".txt"));
 
     if(!m_file_ain->open(QIODevice::Append | QIODevice::Text))
     {

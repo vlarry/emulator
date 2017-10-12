@@ -11,6 +11,7 @@
     #include <QFile>
     #include <QDate>
     #include <QTextStream>
+    #include <QDir>
     #include "qcmd.h"
     #include "ciodevice.h"
     #include "qkeyboard.h"
