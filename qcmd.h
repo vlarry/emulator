@@ -9,14 +9,16 @@
     {
         Q_OBJECT
 
-        typedef QPair<QString, quint8> param_t;
-        typedef QMap<QString, param_t> cmd_t;
+        public:
+            typedef QPair<QString, quint8> param_t;
+            typedef QMap<QString, param_t> cmd_t;
 
         public:
             QCmd(QWidget* parent = Q_NULLPTR);
 
             QString description(int index) const;
             quint8  size(const QString& cmd) const; // количество байт в ответе
+            const cmd_t& list() const;
 
         public slots:
             void slotActivated(int index);

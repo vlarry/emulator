@@ -14,7 +14,8 @@ MainWindow::MainWindow(QWidget* parent):
     m_timerRefreshPort(Q_NULLPTR),
     m_file_ain(Q_NULLPTR),
     m_block_send(false),
-    m_keyboard(Q_NULLPTR)
+    m_keyboard(Q_NULLPTR),
+    m_command(Q_NULLPTR)
 {
     ui->setupUi(this);
 
@@ -36,34 +37,6 @@ MainWindow::MainWindow(QWidget* parent):
     m_timerRefreshPort     = new QTimer(this);
 
     m_file_ain = new QFile;
-
-    initSerialPort();
-    initIO();
-    initConnect();
-
-    loadSettings();
-    refreshSerialPort();
-
-    ui->cbCmdList->slotActivated(0);
-
-    ui->cbInputType->addItems(QStringList() << tr("Аналоговый")  << tr("Цифровой"));
-
-    ui->twPeriphery->setCurrentIndex(0);
-
-    initFilter(ui->cbCmdList->currentText());
-
-    addrChanged(ui->sbDeviceAddress->value());
-
-    fileAinOpen();
-
-    ui->cbKeyboard->hide();
-
-    QDir dir;
-
-    if(!dir.exists(dir.currentPath() + "/AIN"))
-    {
-        dir.mkdir(dir.currentPath() + "/AIN");
-    }
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -110,6 +83,8 @@ void MainWindow::initConnect()
     connect(ui->dwTerminal, SIGNAL(visibilityChanged(bool)), this, SLOT(visiblityTerminal(bool)));
     connect(ui->cboxTerminal, SIGNAL(toggled(bool)), this, SLOT(visiblityTerminal(bool)));
     connect(ui->cbKeyboard, SIGNAL(toggled(bool)), this, SLOT(visiblityKeyboard(bool)));
+    connect(ui->cbCommand, SIGNAL(toggled(bool)), this, SLOT(visiblityCommand(bool)));
+    connect(m_command, SIGNAL(doubleClickCmd(QString)), this, SLOT(sendData(QString)));
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -550,6 +525,10 @@ void MainWindow::loadSettings()
         ui->cbKeyboard->setChecked(m_settings->value(tr("visiblity"), true).toBool());
     m_settings->endGroup();
 
+    m_settings->beginGroup("COMMAND");
+        ui->cbCommand->setChecked(m_settings->value(tr("visiblity"), true).toBool());
+    m_settings->endGroup();
+
     m_settings->beginGroup("GUI");
         restoreGeometry(m_settings->value(tr("geometry")).toByteArray());
     m_settings->endGroup();
@@ -583,6 +562,10 @@ void MainWindow::saveSettings()
 
     m_settings->beginGroup("KEYBOARD");
         m_settings->setValue(tr("visiblity"), ui->cbKeyboard->isChecked());
+    m_settings->endGroup();
+
+    m_settings->beginGroup("COMMAND");
+        m_settings->setValue(tr("visiblity"), ui->cbCommand->isChecked());
     m_settings->endGroup();
 
     m_settings->beginGroup("GUI");
@@ -620,6 +603,34 @@ void MainWindow::keyReleaseEvent(QKeyEvent *evt)
 {
     CIODevice::set_modifier(0);
     QMainWindow::keyReleaseEvent(evt);
+}
+//-----------------------------------------
+void MainWindow::showEvent(QShowEvent* evt)
+{
+    if(m_command == Q_NULLPTR)
+    {
+        m_command = new QCommand(this);
+
+        connect(m_command, SIGNAL(closeCommand(bool)), this, SLOT(visiblityCommand(bool)));
+        m_command->hide();
+    }
+
+    initSerialPort();
+    initIO();
+    initConnect();
+
+    loadSettings();
+    refreshSerialPort();
+
+    ui->cbCmdList->slotActivated(0);
+    ui->cbInputType->addItems(QStringList() << tr("Аналоговый")  << tr("Цифровой"));
+    ui->twPeriphery->setCurrentIndex(0);
+    initFilter(ui->cbCmdList->currentText());
+    addrChanged(ui->sbDeviceAddress->value());
+    fileAinOpen();
+    ui->cbKeyboard->hide();
+
+    QMainWindow::showEvent(evt);
 }
 //----------------------------
 void MainWindow::fileAinOpen()
@@ -736,6 +747,9 @@ void MainWindow::ctrlSerialPort(bool state)
         m_port->setDataBits(QSerialPort::Data8);
         m_port->setStopBits(QSerialPort::OneStop);
         m_port->setParity(QSerialPort::NoParity);
+
+        if(ui->cbCommand->isChecked())
+            m_command->show();
     }
     else
     {
@@ -757,6 +771,9 @@ void MainWindow::ctrlSerialPort(bool state)
         m_file_ain->close();
 
         showMessage(ui->cbPortNames->currentText() + " " + tr("закрыт"));
+
+        if(!m_command->isHidden())
+            m_command->hide();
     }
 
     ui->pbCtrlPort->setChecked(state);
@@ -1211,6 +1228,29 @@ void MainWindow::visiblityKeyboard(bool visible)
         if(m_keyboard != Q_NULLPTR)
         {
             m_keyboard->hide();
+        }
+    }
+}
+//---------------------------------------------
+void MainWindow::visiblityCommand(bool visible)
+{
+    ui->cbCommand->setChecked(visible);
+
+    if(m_port->isOpen())
+    {
+        if(visible)
+        {
+            if(m_command != Q_NULLPTR)
+            {
+                m_command->show();
+            }
+        }
+        else
+        {
+            if(m_command != Q_NULLPTR)
+            {
+                m_command->hide();
+            }
         }
     }
 }

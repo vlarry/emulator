@@ -12,9 +12,11 @@
     #include <QDate>
     #include <QTextStream>
     #include <QDir>
+    #include <QShowEvent>
     #include "qcmd.h"
     #include "ciodevice.h"
     #include "qkeyboard.h"
+    #include "qcommand.h"
     //----------
     namespace Ui
     {
@@ -63,6 +65,7 @@
             bool                m_block_send;
             QString             m_port_name; // имя порта по умолчанию
             QKeyboard*          m_keyboard;
+            QCommand*           m_command;
 
         private:
             void   initConnect();
@@ -78,6 +81,7 @@
             void   closeEvent(QCloseEvent* evt);
             void   keyPressEvent(QKeyEvent* evt);
             void   keyReleaseEvent(QKeyEvent* evt);
+            void   showEvent(QShowEvent* evt);
             void   fileAinOpen();
             void   blockSend();
             void   unblockSend();
@@ -103,6 +107,7 @@
             void timeoutTim();
             void visiblityTerminal(bool visible);
             void visiblityKeyboard(bool visible);
+            void visiblityCommand(bool visible);
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

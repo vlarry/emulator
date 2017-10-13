@@ -28,16 +28,19 @@ SOURCES += main.cpp\
     qcmd.cpp \
     ciodevice.cpp \
     qkeyboard.cpp \
-    qkey.cpp
+    qkey.cpp \
+    qcommand.cpp
 
 HEADERS  += mainwindow.h \
     qcmd.h \
     ciodevice.h \
     qkeyboard.h \
-    qkey.h
+    qkey.h \
+    qcommand.h
 
 FORMS    += mainwindow.ui \
-    keyboard.ui
+    keyboard.ui \
+    command.ui
 
 win32::RC_FILE = \
                  resource/icon.rc

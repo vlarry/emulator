@@ -86,6 +86,11 @@ quint8 QCmd::size(const QString& cmd) const
     quint8 s = m_cmd.value(cmd).second;
     return s;
 }
+//-----------------------------------
+const QCmd::cmd_t& QCmd::list() const
+{
+    return m_cmd;
+}
 //---------------------------------
 void QCmd::slotActivated(int index)
 {
