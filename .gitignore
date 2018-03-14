@@ -1,5 +1,11 @@
-
+Debug/*.*
+Release/*.*
 *.user
 *.8db8359
 *.user
 *.user
+*.stash
+*.Debug
+*.Release
+*.txt
+

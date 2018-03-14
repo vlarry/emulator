@@ -803,6 +803,8 @@ void MainWindow::readData()
         m_responce.clear();
         sendData(); // подтверждаем принятие данных отправкой пустого сообщения
     }
+    else if(m_responce.size() > cmd_size)
+        m_responce.clear();
 }
 //------------------------
 void MainWindow::sendCmd()
