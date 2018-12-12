@@ -591,25 +591,34 @@ void MainWindow::closeEvent(QCloseEvent* evt)
     saveSettings();
     QMainWindow::closeEvent(evt);
 }
-//--------------------------------------------
-void MainWindow::keyPressEvent(QKeyEvent* evt)
+//----------------------------------------------
+void MainWindow::keyPressEvent(QKeyEvent* event)
 {
-    if(evt->modifiers() == Qt::ControlModifier)
+    if(event->modifiers() == Qt::ControlModifier)
     {
         CIODevice::set_modifier(Qt::ControlModifier);
     }
 
-    switch(evt->key())
+    switch(event->key())
     {
         case Qt::Key_C:
-            if(evt->modifiers() == Qt::ALT)
+            if(event->modifiers() == Qt::ALT)
             {
                 ui->pteConsole->clear();
             }
         break;
+
+        case Qt::Key_F5:
+            if((event->modifiers() & Qt::ALT) && (event->modifiers() & Qt::CTRL))
+            {
+                CConfigurationModuleWidget* confWidget = new CConfigurationModuleWidget(this);
+
+                confWidget->exec();
+            }
+        break;
     }
 
-    QMainWindow::keyPressEvent(evt);
+    QMainWindow::keyPressEvent(event);
 }
 //----------------------------------------------
 void MainWindow::keyReleaseEvent(QKeyEvent *evt)

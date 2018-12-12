@@ -29,18 +29,21 @@ SOURCES += main.cpp\
     ciodevice.cpp \
     qkeyboard.cpp \
     qkey.cpp \
-    qcommand.cpp
+    qcommand.cpp \
+    cconfigurationmodulewidget.cpp
 
 HEADERS  += mainwindow.h \
     qcmd.h \
     ciodevice.h \
     qkeyboard.h \
     qkey.h \
-    qcommand.h
+    qcommand.h \
+    cconfigurationmodulewidget.h
 
 FORMS    += mainwindow.ui \
     keyboard.ui \
-    command.ui
+    command.ui \
+    configurationmodulewidget.ui
 
 win32::RC_FILE = \
                  resource/icon.rc

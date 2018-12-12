@@ -4,8 +4,8 @@ bool CIODevice::m_ctrl = false;
 CIODevice::CIODevice(QWidget* parent):
     QToolButton(parent),
     m_state(STATE_OFF),
-    m_type(false),
     m_id(255),
+    m_type(false),
     m_dev_addr(0)
 {
     connect(this, SIGNAL(clicked(bool)), this, SLOT(slotState(bool)));

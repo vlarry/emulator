@@ -13,11 +13,13 @@
     #include <QTextStream>
     #include <QDir>
     #include <QShowEvent>
+    #include <QEvent>
     #include <QScrollBar>
     #include "qcmd.h"
     #include "ciodevice.h"
     #include "qkeyboard.h"
     #include "qcommand.h"
+    #include "cconfigurationmodulewidget.h"
     //----------
     namespace Ui
     {
@@ -80,13 +82,15 @@
             void   loadSettings();
             void   saveSettings();
             void   closeEvent(QCloseEvent* evt);
-            void   keyPressEvent(QKeyEvent* evt);
             void   keyReleaseEvent(QKeyEvent* evt);
             void   showEvent(QShowEvent* evt);
             void   fileAinOpen();
             void   blockSend();
             void   unblockSend();
             bool   is_blockSend();
+
+        protected:
+            void keyPressEvent(QKeyEvent *event);
 
         public slots:
             void refreshSerialPort();
