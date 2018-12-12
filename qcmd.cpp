@@ -27,8 +27,8 @@ QCmd::QCmd(QWidget* parent):
     m_cmd.insert(tr("0x15"), qMakePair(tr("Установка на дискретном выходе 7 значения \"1\""), 2));
     m_cmd.insert(tr("0x16"), qMakePair(tr("Чтение корфигурации"), 10));
     m_cmd.insert(tr("0x17"), qMakePair(tr("Запись конфигурации"), 2));
-    m_cmd.insert(tr("0x18"), qMakePair(tr("Резерв"), 0));
-    m_cmd.insert(tr("0x19"), qMakePair(tr("Резерв"), 0));
+    m_cmd.insert(tr("0x18"), qMakePair(tr("Чтение байта конфигурации искробезопасных входов"), 2));
+    m_cmd.insert(tr("0x19"), qMakePair(tr("Запись байта конфигурации искробезопасных входов"), 2));
     m_cmd.insert(tr("0x1A"), qMakePair(tr("Резерв"), 0));
     m_cmd.insert(tr("0x1B"), qMakePair(tr("Резерв"), 0));
     m_cmd.insert(tr("0x1C"), qMakePair(tr("Резерв"), 0));

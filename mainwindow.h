@@ -13,6 +13,7 @@
     #include <QTextStream>
     #include <QDir>
     #include <QShowEvent>
+    #include <QScrollBar>
     #include "qcmd.h"
     #include "ciodevice.h"
     #include "qkeyboard.h"

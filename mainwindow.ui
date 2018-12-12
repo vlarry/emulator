@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1057</width>
-    <height>694</height>
+    <height>798</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -3861,7 +3861,7 @@
              <item>
               <widget class="QGroupBox" name="groupAIN">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -3882,19 +3882,6 @@
                 <property name="rightMargin">
                  <number>5</number>
                 </property>
-                <item>
-                 <spacer name="horizontalSpacer_6">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout_40">
                   <item>
@@ -4056,19 +4043,6 @@
                    </widget>
                   </item>
                  </layout>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_22">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
                 </item>
                </layout>
               </widget>
@@ -4372,7 +4346,7 @@
      <x>0</x>
      <y>0</y>
      <width>1057</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

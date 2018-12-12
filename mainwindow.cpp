@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget* parent):
     ui(new Ui::MainWindow),
     m_port(Q_NULLPTR),
     m_lblMessage(Q_NULLPTR),
-    m_cmd_last(""),
     m_query_count(0),
     m_timerAutoRepeatInput(Q_NULLPTR),
     m_timerAutoRepeatAIN(Q_NULLPTR),
@@ -204,6 +203,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 
     Float_t ain;
     QTextStream in(m_file_ain);
+    int tdata = 0;
 
     QString s;
 
@@ -405,21 +405,34 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 
             ui->leDeviceID->setText(s);
 
-            temp.byte[0] = data.at(1);
-            temp.byte[1] = data.at(2);
+            tdata = static_cast<quint8>(data.at(1));
+            tdata = ((tdata >> 4)&0x0F)*1000 + (tdata&0x0F)*100;
+            tdata += ((static_cast<quint8>(data.at(2))) >> 4)*10 + ((static_cast<quint8>(data.at(2)))&0x0F);
+            ui->leDeviceNumber->setText(QString::number(tdata, 10));
 
-            ui->leDeviceNumber->setText(QString::number(temp.data, 10));
-            ui->leDeviceLotNum->setText(QString::number(data.at(3), 10));
-            ui->leDeviceFirmwareVar->setText(QString::number(data.at(4), 10));
+            tdata = static_cast<quint8>(data.at(3));
+            tdata = ((tdata >> 4)&0x0F)*10 + (tdata&0x0F);
+            ui->leDeviceLotNum->setText(QString::number(tdata, 10));
 
-            s = QString::number(data.at(7), 10) + ".";
+            tdata = static_cast<quint8>(data.at(4));
+            tdata = ((tdata >> 4)&0x0F)*10 + (tdata&0x0F);
+            ui->leDeviceFirmwareVar->setText(QString::number(tdata, 10));
+
+            tdata = static_cast<quint8>(data.at(7));
+            tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
+            s = QString::number(tdata, 10) + ".";
 
             if(data.at(6) < 10)
                 s += "0";
 
-            s += QString::number(data.at(6), 10);
+            tdata = data.at(6);
+            tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
+            s += QString::number(tdata, 10);
 
-            s += ".20" + QString::number(data.at(5), 10);
+            tdata = data.at(5);
+            tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
+            s += ".20" + QString::number(tdata, 10);
+
             ui->leDeviceFirmwareDate->setText(s);
         break;
 
@@ -457,18 +470,18 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
         case 0x3D:
             if(size == 6)
             {
-                temp.byte[data.at(0)];
-                temp.byte[data.at(1)];
+                temp.byte[static_cast<quint8>(data.at(0))];
+                temp.byte[static_cast<quint8>(data.at(1))];
 
                 ui->leErrorAddr->setText(QString::number(temp.data));
 
-                temp.byte[data.at(2)];
-                temp.byte[data.at(3)];
+                temp.byte[static_cast<quint8>(data.at(2))];
+                temp.byte[static_cast<quint8>(data.at(3))];
 
                 ui->leErrorCmd->setText(QString::number(temp.data));
 
-                temp.byte[data.at(4)];
-                temp.byte[data.at(5)];
+                temp.byte[static_cast<quint8>(data.at(4))];
+                temp.byte[static_cast<quint8>(data.at(5))];
 
                 ui->leErrorChecksum->setText(QString::number(temp.data));
             }
@@ -791,6 +804,7 @@ void MainWindow::readData()
     if(responce_size == cmd_size)
     {
         ui->pteConsole->appendPlainText(tr("ЧТЕНИЕ: 0x") + m_responce.toHex().toUpper());
+        ui->pteConsole->verticalScrollBar()->setValue(ui->pteConsole->verticalScrollBar()->maximum());
 
         quint8 checksum_calc = getChecksum(m_responce, m_responce.size() - 1);
         quint8 checksum_read = m_responce.at(m_responce.size() - 1);
@@ -814,7 +828,6 @@ void MainWindow::sendCmd()
 //--------------------------------------------
 void MainWindow::sendData(const QString& data)
 {
-//    ui->pteConsole->appendPlainText(data);
     if(!is_blockSend()) // если не блокирована передача
     {
         if(!data.isEmpty())
@@ -955,6 +968,7 @@ void MainWindow::write(const QString& cmd_str)
     m_port->write(m_query.at(m_query_count));
 
     ui->pteConsole->appendPlainText(tr("ЗАПИСЬ: ") + m_query.at(m_query_count).toHex().toUpper());
+    ui->pteConsole->verticalScrollBar()->setValue(ui->pteConsole->verticalScrollBar()->maximum());
 }
 //---------------------------------------
 void MainWindow::BytesWriten(qint64 byte)
@@ -970,6 +984,7 @@ void MainWindow::BytesWriten(qint64 byte)
     {
         int index = (QString(m_cmd_last).remove(QRegExp(tr("0x"))).toInt(Q_NULLPTR, 16));
         ui->pteConsole->appendPlainText(tr("ЗАПИСЬ КОМАНДЫ: ") + ui->cbCmdList->description(index));
+        ui->pteConsole->verticalScrollBar()->setValue(ui->pteConsole->verticalScrollBar()->maximum());
 
         m_query.clear();
         m_query_count = 0;
