@@ -917,8 +917,8 @@ void MainWindow::sendData(const QString& data)
         }
     }
 }
-//--------------------------------------------
-void MainWindow::write(const QString& cmd_str)
+//--------------------------------------------------------------------
+void MainWindow::write(const QString& cmd_str, const QByteArray& data)
 {
     if(m_query.isEmpty())
     {
@@ -1005,23 +1005,22 @@ void MainWindow::write(const QString& cmd_str)
             m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // погрешность периода
         }
 
-        QByteArray ba;
+//        QByteArray ba;
 
-        for(QByteArray b: m_query)
-        {
-            for(quint8 s: b)
-                ba.append(s);
-        }
+//        for(QByteArray b: m_query)
+//        {
+//            for(quint8 s: b)
+//                ba.append(s);
+//        }
 
-        quint8 checksum = getChecksum(ba, m_query.size()); // создать контрольную сумму
+        quint8 checksum = getChecksum(m_query, m_query.size()); // создать контрольную сумму
 
         str.setNum(checksum, 16);
         m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
+        ui->pteConsole->appendPlainText(tr("ОТПРАВКА ДАННЫХ: ") + m_query.toHex().toUpper());
     }
 
-    m_port->write(m_query.at(m_query_count));
-
-    ui->pteConsole->appendPlainText(tr("ЗАПИСЬ: ") + m_query.at(m_query_count).toHex().toUpper());
+    m_port->write(m_query);
     ui->pteConsole->verticalScrollBar()->setValue(ui->pteConsole->verticalScrollBar()->maximum());
 }
 //---------------------------------------

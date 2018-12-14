@@ -52,7 +52,7 @@
             QSerialPort*                m_port; // COM-порт
             QLabel*                     m_lblMessage; // вывод сообщений в статус бар
             QSettings*                  m_settings; // настройки
-            QVector<QByteArray>         m_query; // массив байт запроса
+            QByteArray                  m_query; // массив байт запроса
             quint8                      m_query_count; // количество отправленных байт
             QByteArray                  m_responce; // массив байт ответа устройства
             QString                     m_cmd_last; // последняя отправленная команда
@@ -100,7 +100,7 @@
             void readData();
             void sendCmd();
             void sendData(const QString& data = "");
-            void write(const QString& cmd_str = "");
+            void write(const QString& cmd_str = "", const QByteArray& data = QByteArray(0));
             void BytesWriten(qint64 byte);
             void cmdDescription(const QString& description);
             void addrChanged(int addr);
