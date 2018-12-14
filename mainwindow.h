@@ -48,27 +48,28 @@
             ~MainWindow();
 
         private:
-            Ui::MainWindow*     ui;
-            QSerialPort*        m_port; // COM-порт
-            QLabel*             m_lblMessage; // вывод сообщений в статус бар
-            QSettings*          m_settings; // настройки
-            QVector<QByteArray> m_query; // массив байт запроса
-            quint8              m_query_count; // количество отправленных байт
-            QByteArray          m_responce; // массив байт ответа устройства
-            QString             m_cmd_last; // последняя отправленная команда
-            QVector<CIODevice*> m_input_dev;
-            QVector<CIODevice*> m_output_dev;
-            QVector<QLineEdit*> m_ain_dev;
-            QVector<QString>    m_queue_cmd;
-            QTimer*             m_timerAutoRepeatInput;
-            QTimer*             m_timerAutoRepeatAIN;
-            QTimer*             m_timerTimeoutQuery;
-            QTimer*             m_timerRefreshPort;
-            QFile*              m_file_ain;
-            bool                m_block_send;
-            QString             m_port_name; // имя порта по умолчанию
-            QKeyboard*          m_keyboard;
-            QCommand*           m_command;
+            Ui::MainWindow*             ui;
+            QSerialPort*                m_port; // COM-порт
+            QLabel*                     m_lblMessage; // вывод сообщений в статус бар
+            QSettings*                  m_settings; // настройки
+            QVector<QByteArray>         m_query; // массив байт запроса
+            quint8                      m_query_count; // количество отправленных байт
+            QByteArray                  m_responce; // массив байт ответа устройства
+            QString                     m_cmd_last; // последняя отправленная команда
+            QVector<CIODevice*>         m_input_dev;
+            QVector<CIODevice*>         m_output_dev;
+            QVector<QLineEdit*>         m_ain_dev;
+            QVector<QString>            m_queue_cmd;
+            QTimer*                     m_timerAutoRepeatInput;
+            QTimer*                     m_timerAutoRepeatAIN;
+            QTimer*                     m_timerTimeoutQuery;
+            QTimer*                     m_timerRefreshPort;
+            QFile*                      m_file_ain;
+            bool                        m_block_send;
+            QString                     m_port_name; // имя порта по умолчанию
+            QKeyboard*                  m_keyboard;
+            QCommand*                   m_command;
+            CConfigurationModuleWidget* m_conf_widget;
 
         private:
             void   initConnect();

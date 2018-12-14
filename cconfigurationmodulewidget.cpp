@@ -9,9 +9,9 @@ CConfigurationModuleWidget::CConfigurationModuleWidget(QWidget* parent):
 
     ui->lineEditModuleKeyCurrent->setInputMask("HH HH HH HH");
     ui->lineEditModuleKeyNew->setInputMask("HH HH HH HH");
-    ui->lineEditModuleNumber->setInputMask("9999");
-    ui->lineEditModuleNumberParty->setInputMask("99");
-    ui->lineEditModuleFirmwareVariant->setInputMask("99");
+    ui->lineEditModuleNumber->setValidator(new QIntValidator(0, 9999));
+    ui->lineEditModuleNumberParty->setValidator(new QIntValidator(0, 99));
+    ui->lineEditModuleFirmwareVariant->setValidator(new QIntValidator(0, 99));
 
     ui->lineEditModuleKeyCurrent->setText("00000000");
     ui->lineEditModuleKeyNew->setText("00000000");
@@ -25,4 +25,61 @@ CConfigurationModuleWidget::CConfigurationModuleWidget(QWidget* parent):
 CConfigurationModuleWidget::~CConfigurationModuleWidget()
 {
     delete ui;
+}
+//------------------------------------------------
+int CConfigurationModuleWidget::moduleType() const
+{
+    return ui->comboBoxModuleType->currentIndex() + 0x48;
+}
+//--------------------------------------------------
+int CConfigurationModuleWidget::moduleNumber() const
+{
+    return ui->lineEditModuleNumber->text().toInt();
+}
+//-------------------------------------------------------
+int CConfigurationModuleWidget::moduleNumberParty() const
+{
+    return ui->lineEditModuleNumberParty->text().toInt();
+}
+//-----------------------------------------------------------
+int CConfigurationModuleWidget::moduleFirmwareVariant() const
+{
+    return ui->lineEditModuleFirmwareVariant->text().toInt();
+}
+//----------------------------------------------------------
+QDate CConfigurationModuleWidget::moduleFirmwareDate() const
+{
+    return ui->dateEdit->date();
+}
+//------------------------------------------------------
+void CConfigurationModuleWidget::setModuleType(int type)
+{
+    if(type < ui->comboBoxModuleType->count())
+        ui->comboBoxModuleType->setCurrentIndex(type);
+}
+//----------------------------------------------------------
+void CConfigurationModuleWidget::setModuleNumber(int number)
+{
+    ui->lineEditModuleNumber->setText(QString::number(number));
+}
+//---------------------------------------------------------------
+void CConfigurationModuleWidget::setModuleNumberParty(int number)
+{
+    ui->lineEditModuleNumberParty->setText(QString::number(number));
+}
+//--------------------------------------------------------------------
+void CConfigurationModuleWidget::setModuleFirmwareVariant(int variant)
+{
+    ui->lineEditModuleFirmwareVariant->setText(QString::number(variant));
+}
+//-----------------------------------------------------------------------
+void CConfigurationModuleWidget::setModuleFirmwareDate(const QDate& date)
+{
+    ui->dateEdit->setDate(date);
+}
+//--------------------------------------
+void CConfigurationModuleWidget::close()
+{
+    if(!isHidden())
+        hide();
 }

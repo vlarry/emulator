@@ -15,6 +15,19 @@
         public:
             explicit CConfigurationModuleWidget(QWidget* parent = nullptr);
             ~CConfigurationModuleWidget();
+            int   moduleType() const;
+            int   moduleNumber() const;
+            int   moduleNumberParty() const;
+            int   moduleFirmwareVariant() const;
+            QDate moduleFirmwareDate() const;
+            void  setModuleType(int type);
+            void  setModuleNumber(int number);
+            void  setModuleNumberParty(int number);
+            void  setModuleFirmwareVariant(int variant);
+            void  setModuleFirmwareDate(const QDate& date);
+
+        protected:
+            void close();
 
         private:
             Ui::CConfigurationModuleWidget* ui;

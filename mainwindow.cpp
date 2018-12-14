@@ -34,8 +34,10 @@ MainWindow::MainWindow(QWidget* parent):
     m_timerAutoRepeatAIN   = new QTimer(this);
     m_timerTimeoutQuery    = new QTimer(this);
     m_timerRefreshPort     = new QTimer(this);
+    m_conf_widget          = new CConfigurationModuleWidget(this);
+    m_file_ain             = new QFile;
 
-    m_file_ain = new QFile;
+    m_conf_widget->hide();
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -375,65 +377,70 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
         break;
 
         case 0x1E:
-            ui->leDeviceID->setEnabled(true);
-            ui->leDeviceNumber->setEnabled(true);
-            ui->leDeviceLotNum->setEnabled(true);
-            ui->leDeviceFirmwareVar->setEnabled(true);
-            ui->leDeviceFirmwareDate->setEnabled(true);
+        ui->leDeviceID->setEnabled(true);
+        ui->leDeviceNumber->setEnabled(true);
+        ui->leDeviceLotNum->setEnabled(true);
+        ui->leDeviceFirmwareVar->setEnabled(true);
+        ui->leDeviceFirmwareDate->setEnabled(true);
 
-            ui->twPeriphery->setCurrentIndex(1);
+        ui->twPeriphery->setCurrentIndex(1);
 
-            s = "0x";
+        s = "0x";
 
-            if(data.at(0) < 16)
-                s += "0";
+        if(data.at(0) < 16)
+            s += "0";
 
-            s += QString::number(data.at(0), 16);
+        s += QString::number(data.at(0), 16);
 
-            if(data.at(0) == 0x48)
-            {
-                s += " " + tr("(МДВВ-01)");
-            }
-            else if(data.at(0) == 0x49)
-            {
-                s += " " + tr("(МДВВ-02)");
-            }
-            else if(data.at(0) == 0x50)
-            {
-                s += " " + tr("(МИК-01)");
-            }
+        if(data.at(0) == 0x48)
+        {
+            s += " " + tr("(МДВВ-01)");
+        }
+        else if(data.at(0) == 0x49)
+        {
+            s += " " + tr("(МДВВ-02)");
+        }
+        else if(data.at(0) == 0x50)
+        {
+            s += " " + tr("(МИК-01)");
+        }
 
-            ui->leDeviceID->setText(s);
+        ui->leDeviceID->setText(s);
+        m_conf_widget->setModuleType(data.at(0) - 0x48);
 
-            tdata = static_cast<quint8>(data.at(1));
-            tdata = ((tdata >> 4)&0x0F)*1000 + (tdata&0x0F)*100;
-            tdata += ((static_cast<quint8>(data.at(2))) >> 4)*10 + ((static_cast<quint8>(data.at(2)))&0x0F);
-            ui->leDeviceNumber->setText(QString::number(tdata, 10));
+        tdata = static_cast<quint8>(data.at(1));
+        tdata = ((tdata >> 4)&0x0F)*1000 + (tdata&0x0F)*100;
+        tdata += ((static_cast<quint8>(data.at(2))) >> 4)*10 + ((static_cast<quint8>(data.at(2)))&0x0F);
+        ui->leDeviceNumber->setText(QString::number(tdata, 10));
+        m_conf_widget->setModuleNumber(tdata);
 
-            tdata = static_cast<quint8>(data.at(3));
-            tdata = ((tdata >> 4)&0x0F)*10 + (tdata&0x0F);
-            ui->leDeviceLotNum->setText(QString::number(tdata, 10));
+        tdata = static_cast<quint8>(data.at(3));
+        tdata = ((tdata >> 4)&0x0F)*10 + (tdata&0x0F);
+        ui->leDeviceLotNum->setText(QString::number(tdata, 10));
+        m_conf_widget->setModuleNumberParty(tdata);
 
-            tdata = static_cast<quint8>(data.at(4));
-            tdata = ((tdata >> 4)&0x0F)*10 + (tdata&0x0F);
-            ui->leDeviceFirmwareVar->setText(QString::number(tdata, 10));
+        tdata = static_cast<quint8>(data.at(4));
+        tdata = ((tdata >> 4)&0x0F)*10 + (tdata&0x0F);
+        ui->leDeviceFirmwareVar->setText(QString::number(tdata, 10));
+        m_conf_widget->setModuleFirmwareVariant(tdata);
 
-            tdata = static_cast<quint8>(data.at(7));
-            tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
-            s = QString::number(tdata, 10) + ".";
+        tdata = static_cast<quint8>(data.at(7));
+        tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
+        s = QString::number(tdata, 10) + ".";
 
-            if(data.at(6) < 10)
-                s += "0";
+        if(data.at(6) < 10)
+            s += "0";
 
-            tdata = data.at(6);
-            tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
-            s += QString::number(tdata, 10);
+        tdata = data.at(6);
+        tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
+        s += QString::number(tdata, 10);
 
-            tdata = data.at(5);
-            tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
-            s += ".20" + QString::number(tdata, 10);
+        tdata = data.at(5);
+        tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
+        s += ".20" + QString::number(tdata, 10);
 
-            ui->leDeviceFirmwareDate->setText(s);
+        ui->leDeviceFirmwareDate->setText(s);
+        m_conf_widget->setModuleFirmwareDate(QDate::fromString(s, "dd.MM.yyyy"));
         break;
 
         case 0x1F:
@@ -611,9 +618,11 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
         case Qt::Key_F5:
             if((event->modifiers() & Qt::ALT) && (event->modifiers() & Qt::CTRL))
             {
-                CConfigurationModuleWidget* confWidget = new CConfigurationModuleWidget(this);
-
-                confWidget->exec();
+                if(m_conf_widget->isHidden())
+                {
+                    sendData("0x1E");
+                    m_conf_widget->show();
+                }
             }
         break;
     }
