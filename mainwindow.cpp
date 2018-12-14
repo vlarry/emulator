@@ -618,11 +618,7 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
         case Qt::Key_F5:
             if((event->modifiers() & Qt::ALT) && (event->modifiers() & Qt::CTRL))
             {
-                if(m_conf_widget->isHidden())
-                {
-                    sendData("0x1E");
-                    m_conf_widget->show();
-                }
+                configurationWindow();
             }
         break;
     }
@@ -699,6 +695,42 @@ void MainWindow::unblockSend()
 bool MainWindow::is_blockSend()
 {
     return m_block_send;
+}
+//------------------------------------
+void MainWindow::configurationWindow()
+{
+    if(m_conf_widget->isHidden())
+    {
+        sendData("0x1E");
+        if(m_conf_widget->exec() == QDialog::Accepted)
+        {
+            int   cmd          = 0x3A;
+            int   type         = m_conf_widget->moduleType();
+            int   num          = m_conf_widget->moduleNumber();
+            int   numParty     = m_conf_widget->moduleNumberParty();
+            int   firmwareVar  = m_conf_widget->moduleFirmwareVariant();
+            QDate firmwareDate = m_conf_widget->moduleFirmwareDate();
+
+/* FORMAT SERIAL NUMBER CMD
+* -----------------------------------------------------------------------------------------------------------------------------------------------------------
+* | cmd | module | key_cur | key_cur | key_cur | key_cur | key_new | key_new | key_new | key_new | num | num | party | firmware | year | month | day | CRC8 |
+* -----------------------------------------------------------------------------------------------------------------------------------------------------------
+*/
+            QByteArray ba;
+
+            ba.append(QByteArray::fromHex(QByteArray::number(cmd, 16))); // код команды
+            ba.append(QByteArray::fromHex(QByteArray::number(type, 16))); // тип модуля: МДВВ-01 (0x48), МДВВ-02 (0x49), МИК-01 (0x50)
+            ba.append(QByteArray::fromHex(QByteArray::number(((num/1000 << 4) | (num%1000)/100), 16)));
+            num = num%100;
+            ba.append(QByteArray::fromHex(QByteArray::number(((num/10 << 4) | (num%10)), 16)));
+            ba.append(QByteArray::fromHex(QByteArray::number(((numParty/10 << 4) | (numParty%10)), 16)));
+            ba.append(QByteArray::fromHex(QByteArray::number(((firmwareVar/10 << 4) | (firmwareVar%10)), 16)));
+            ba.append(QByteArray::fromHex(QByteArray::number((((firmwareDate.year() - 2000)/10 << 4) | ((firmwareDate.year() - 2000)%10)), 16)));
+            ba.append(QByteArray::fromHex(QByteArray::number(((firmwareDate.month()/10 << 4) | (firmwareDate.month()%10)), 16)));
+            ba.append(QByteArray::fromHex(QByteArray::number(((firmwareDate.day()/10 << 4) | (firmwareDate.day()%10)), 16)));
+            ba.append(getChecksum(ba, ba.count()));
+        }
+    }
 }
 //----------------------------------
 void MainWindow::refreshSerialPort()

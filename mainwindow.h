@@ -89,6 +89,7 @@
             void   blockSend();
             void   unblockSend();
             bool   is_blockSend();
+            void   configurationWindow();
 
         protected:
             void keyPressEvent(QKeyEvent *event);
