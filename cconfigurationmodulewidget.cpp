@@ -51,6 +51,16 @@ QDate CConfigurationModuleWidget::moduleFirmwareDate() const
 {
     return ui->dateEdit->date();
 }
+//----------------------------------------------------------
+QString CConfigurationModuleWidget::moduleKeyCurrent() const
+{
+    return ui->lineEditModuleKeyCurrent->text();
+}
+//------------------------------------------------------
+QString CConfigurationModuleWidget::moduleKeyNew() const
+{
+    return ui->lineEditModuleKeyNew->text();
+}
 //------------------------------------------------------
 void CConfigurationModuleWidget::setModuleType(int type)
 {

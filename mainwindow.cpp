@@ -704,12 +704,14 @@ void MainWindow::configurationWindow()
         sendData("0x1E");
         if(m_conf_widget->exec() == QDialog::Accepted)
         {
-            int   cmd          = 0x3A;
-            int   type         = m_conf_widget->moduleType();
-            int   num          = m_conf_widget->moduleNumber();
-            int   numParty     = m_conf_widget->moduleNumberParty();
-            int   firmwareVar  = m_conf_widget->moduleFirmwareVariant();
-            QDate firmwareDate = m_conf_widget->moduleFirmwareDate();
+            int     cmd          = 0x3A;
+            int     type         = m_conf_widget->moduleType();
+            QString keyCurrent   = m_conf_widget->moduleKeyCurrent();
+            QString keyNew       = m_conf_widget->moduleKeyNew();
+            int     num          = m_conf_widget->moduleNumber();
+            int     numParty     = m_conf_widget->moduleNumberParty();
+            int     firmwareVar  = m_conf_widget->moduleFirmwareVariant();
+            QDate   firmwareDate = m_conf_widget->moduleFirmwareDate();
 
 /* FORMAT SERIAL NUMBER CMD
 * -----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -720,6 +722,8 @@ void MainWindow::configurationWindow()
 
             ba.append(QByteArray::fromHex(QByteArray::number(cmd, 16))); // код команды
             ba.append(QByteArray::fromHex(QByteArray::number(type, 16))); // тип модуля: МДВВ-01 (0x48), МДВВ-02 (0x49), МИК-01 (0x50)
+            ba.append(QByteArray::fromHex(keyCurrent.toLatin1()));
+            ba.append(QByteArray::fromHex(keyNew.toLatin1()));
             ba.append(QByteArray::fromHex(QByteArray::number(((num/1000 << 4) | (num%1000)/100), 16)));
             num = num%100;
             ba.append(QByteArray::fromHex(QByteArray::number(((num/10 << 4) | (num%10)), 16)));
