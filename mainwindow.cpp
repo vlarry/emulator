@@ -705,7 +705,6 @@ void MainWindow::configurationWindow()
         if(m_conf_widget->exec() == QDialog::Accepted)
         {
             int     cmd          = 0x3A;
-            int     type         = m_conf_widget->moduleType();
             QString keyCurrent   = m_conf_widget->moduleKeyCurrent();
             QString keyNew       = m_conf_widget->moduleKeyNew();
             int     num          = m_conf_widget->moduleNumber();
@@ -714,14 +713,12 @@ void MainWindow::configurationWindow()
             QDate   firmwareDate = m_conf_widget->moduleFirmwareDate();
 
 /* FORMAT SERIAL NUMBER CMD
-* -----------------------------------------------------------------------------------------------------------------------------------------------------------
-* | cmd | module | key_cur | key_cur | key_cur | key_cur | key_new | key_new | key_new | key_new | num | num | party | firmware | year | month | day | CRC8 |
-* -----------------------------------------------------------------------------------------------------------------------------------------------------------
+* --------------------------------------------------------------------------------------------------------------------------------------------------
+* | cmd | key_cur | key_cur | key_cur | key_cur | key_new | key_new | key_new | key_new | num | num | party | firmware | year | month | day | CRC8 |
+* --------------------------------------------------------------------------------------------------------------------------------------------------
 */
             QByteArray ba;
 
-            ba.append(QByteArray::fromHex(QByteArray::number(cmd, 16))); // код команды
-            ba.append(QByteArray::fromHex(QByteArray::number(type, 16))); // тип модуля: МДВВ-01 (0x48), МДВВ-02 (0x49), МИК-01 (0x50)
             ba.append(QByteArray::fromHex(keyCurrent.toLatin1()));
             ba.append(QByteArray::fromHex(keyNew.toLatin1()));
             ba.append(QByteArray::fromHex(QByteArray::number(((num/1000 << 4) | (num%1000)/100), 16)));
@@ -732,7 +729,10 @@ void MainWindow::configurationWindow()
             ba.append(QByteArray::fromHex(QByteArray::number((((firmwareDate.year() - 2000)/10 << 4) | ((firmwareDate.year() - 2000)%10)), 16)));
             ba.append(QByteArray::fromHex(QByteArray::number(((firmwareDate.month()/10 << 4) | (firmwareDate.month()%10)), 16)));
             ba.append(QByteArray::fromHex(QByteArray::number(((firmwareDate.day()/10 << 4) | (firmwareDate.day()%10)), 16)));
-            ba.append(getChecksum(ba, ba.count()));
+
+            QString str;
+            str.setNum(cmd, 16);
+            write(str, ba);
         }
     }
 }
@@ -931,92 +931,99 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
 
         cmd |= ((quint8)ui->sbDeviceAddress->value()) << 6;
 
-        qint8 channel_id                 = -1;
-        CIODevice::state_t channel_state = CIODevice::STATE_OFF;
+        QString cmd_temp;
 
-        if(cmd >= 0x06 && cmd <= 0x0D)
+        cmd_temp.setNum(cmd, 16);
+        m_query.append(QByteArray::fromHex(cmd_temp.toLocal8Bit().data()));
+
+        if(data.isEmpty())
         {
-            channel_id    = cmd - 0x06;
-            channel_state = CIODevice::STATE_OFF;
-        }
-        else if(cmd >= 0x0E && cmd <= 0x15)
-        {
-            channel_id    = cmd - 0x0E;
-            channel_state = CIODevice::STATE_ON;
-        }
+            qint8 channel_id                 = -1;
+            CIODevice::state_t channel_state = CIODevice::STATE_OFF;
 
-        if(channel_id != -1)
-        {
-            m_output_dev.at(channel_id)->set_state(channel_state);
-        }
-
-        m_port->setParity(QSerialPort::MarkParity); // enable 9 bit
-
-        QString str;
-
-        str.setNum(cmd, 16);
-        m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
-
-        if(m_cmd_last == tr("0x05") && ui->sbDeviceAddress->value() == MIK_01) // только для устройства МИК-01
-        {
-            for(quint8 i = 0; i < 3; ++i) // 3 байта на 12 входов
+            if(cmd >= 0x06 && cmd <= 0x0D)
             {
-                quint8 byte = 0x00;
+                channel_id    = cmd - 0x06;
+                channel_state = CIODevice::STATE_OFF;
+            }
+            else if(cmd >= 0x0E && cmd <= 0x15)
+            {
+                channel_id    = cmd - 0x0E;
+                channel_state = CIODevice::STATE_ON;
+            }
 
-                for(quint8 j = 0; j < 8; j += 2) // 8 бит с шагом 2 (т.е. 2 бита на описание состояния одного выхода)
+            if(channel_id != -1)
+            {
+                m_output_dev.at(channel_id)->set_state(channel_state);
+            }
+
+            m_port->setParity(QSerialPort::MarkParity); // enable 9 bit
+
+            QString str;
+
+            if(m_cmd_last == tr("0x05") && ui->sbDeviceAddress->value() == MIK_01) // только для устройства МИК-01
+            {
+                for(quint8 i = 0; i < 3; ++i) // 3 байта на 12 входов
                 {
-                    CIODevice* out   = m_output_dev.at(i*4 + j/2);
-                    quint8     state = (out->get_state() == CIODevice::STATE_OFF)?0x00:
-                                       (out->get_state() == CIODevice::STATE_ON)?0x01:0x02;
+                    quint8 byte = 0x00;
 
-                    state = state << j;
-                    byte |= state;
+                    for(quint8 j = 0; j < 8; j += 2) // 8 бит с шагом 2 (т.е. 2 бита на описание состояния одного выхода)
+                    {
+                        CIODevice* out   = m_output_dev.at(i*4 + j/2);
+                        quint8     state = (out->get_state() == CIODevice::STATE_OFF)?0x00:
+                                                                                      (out->get_state() == CIODevice::STATE_ON)?0x01:0x02;
+
+                        state = state << j;
+                        byte |= state;
+                    }
+
+                    str.setNum(byte, 16);
+                    m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
                 }
+            }
+            if(m_cmd_last == tr("0x3E"))
+            {
+                str.setNum(ui->sbPeriods->value(), 16);
+                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // количество периодов
 
-                str.setNum(byte, 16);
-                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
+                str.setNum(ui->sbDiscret->value(), 16);
+                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // дискретность
+
+                str.setNum(ui->sbSignal->value(), 16);
+                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // длительность сигнала
+            }
+            else if(m_cmd_last == tr("0x3F"))
+            {
+                str.setNum(ui->sbInput->value(), 16);
+                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // номер входа
+
+                quint8 type = (ui->cbInputType->currentText().toUpper() == tr("АНАЛОГОВЫЙ"))?0x00:0x01;
+
+                str.setNum(type, 16);
+                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // тип входа
+
+                str.setNum(ui->sbDuration->value(), 16);
+                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // длительность периода
+
+                str.setNum(ui->sbFaultInput->value(), 16);
+                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // погрешность периода
             }
         }
-        if(m_cmd_last == tr("0x3E"))
+        else
         {
-            str.setNum(ui->sbPeriods->value(), 16);
-            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // количество периодов
+            QString data_str;
 
-            str.setNum(ui->sbDiscret->value(), 16);
-            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // дискретность
+            for(QChar ch: data)
+                data_str.append(ch);
 
-            str.setNum(ui->sbSignal->value(), 16);
-            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // длительность сигнала
+            m_query.append(data_str.toLatin1());
         }
-        else if(m_cmd_last == tr("0x3F"))
-        {
-            str.setNum(ui->sbInput->value(), 16);
-            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // номер входа
-
-            quint8 type = (ui->cbInputType->currentText().toUpper() == tr("АНАЛОГОВЫЙ"))?0x00:0x01;
-
-            str.setNum(type, 16);
-            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // тип входа
-
-            str.setNum(ui->sbDuration->value(), 16);
-            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // длительность периода
-
-            str.setNum(ui->sbFaultInput->value(), 16);
-            m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // погрешность периода
-        }
-
-//        QByteArray ba;
-
-//        for(QByteArray b: m_query)
-//        {
-//            for(quint8 s: b)
-//                ba.append(s);
-//        }
 
         quint8 checksum = getChecksum(m_query, m_query.size()); // создать контрольную сумму
+        QString crc_str;
 
-        str.setNum(checksum, 16);
-        m_query.append(QByteArray::fromHex(str.toLocal8Bit().data()));
+        crc_str.setNum(checksum, 16);
+        m_query.append(QByteArray::fromHex(crc_str.toLocal8Bit().data()));
         ui->pteConsole->appendPlainText(tr("ОТПРАВКА ДАННЫХ: ") + m_query.toHex().toUpper());
     }
 
