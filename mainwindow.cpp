@@ -704,7 +704,7 @@ void MainWindow::configurationWindow()
         sendData("0x1E");
         if(m_conf_widget->exec() == QDialog::Accepted)
         {
-            int     cmd          = 0x3A;
+            QString cmd          = "0x3A";
             QString keyCurrent   = m_conf_widget->moduleKeyCurrent();
             QString keyNew       = m_conf_widget->moduleKeyNew();
             int     num          = m_conf_widget->moduleNumber();
@@ -730,9 +730,7 @@ void MainWindow::configurationWindow()
             ba.append(QByteArray::fromHex(QByteArray::number(((firmwareDate.month()/10 << 4) | (firmwareDate.month()%10)), 16)));
             ba.append(QByteArray::fromHex(QByteArray::number(((firmwareDate.day()/10 << 4) | (firmwareDate.day()%10)), 16)));
 
-            QString str;
-            str.setNum(cmd, 16);
-            write(str, ba);
+            write(cmd, ba);
         }
     }
 }
@@ -857,17 +855,21 @@ void MainWindow::readData()
 
     if(responce_size == cmd_size)
     {
-        ui->pteConsole->appendPlainText(tr("ЧТЕНИЕ: 0x") + m_responce.toHex().toUpper());
-        ui->pteConsole->verticalScrollBar()->setValue(ui->pteConsole->verticalScrollBar()->maximum());
-
         quint8 checksum_calc = getChecksum(m_responce, m_responce.size() - 1);
         quint8 checksum_read = m_responce.at(m_responce.size() - 1);
 
         if(checksum_calc == checksum_read)
         {
             cmdParser(m_responce, m_responce.size() - 1);
+            ui->pteConsole->appendPlainText(tr("ЧТЕНИЕ: 0x%1\n%2").arg(QString(m_responce.toHex().toUpper())).arg("*****"));
         }
+        else
+            ui->pteConsole->appendPlainText(tr("ЧТЕНИЕ: ОШИБКА CRC\n%1").arg("*****"));
 
+        ui->pteConsole->verticalScrollBar()->setValue(ui->pteConsole->verticalScrollBar()->maximum());
+
+        m_query.clear();
+        m_query_count = 0;
         m_responce.clear();
         sendData(); // подтверждаем принятие данных отправкой пустого сообщения
     }
@@ -957,8 +959,6 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
                 m_output_dev.at(channel_id)->set_state(channel_state);
             }
 
-            m_port->setParity(QSerialPort::MarkParity); // enable 9 bit
-
             QString str;
 
             if(m_cmd_last == tr("0x05") && ui->sbDeviceAddress->value() == MIK_01) // только для устройства МИК-01
@@ -970,8 +970,7 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
                     for(quint8 j = 0; j < 8; j += 2) // 8 бит с шагом 2 (т.е. 2 бита на описание состояния одного выхода)
                     {
                         CIODevice* out   = m_output_dev.at(i*4 + j/2);
-                        quint8     state = (out->get_state() == CIODevice::STATE_OFF)?0x00:
-                                                                                      (out->get_state() == CIODevice::STATE_ON)?0x01:0x02;
+                        quint8     state = (out->get_state() == CIODevice::STATE_OFF)?0x00:(out->get_state() == CIODevice::STATE_ON)?0x01:0x02;
 
                         state = state << j;
                         byte |= state;
@@ -1024,7 +1023,10 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
 
         crc_str.setNum(checksum, 16);
         m_query.append(QByteArray::fromHex(crc_str.toLocal8Bit().data()));
+        int index = (QString(m_cmd_last).remove(QRegExp(tr("0x"))).toInt(Q_NULLPTR, 16));
+        ui->pteConsole->appendPlainText(tr("КОМАНДА: ") + ui->cbCmdList->description(index));
         ui->pteConsole->appendPlainText(tr("ОТПРАВКА ДАННЫХ: ") + m_query.toHex().toUpper());
+        m_port->setParity(QSerialPort::MarkParity); // enable 9 bit
     }
 
     m_port->write(m_query);
@@ -1040,17 +1042,10 @@ void MainWindow::BytesWriten(qint64 byte)
 
     m_query_count++;
 
-    if(m_query_count == m_query.count())
+    if(m_query_count < m_query.count())
     {
-        int index = (QString(m_cmd_last).remove(QRegExp(tr("0x"))).toInt(Q_NULLPTR, 16));
-        ui->pteConsole->appendPlainText(tr("ЗАПИСЬ КОМАНДЫ: ") + ui->cbCmdList->description(index));
-        ui->pteConsole->verticalScrollBar()->setValue(ui->pteConsole->verticalScrollBar()->maximum());
-
-        m_query.clear();
-        m_query_count = 0;
-    }
-    else
         write();
+    }
 }
 //---------------------------------------------------------
 void MainWindow::cmdDescription(const QString& description)
