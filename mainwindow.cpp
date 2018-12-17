@@ -704,13 +704,13 @@ void MainWindow::configurationWindow()
         sendData("0x1E");
         if(m_conf_widget->exec() == QDialog::Accepted)
         {
-            QString cmd          = "0x3A";
-            QString keyCurrent   = m_conf_widget->moduleKeyCurrent();
-            QString keyNew       = m_conf_widget->moduleKeyNew();
-            int     num          = m_conf_widget->moduleNumber();
-            int     numParty     = m_conf_widget->moduleNumberParty();
-            int     firmwareVar  = m_conf_widget->moduleFirmwareVariant();
-            QDate   firmwareDate = m_conf_widget->moduleFirmwareDate();
+            QString    cmd          = "0x3A";
+            QByteArray keyCurrent   = m_conf_widget->moduleKeyCurrent();
+            QByteArray keyNew       = m_conf_widget->moduleKeyNew();
+            int        num          = m_conf_widget->moduleNumber();
+            int        numParty     = m_conf_widget->moduleNumberParty();
+            int        firmwareVar  = m_conf_widget->moduleFirmwareVariant();
+            QDate      firmwareDate = m_conf_widget->moduleFirmwareDate();
 
 /* FORMAT SERIAL NUMBER CMD
 * --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -719,8 +719,8 @@ void MainWindow::configurationWindow()
 */
             QByteArray ba;
 
-            ba.append(QByteArray::fromHex(keyCurrent.toLatin1()));
-            ba.append(QByteArray::fromHex(keyNew.toLatin1()));
+            ba.append(keyCurrent);
+            ba.append(keyNew);
             ba.append(QByteArray::fromHex(QByteArray::number(((num/1000 << 4) | (num%1000)/100), 16)));
             num = num%100;
             ba.append(QByteArray::fromHex(QByteArray::number(((num/10 << 4) | (num%10)), 16)));
@@ -1010,12 +1010,7 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
         }
         else
         {
-            QString data_str;
-
-            for(QChar ch: data)
-                data_str.append(ch);
-
-            m_query.append(data_str.toLatin1());
+            m_query.append(data);
         }
 
         quint8 checksum = getChecksum(m_query, m_query.size()); // создать контрольную сумму

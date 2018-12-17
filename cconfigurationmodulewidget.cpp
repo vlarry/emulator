@@ -51,15 +51,19 @@ QDate CConfigurationModuleWidget::moduleFirmwareDate() const
 {
     return ui->dateEdit->date();
 }
-//----------------------------------------------------------
-QString CConfigurationModuleWidget::moduleKeyCurrent() const
+//-------------------------------------------------------------
+QByteArray CConfigurationModuleWidget::moduleKeyCurrent() const
 {
-    return ui->lineEditModuleKeyCurrent->text();
+    QString hex = ui->lineEditModuleKeyCurrent->text();
+    hex.remove(" ");
+    return QByteArray::fromHex(hex.toUtf8());
 }
-//------------------------------------------------------
-QString CConfigurationModuleWidget::moduleKeyNew() const
+//---------------------------------------------------------
+QByteArray CConfigurationModuleWidget::moduleKeyNew() const
 {
-    return ui->lineEditModuleKeyNew->text();
+    QString hex = ui->lineEditModuleKeyNew->text();
+    hex.remove(" ");
+    return QByteArray::fromHex(hex.toUtf8());
 }
 //------------------------------------------------------
 void CConfigurationModuleWidget::setModuleType(int type)
