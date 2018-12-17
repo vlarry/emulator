@@ -1037,10 +1037,13 @@ void MainWindow::BytesWriten(qint64 byte)
 
     m_query_count++;
 
-    if(m_query_count < m_query.count())
+    if(m_query_count == m_query.count())
     {
-        write();
+        m_query.clear();
+        m_query_count = 0;
     }
+    else
+        write();
 }
 //---------------------------------------------------------
 void MainWindow::cmdDescription(const QString& description)
