@@ -615,11 +615,8 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
             }
         break;
 
-        case Qt::Key_F5:
-            if((event->modifiers() & Qt::ALT) && (event->modifiers() & Qt::CTRL))
-            {
-                configurationWindow();
-            }
+        case Qt::Key_F7:
+            configurationWindow();
         break;
     }
 
