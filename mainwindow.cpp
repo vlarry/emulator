@@ -86,6 +86,8 @@ void MainWindow::initConnect()
     connect(ui->cbKeyboard, SIGNAL(toggled(bool)), this, SLOT(visiblityKeyboard(bool)));
     connect(ui->cbCommand, SIGNAL(toggled(bool)), this, SLOT(visiblityCommand(bool)));
     connect(m_command, SIGNAL(doubleClickCmd(QString)), this, SLOT(sendData(QString)));
+
+    connect(ui->checkBoxSerialConfig, &QCheckBox::clicked, this, &MainWindow::configWindowVisiblity);
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -698,6 +700,9 @@ void MainWindow::configurationWindow()
 {
     if(m_conf_widget->isHidden())
     {
+        if(!ui->checkBoxSerialConfig->isChecked())
+            ui->checkBoxSerialConfig->setChecked(true);
+
         sendData("0x1E");
         if(m_conf_widget->exec() == QDialog::Accepted)
         {
@@ -729,6 +734,21 @@ void MainWindow::configurationWindow()
 
             write(cmd, ba);
         }
+
+        ui->checkBoxSerialConfig->setChecked(false);
+    }
+}
+//------------------------------------------------
+void MainWindow::configWindowVisiblity(bool state)
+{
+    if(!state)
+    {
+        if(m_conf_widget->isVisible())
+            m_conf_widget->hide();
+    }
+    else
+    {
+        configurationWindow();
     }
 }
 //----------------------------------

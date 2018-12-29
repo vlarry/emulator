@@ -89,7 +89,6 @@
             void   blockSend();
             void   unblockSend();
             bool   is_blockSend();
-            void   configurationWindow();
 
         protected:
             void keyPressEvent(QKeyEvent *event);
@@ -115,6 +114,8 @@
             void visiblityTerminal(bool visible);
             void visiblityKeyboard(bool visible);
             void visiblityCommand(bool visible);
+            void configurationWindow();
+            void configWindowVisiblity(bool state = false);
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)
