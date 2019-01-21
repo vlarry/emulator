@@ -203,7 +203,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
     if(data.isEmpty())
         return;
 
-    quint8 cmd  = (quint8)QString(m_cmd_last).remove(QRegExp("0x")).toInt(Q_NULLPTR, 16);
+    quint8 cmd  = static_cast<quint8>(QString(m_cmd_last).remove(QRegExp("0x")).toInt(Q_NULLPTR, 16));
 
     Float_t ain;
     QTextStream in(m_file_ain);
@@ -226,7 +226,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             {
                 for(quint8 i = 0; i < size; ++i)
                 {
-                    quint8 byte = data.at(i);
+                    quint8 byte = static_cast<quint8>(data.at(i));
 
                     for(quint8 j = 0; j < 8; j += 2)
                     {
@@ -250,7 +250,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             {
                 if(size == 1)
                 {
-                    quint8 channels = data.at(0);
+                    quint8 channels = static_cast<quint8>(data.at(0));
 
                     for(quint8 i = 0; i < 8; ++i)
                     {
@@ -345,7 +345,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 
                         channels >>= j;
 
-                        quint8 ch_state = channels & 0x01;
+                        quint8 ch_state = channels&0x01;
                         quint8 ch_num   = j + (i*8);
 
                         m_keyboard->setStateKey(ch_num, ch_state);
@@ -379,76 +379,76 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
         break;
 
         case 0x1E:
-        ui->leDeviceID->setEnabled(true);
-        ui->leDeviceNumber->setEnabled(true);
-        ui->leDeviceLotNum->setEnabled(true);
-        ui->leDeviceFirmwareVar->setEnabled(true);
-        ui->leDeviceFirmwareDate->setEnabled(true);
+            ui->leDeviceID->setEnabled(true);
+            ui->leDeviceNumber->setEnabled(true);
+            ui->leDeviceLotNum->setEnabled(true);
+            ui->leDeviceFirmwareVar->setEnabled(true);
+            ui->leDeviceFirmwareDate->setEnabled(true);
 
-        ui->twPeriphery->setCurrentIndex(1);
+            ui->twPeriphery->setCurrentIndex(1);
 
-        s = "0x";
+            s = "0x";
 
-        if(data.at(0) < 16)
-            s += "0";
+            if(data.at(0) < 16)
+                s += "0";
 
-        s += QString::number(data.at(0), 16);
+            s += QString::number(data.at(0), 16);
 
-        if(data.at(0) == 0x48)
-        {
-            s += " " + tr("(МДВВ-01)");
-        }
-        else if(data.at(0) == 0x49)
-        {
-            s += " " + tr("(МДВВ-02)");
-        }
-        else if(data.at(0) == 0x50)
-        {
-            s += " " + tr("(МИК-01)");
-        }
+            if(data.at(0) == 0x48)
+            {
+                s += " " + tr("(МДВВ-01)");
+            }
+            else if(data.at(0) == 0x49)
+            {
+                s += " " + tr("(МДВВ-02)");
+            }
+            else if(data.at(0) == 0x50)
+            {
+                s += " " + tr("(МИК-01)");
+            }
 
-        ui->leDeviceID->setText(s);
-        m_conf_widget->setModuleType(data.at(0) - 0x48);
+            ui->leDeviceID->setText(s);
+            m_conf_widget->setModuleType(data.at(0) - 0x48);
 
-        tdata = static_cast<quint8>(data.at(1));
-        tdata = ((tdata >> 4)&0x0F)*1000 + (tdata&0x0F)*100;
-        tdata += ((static_cast<quint8>(data.at(2))) >> 4)*10 + ((static_cast<quint8>(data.at(2)))&0x0F);
-        ui->leDeviceNumber->setText(QString::number(tdata, 10));
-        m_conf_widget->setModuleNumber(tdata);
+            tdata = static_cast<quint8>(data.at(1));
+            tdata = ((tdata >> 4)&0x0F)*1000 + (tdata&0x0F)*100;
+            tdata += ((static_cast<quint8>(data.at(2))) >> 4)*10 + ((static_cast<quint8>(data.at(2)))&0x0F);
+            ui->leDeviceNumber->setText(QString::number(tdata, 10));
+            m_conf_widget->setModuleNumber(tdata);
 
-        tdata = static_cast<quint8>(data.at(3));
-        tdata = ((tdata >> 4)&0x0F)*10 + (tdata&0x0F);
-        ui->leDeviceLotNum->setText(QString::number(tdata, 10));
-        m_conf_widget->setModuleNumberParty(tdata);
+            tdata = static_cast<quint8>(data.at(3));
+            tdata = ((tdata >> 4)&0x0F)*10 + (tdata&0x0F);
+            ui->leDeviceLotNum->setText(QString::number(tdata, 10));
+            m_conf_widget->setModuleNumberParty(tdata);
 
-        tdata = static_cast<quint8>(data.at(4));
-        tdata = ((tdata >> 4)&0x0F)*10 + (tdata&0x0F);
-        ui->leDeviceFirmwareVar->setText(QString::number(tdata, 10));
-        m_conf_widget->setModuleFirmwareVariant(tdata);
+            tdata = static_cast<quint8>(data.at(4));
+            tdata = ((tdata >> 4)&0x0F)*10 + (tdata&0x0F);
+            ui->leDeviceFirmwareVar->setText(QString::number(tdata, 10));
+            m_conf_widget->setModuleFirmwareVariant(tdata);
 
-        tdata = static_cast<quint8>(data.at(7));
-        tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
-        s = QString::number(tdata, 10) + ".";
+            tdata = static_cast<quint8>(data.at(7));
+            tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
+            s = QString::number(tdata, 10) + ".";
 
-        if(data.at(6) < 10)
-            s += "0";
+            if(data.at(6) < 10)
+                s += "0";
 
-        tdata = data.at(6);
-        tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
-        s += QString::number(tdata, 10);
+            tdata = data.at(6);
+            tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
+            s += QString::number(tdata, 10);
 
-        tdata = data.at(5);
-        tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
-        s += ".20" + QString::number(tdata, 10);
+            tdata = data.at(5);
+            tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
+            s += ".20" + QString::number(tdata, 10);
 
-        ui->leDeviceFirmwareDate->setText(s);
-        m_conf_widget->setModuleFirmwareDate(QDate::fromString(s, "dd.MM.yyyy"));
+            ui->leDeviceFirmwareDate->setText(s);
+            m_conf_widget->setModuleFirmwareDate(QDate::fromString(s, "dd.MM.yyyy"));
         break;
 
         case 0x1F:
             if(size == 3)
             {
-                quint8 byte = data.at(0);
+                quint8 byte = static_cast<quint8>(data.at(0));
 
                 switch(byte)
                 {

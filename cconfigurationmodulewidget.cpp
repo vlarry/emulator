@@ -20,6 +20,8 @@ CConfigurationModuleWidget::CConfigurationModuleWidget(QWidget* parent):
     ui->lineEditModuleFirmwareVariant->setText("00");
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    connect(ui->checkBoxNewKey, &QCheckBox::clicked, this, &CConfigurationModuleWidget::newKeyStateChanged);
 }
 //-------------------------------------------------------
 CConfigurationModuleWidget::~CConfigurationModuleWidget()
@@ -61,7 +63,13 @@ QByteArray CConfigurationModuleWidget::moduleKeyCurrent() const
 //---------------------------------------------------------
 QByteArray CConfigurationModuleWidget::moduleKeyNew() const
 {
-    QString hex = ui->lineEditModuleKeyNew->text();
+    QString hex;
+
+    if(ui->checkBoxNewKey->isChecked())
+        hex = ui->lineEditModuleKeyNew->text();
+    else
+        hex = "00 00 00 00";
+
     hex.remove(" ");
     return QByteArray::fromHex(hex.toUtf8());
 }
@@ -91,9 +99,21 @@ void CConfigurationModuleWidget::setModuleFirmwareDate(const QDate& date)
 {
     ui->dateEdit->setDate(date);
 }
+//-----------------------------------------------------------
+void CConfigurationModuleWidget::showEvent(QShowEvent* event)
+{
+    QDialog::showEvent(event);
+    ui->checkBoxNewKey->setChecked(false);
+    ui->lineEditModuleKeyNew->setEnabled(false);
+}
 //--------------------------------------
 void CConfigurationModuleWidget::close()
 {
     if(!isHidden())
         hide();
+}
+//-------------------------------------------------------------
+void CConfigurationModuleWidget::newKeyStateChanged(bool state)
+{
+    ui->lineEditModuleKeyNew->setEnabled(state);
 }

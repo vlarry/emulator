@@ -29,7 +29,11 @@
             void       setModuleFirmwareDate(const QDate& date);
 
         protected:
+            void showEvent(QShowEvent* event);
             void close();
+
+        private slots:
+            void newKeyStateChanged(bool state);
 
         private:
             Ui::CConfigurationModuleWidget* ui;
