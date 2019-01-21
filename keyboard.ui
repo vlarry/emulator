@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>231</width>
-    <height>397</height>
+    <width>269</width>
+    <height>458</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,18 +16,18 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="5" column="2">
-      <widget class="QKey" name="key_right">
+     <item row="0" column="0">
+      <widget class="QKey" name="key_7">
        <property name="minimumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="font">
@@ -39,11 +39,7 @@
         </font>
        </property>
        <property name="text">
-        <string>0</string>
-       </property>
-       <property name="icon">
-        <iconset resource="resource.qrc">
-         <normaloff>:/images/resource/images/arrow_right.png</normaloff>:/images/resource/images/arrow_right.png</iconset>
+        <string>7</string>
        </property>
        <property name="iconSize">
         <size>
@@ -53,24 +49,18 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QKey" name="key_8">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>48</horstretch>
-         <verstretch>48</verstretch>
-        </sizepolicy>
-       </property>
+     <item row="1" column="0">
+      <widget class="QKey" name="key_4">
        <property name="minimumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="font">
@@ -82,7 +72,7 @@
         </font>
        </property>
        <property name="text">
-        <string>8</string>
+        <string>4</string>
        </property>
        <property name="iconSize">
         <size>
@@ -91,115 +81,19 @@
         </size>
        </property>
       </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QKey" name="key_ok">
-       <property name="minimumSize">
-        <size>
-         <width>48</width>
-         <height>48</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>48</width>
-         <height>48</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>18</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>OK</string>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="5" column="0">
-      <widget class="QKey" name="key_left">
-       <property name="minimumSize">
-        <size>
-         <width>48</width>
-         <height>48</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>48</width>
-         <height>48</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>18</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>0</string>
-       </property>
-       <property name="icon">
-        <iconset resource="resource.qrc">
-         <normaloff>:/images/resource/images/arrow_left.png</normaloff>:/images/resource/images/arrow_left.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="3">
-      <spacer name="horizontalSpacer_8">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item row="0" column="2">
       <widget class="QKey" name="key_9">
        <property name="minimumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="font">
@@ -221,18 +115,97 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
-      <widget class="QKey" name="key_0">
+     <item row="4" column="2">
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="1" column="2">
+      <widget class="QKey" name="key_6">
        <property name="minimumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>18</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>6</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QKey" name="key_1">
+       <property name="minimumSize">
+        <size>
+         <width>56</width>
+         <height>56</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>56</width>
+         <height>56</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>18</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>1</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QKey" name="key_0">
+       <property name="minimumSize">
+        <size>
+         <width>56</width>
+         <height>56</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="font">
@@ -258,14 +231,14 @@
       <widget class="QKey" name="key_esc">
        <property name="minimumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="font">
@@ -287,51 +260,31 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QKey" name="key_6">
-       <property name="minimumSize">
+     <item row="5" column="3">
+      <spacer name="horizontalSpacer_8">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>40</width>
+         <height>20</height>
         </size>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>48</width>
-         <height>48</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>18</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>6</string>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-      </widget>
+      </spacer>
      </item>
      <item row="3" column="2">
       <widget class="QKey" name="key_point">
        <property name="minimumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="font">
@@ -353,107 +306,8 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QKey" name="key_4">
-       <property name="minimumSize">
-        <size>
-         <width>48</width>
-         <height>48</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>48</width>
-         <height>48</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>18</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>4</string>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QKey" name="key_5">
-       <property name="minimumSize">
-        <size>
-         <width>48</width>
-         <height>48</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>48</width>
-         <height>48</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>18</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>5</string>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QKey" name="key_7">
-       <property name="minimumSize">
-        <size>
-         <width>48</width>
-         <height>48</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>48</width>
-         <height>48</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>18</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>7</string>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <spacer name="horizontalSpacer_4">
+     <item row="4" column="0">
+      <spacer name="horizontalSpacer_5">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -465,51 +319,18 @@
        </property>
       </spacer>
      </item>
-     <item row="2" column="1">
-      <widget class="QKey" name="key_2">
-       <property name="minimumSize">
-        <size>
-         <width>48</width>
-         <height>48</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>48</width>
-         <height>48</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Arial</family>
-         <pointsize>18</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>2</string>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-      </widget>
-     </item>
      <item row="4" column="3">
       <widget class="QKey" name="key_off">
        <property name="minimumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="font">
@@ -535,31 +356,18 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="3">
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="2" column="2">
-      <widget class="QKey" name="key_3">
+     <item row="2" column="1">
+      <widget class="QKey" name="key_2">
        <property name="minimumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="font">
@@ -571,7 +379,7 @@
         </font>
        </property>
        <property name="text">
-        <string>3</string>
+        <string>2</string>
        </property>
        <property name="iconSize">
         <size>
@@ -585,14 +393,14 @@
       <widget class="QKey" name="key_up">
        <property name="minimumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="font">
@@ -618,18 +426,24 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QKey" name="key_1">
+     <item row="0" column="1">
+      <widget class="QKey" name="key_8">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>48</horstretch>
+         <verstretch>48</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="font">
@@ -641,7 +455,7 @@
         </font>
        </property>
        <property name="text">
-        <string>1</string>
+        <string>8</string>
        </property>
        <property name="iconSize">
         <size>
@@ -651,18 +465,18 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="3">
-      <widget class="QKey" name="key_on">
+     <item row="6" column="3">
+      <widget class="QKey" name="key_reset">
        <property name="minimumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="font">
@@ -674,11 +488,7 @@
         </font>
        </property>
        <property name="text">
-        <string>0</string>
-       </property>
-       <property name="icon">
-        <iconset resource="resource.qrc">
-         <normaloff>:/images/resource/images/key_on.png</normaloff>:/images/resource/images/key_on.png</iconset>
+        <string>R</string>
        </property>
        <property name="iconSize">
         <size>
@@ -687,58 +497,19 @@
         </size>
        </property>
       </widget>
-     </item>
-     <item row="3" column="3">
-      <spacer name="horizontalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="4" column="0">
-      <spacer name="horizontalSpacer_5">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="6" column="0">
-      <spacer name="horizontalSpacer_6">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item row="6" column="1">
       <widget class="QKey" name="key_down">
        <property name="minimumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="font">
@@ -764,6 +535,19 @@
        </property>
       </widget>
      </item>
+     <item row="6" column="0">
+      <spacer name="horizontalSpacer_6">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
      <item row="6" column="2">
       <spacer name="horizontalSpacer_7">
        <property name="orientation">
@@ -777,18 +561,18 @@
        </property>
       </spacer>
      </item>
-     <item row="6" column="3">
-      <widget class="QKey" name="key_reset">
+     <item row="5" column="2">
+      <widget class="QKey" name="key_right">
        <property name="minimumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>56</width>
+         <height>56</height>
         </size>
        </property>
        <property name="font">
@@ -800,7 +584,223 @@
         </font>
        </property>
        <property name="text">
-        <string>R</string>
+        <string>0</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/images/resource/images/arrow_right.png</normaloff>:/images/resource/images/arrow_right.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QKey" name="key_5">
+       <property name="minimumSize">
+        <size>
+         <width>56</width>
+         <height>56</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>56</width>
+         <height>56</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>18</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>5</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QKey" name="key_on">
+       <property name="minimumSize">
+        <size>
+         <width>56</width>
+         <height>56</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>56</width>
+         <height>56</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>18</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>0</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/images/resource/images/key_on.png</normaloff>:/images/resource/images/key_on.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="2" column="2">
+      <widget class="QKey" name="key_3">
+       <property name="minimumSize">
+        <size>
+         <width>56</width>
+         <height>56</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>56</width>
+         <height>56</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>18</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>3</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="5" column="0">
+      <widget class="QKey" name="key_left">
+       <property name="minimumSize">
+        <size>
+         <width>56</width>
+         <height>56</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>56</width>
+         <height>56</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>18</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>0</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/images/resource/images/arrow_left.png</normaloff>:/images/resource/images/arrow_left.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3">
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="5" column="1">
+      <widget class="QKey" name="key_ok">
+       <property name="minimumSize">
+        <size>
+         <width>56</width>
+         <height>56</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>56</width>
+         <height>56</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>18</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>OK</string>
        </property>
        <property name="iconSize">
         <size>

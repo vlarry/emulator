@@ -337,7 +337,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             {
                 for(quint8 i = 0; i < size; ++i)
                 {
-                    quint8 byte = data.at(i);
+                    quint8 byte = static_cast<quint8>(data.at(i));
 
                     for(quint8 j = 0; j < 8; ++j)
                     {
@@ -347,6 +347,14 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 
                         quint8 ch_state = channels&0x01;
                         quint8 ch_num   = j + (i*8);
+
+                        // кнопки 1, 2 и 3 попутаны с кнопками 7, 8 и 9 аппаратно, поэтому меняем номер канала
+                        if(ch_num >= 0 && ch_num < 3)
+                        {
+                            ch_num += 6;
+                        }
+                        else if(ch_num >= 6 && ch_num < 9)
+                            ch_num -= 6;
 
                         m_keyboard->setStateKey(ch_num, ch_state);
                     }
@@ -359,7 +367,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             {
                 for(quint8 i = 0; i < size; ++i)
                 {
-                    quint8 byte = data.at(i);
+                    quint8 byte = static_cast<quint8>(data.at(i));
 
                     for(quint8 j = 0; j < 8; j += 2)
                     {
