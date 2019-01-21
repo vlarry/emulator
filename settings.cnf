@@ -9,7 +9,7 @@ visiblity=true
 visiblity=true
 
 [COMMAND]
-visiblity=false
+visiblity=true
 
 [GUI]
-geometry=@ByteArray(\x1\xd9\xd0\xcb\0\x3\0\0\0\0\x1\xae\0\0\0N\0\0\x5\xd0\0\0\x3\x92\0\0\x1\xaf\0\0\0t\0\0\x5\xcf\0\0\x3\x91\0\0\0\0\0\0\0\0\a\x80\0\0\x1\xaf\0\0\0t\0\0\x5\xcf\0\0\x3\x91)
+geometry=@ByteArray(\x1\xd9\xd0\xcb\0\x3\0\0\0\0\x1\xae\0\0\0N\0\0\x6\x9a\0\0\x3\x92\0\0\x1\xaf\0\0\0t\0\0\x6\x99\0\0\x3\x91\0\0\0\0\0\0\0\0\a\x80\0\0\x1\xaf\0\0\0t\0\0\x6\x99\0\0\x3\x91)

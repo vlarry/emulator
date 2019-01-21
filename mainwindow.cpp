@@ -450,7 +450,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             s += ".20" + QString::number(tdata, 10);
 
             ui->leDeviceFirmwareDate->setText(s);
-            m_conf_widget->setModuleFirmwareDate(QDate::fromString(s, "dd.MM.yyyy"));
+            m_conf_widget->setModuleFirmwareDate(s);
         break;
 
         case 0x1F:
@@ -720,12 +720,11 @@ void MainWindow::configurationWindow()
             int        num          = m_conf_widget->moduleNumber();
             int        numParty     = m_conf_widget->moduleNumberParty();
             int        firmwareVar  = m_conf_widget->moduleFirmwareVariant();
-            QDate      firmwareDate = m_conf_widget->moduleFirmwareDate();
 
 /* FORMAT SERIAL NUMBER CMD
-* --------------------------------------------------------------------------------------------------------------------------------------------------
-* | cmd | key_cur | key_cur | key_cur | key_cur | key_new | key_new | key_new | key_new | num | num | party | firmware | year | month | day | CRC8 |
-* --------------------------------------------------------------------------------------------------------------------------------------------------
+* -----------------------------------------------------------------------------------------------------------------------------
+* | cmd | key_cur | key_cur | key_cur | key_cur | key_new | key_new | key_new | key_new | num | num | party | firmware | CRC8 |
+* -----------------------------------------------------------------------------------------------------------------------------
 */
             QByteArray ba;
 
@@ -736,9 +735,6 @@ void MainWindow::configurationWindow()
             ba.append(QByteArray::fromHex(QByteArray::number(((num/10 << 4) | (num%10)), 16)));
             ba.append(QByteArray::fromHex(QByteArray::number(((numParty/10 << 4) | (numParty%10)), 16)));
             ba.append(QByteArray::fromHex(QByteArray::number(((firmwareVar/10 << 4) | (firmwareVar%10)), 16)));
-            ba.append(QByteArray::fromHex(QByteArray::number((((firmwareDate.year() - 2000)/10 << 4) | ((firmwareDate.year() - 2000)%10)), 16)));
-            ba.append(QByteArray::fromHex(QByteArray::number(((firmwareDate.month()/10 << 4) | (firmwareDate.month()%10)), 16)));
-            ba.append(QByteArray::fromHex(QByteArray::number(((firmwareDate.day()/10 << 4) | (firmwareDate.day()%10)), 16)));
 
             write(cmd, ba);
         }
