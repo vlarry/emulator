@@ -797,7 +797,7 @@ void MainWindow::refreshSerialPort()
     }
     else if(count != 0 && ui->cbPortNames->count() == 0)
     {
-        qint8 index = -1;
+        int index = -1;
 
         if(!port_list.isEmpty())
             ui->cbPortNames->addItems(port_list);
@@ -925,7 +925,8 @@ void MainWindow::sendCmd(const QString& cmd_str)
 
     if(cmd.toUpper() == "0X3A") // если команда "Запись серийного номера, то открываем дополнительное окно (команду не отправляем)
     {
-        configWindowVisiblity(true);
+        if(m_conf_widget->isHidden())
+            m_conf_widget->show();
         return;
     }
     else if(cmd.toUpper() == "0X3F") // если команда "Настройка входа", то открываем дополнительное окно (команду не отправляем)
