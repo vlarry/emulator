@@ -20,6 +20,7 @@
     #include "qkeyboard.h"
     #include "qcommand.h"
     #include "cconfigurationmodulewidget.h"
+    #include "csetinput.h"
     //----------
     namespace Ui
     {
@@ -70,6 +71,7 @@
             QKeyboard*                  m_keyboard;
             QCommand*                   m_command;
             CConfigurationModuleWidget* m_conf_widget;
+            CSetInput*                  m_set_intput_widget;
 
         private:
             void   initConnect();
@@ -97,15 +99,14 @@
             void refreshSerialPort();
             void ctrlSerialPort(bool state);
             void readData();
-            void sendCmd();
+            void sendCmd(const QString& cmd_str = "");
             void sendData(const QString& data = "");
-            void write(const QString& cmd_str = "", const QByteArray& data = QByteArray(0));
+            void write(const QString& cmd_str = "", const QByteArray& data = QByteArray());
             void BytesWriten(qint64 byte);
             void cmdDescription(const QString& description);
             void addrChanged(int addr);
             void outputStateChanged(quint8 id, bool state);
-            void initFilter(QString text);
-            void typeInput(QString text);
+            void initFilter(const QString& text);
             void autoRepeatInputs(bool state);
             void autoRepeatAIN(bool state);
             void autoRepeatTimInputs();
@@ -116,6 +117,7 @@
             void visiblityCommand(bool visible);
             void configurationWindow();
             void configWindowVisiblity(bool state = false);
+            void setupDiscretInput();
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

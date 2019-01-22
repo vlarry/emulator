@@ -2,6 +2,7 @@
     #define CCONFIGURATIONMODULEWIDGET_H
     //----------------
     #include <QDialog>
+    #include <QDate>
     //----------
     namespace Ui
     {
@@ -19,14 +20,13 @@
             int        moduleNumber() const;
             int        moduleNumberParty() const;
             int        moduleFirmwareVariant() const;
-            QDate      moduleFirmwareDate() const;
             QByteArray moduleKeyCurrent() const;
             QByteArray moduleKeyNew() const;
             void       setModuleType(int type);
             void       setModuleNumber(int number);
             void       setModuleNumberParty(int number);
             void       setModuleFirmwareVariant(int variant);
-            void       setModuleFirmwareDate(const QDate& date);
+            void       setModuleFirmwareDate(const QString& date);
 
         protected:
             void showEvent(QShowEvent* event);

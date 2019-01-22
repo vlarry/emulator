@@ -37,14 +37,15 @@ QCommand::QCommand(QWidget* parent):
         }
     }
 
-    connect(ui->lwCmd, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(cmdDoubleClicked(QListWidgetItem*)));
+    connect(ui->lwCmd, &QListWidget::itemDoubleClicked, this, &QCommand::cmdDoubleClicked);
+    connect(ui->lwCmd, &QListWidget::itemClicked, this, &QCommand::cmdClicked);
 
-    size.setHeight(size.height()*count*1.5);
+    size.setHeight(static_cast<int>(size.height()*count*1.5f));
 
     if(size.height() > parent->geometry().height()/2)
         size.setHeight(parent->geometry().height()/2);
 
-    this->setMaximumSize(size.width()*1.2, parent->height());
+    this->setMaximumSize(static_cast<int>(size.width()*1.2f), parent->height());
 
     setWindowFlags(Qt::Window | Qt::WindowCloseButtonHint);
 }
@@ -67,6 +68,11 @@ void QCommand::closeEvent(QCloseEvent* event)
     emit closeCommand(false);
 
     QWidget::closeEvent(event);
+}
+//----------------------------------------------
+void QCommand::cmdClicked(QListWidgetItem* item)
+{
+    emit clickCmd(item->data(Qt::UserRole).toString());
 }
 //----------------------------------------------------
 void QCommand::cmdDoubleClicked(QListWidgetItem* item)

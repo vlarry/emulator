@@ -13,7 +13,6 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
-#include <QtWidgets/QDateEdit>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QGridLayout>
@@ -36,13 +35,13 @@ public:
     QLineEdit *lineEditModuleKeyNew;
     QComboBox *comboBoxModuleType;
     QLineEdit *lineEditModuleFirmwareVariant;
-    QDateEdit *dateEdit;
     QLabel *label;
     QLineEdit *lineEditModuleNumberParty;
     QLabel *label_5;
     QLineEdit *lineEditModuleNumber;
     QLineEdit *lineEditModuleKeyCurrent;
     QCheckBox *checkBoxNewKey;
+    QLineEdit *lineEditModuleFirmwareDate;
     QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *CConfigurationModuleWidget)
@@ -101,12 +100,6 @@ public:
 
         gridLayout->addWidget(lineEditModuleFirmwareVariant, 3, 1, 1, 1);
 
-        dateEdit = new QDateEdit(CConfigurationModuleWidget);
-        dateEdit->setObjectName(QString::fromUtf8("dateEdit"));
-        dateEdit->setAlignment(Qt::AlignCenter);
-
-        gridLayout->addWidget(dateEdit, 4, 1, 1, 1);
-
         label = new QLabel(CConfigurationModuleWidget);
         label->setObjectName(QString::fromUtf8("label"));
 
@@ -143,6 +136,13 @@ public:
         checkBoxNewKey->setObjectName(QString::fromUtf8("checkBoxNewKey"));
 
         gridLayout->addWidget(checkBoxNewKey, 6, 2, 1, 1);
+
+        lineEditModuleFirmwareDate = new QLineEdit(CConfigurationModuleWidget);
+        lineEditModuleFirmwareDate->setObjectName(QString::fromUtf8("lineEditModuleFirmwareDate"));
+        lineEditModuleFirmwareDate->setAlignment(Qt::AlignCenter);
+        lineEditModuleFirmwareDate->setReadOnly(true);
+
+        gridLayout->addWidget(lineEditModuleFirmwareDate, 4, 1, 1, 1);
 
 
         verticalLayout->addLayout(gridLayout);

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1057</width>
-    <height>798</height>
+    <width>1284</width>
+    <height>821</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -215,7 +215,7 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_33">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_61">
+        <layout class="QHBoxLayout" name="horizontalLayout_14">
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
@@ -403,19 +403,6 @@
             </layout>
            </item>
            <item>
-            <spacer name="verticalSpacer">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>18</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
             <widget class="QGroupBox" name="groupBox_2">
              <property name="title">
               <string>DSDIN</string>
@@ -496,7 +483,7 @@
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_60">
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <item>
@@ -672,122 +659,41 @@
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_3">
                <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_14">
-                 <item>
-                  <widget class="QLabel" name="lblInput">
-                   <property name="text">
-                    <string>Вход</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer_13">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QSpinBox" name="sbInput">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="maximum">
-                    <number>7</number>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
+                <widget class="QRadioButton" name="radioButtonInputSingle">
+                 <property name="text">
+                  <string>Одиночный</string>
+                 </property>
+                </widget>
                </item>
                <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_17">
-                 <item>
-                  <widget class="QLabel" name="label_9">
-                   <property name="text">
-                    <string>Тип</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QComboBox" name="cbInputType"/>
-                 </item>
-                </layout>
+                <widget class="QRadioButton" name="radioButtonInputGroup">
+                 <property name="text">
+                  <string>Группа</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
                </item>
                <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_9">
-                 <item>
-                  <widget class="QLabel" name="lblDuration">
-                   <property name="text">
-                    <string>Длительность</string>
-                   </property>
-                   <property name="scaledContents">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer_7">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QSpinBox" name="sbDuration">
-                   <property name="minimum">
-                    <number>10</number>
-                   </property>
-                   <property name="maximum">
-                    <number>100</number>
-                   </property>
-                   <property name="singleStep">
-                    <number>10</number>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
+                <spacer name="verticalSpacer_4">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
                </item>
                <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_16">
-                 <item>
-                  <widget class="QLabel" name="lblTextFault">
-                   <property name="text">
-                    <string>Погрешность, %</string>
-                   </property>
-                   <property name="scaledContents">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QSpinBox" name="sbFaultInput">
-                   <property name="minimum">
-                    <number>10</number>
-                   </property>
-                   <property name="maximum">
-                    <number>50</number>
-                   </property>
-                   <property name="singleStep">
-                    <number>10</number>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
+                <widget class="QPushButton" name="pushButtonInputSet">
+                 <property name="text">
+                  <string>Настроить</string>
+                 </property>
+                </widget>
                </item>
               </layout>
              </widget>
@@ -796,6 +702,19 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item>
         <widget class="Line" name="line">
@@ -4378,7 +4297,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1057</width>
+     <width>1284</width>
      <height>26</height>
     </rect>
    </property>

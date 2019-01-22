@@ -14,7 +14,8 @@ MainWindow::MainWindow(QWidget* parent):
     m_file_ain(Q_NULLPTR),
     m_block_send(false),
     m_keyboard(Q_NULLPTR),
-    m_command(Q_NULLPTR)
+    m_command(Q_NULLPTR),
+    m_set_intput_widget(Q_NULLPTR)
 {
     ui->setupUi(this);
 
@@ -36,8 +37,10 @@ MainWindow::MainWindow(QWidget* parent):
     m_timerRefreshPort     = new QTimer(this);
     m_conf_widget          = new CConfigurationModuleWidget(this);
     m_file_ain             = new QFile;
+    m_set_intput_widget    = new CSetInput(this);
 
     m_conf_widget->hide();
+    m_set_intput_widget->hide();
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -72,8 +75,7 @@ void MainWindow::initConnect()
     connect(m_output_dev.at(10), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
     connect(m_output_dev.at(11), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
 
-    connect(ui->cbCmdList, SIGNAL(currentTextChanged(QString)), this, SLOT(initFilter(QString)));
-    connect(ui->cbInputType, SIGNAL(currentTextChanged(QString)), this, SLOT(typeInput(QString)));
+    connect(ui->cbCmdList, SIGNAL(currentTextChanged(const QString&)), this, SLOT(initFilter(const QString&)));
 
     connect(ui->cboxRepeatInputs, SIGNAL(clicked(bool)), this, SLOT(autoRepeatInputs(bool)));
     connect(ui->cboxRepeatAIN, SIGNAL(clicked(bool)), this, SLOT(autoRepeatAIN(bool)));
@@ -85,9 +87,11 @@ void MainWindow::initConnect()
     connect(ui->cboxTerminal, SIGNAL(toggled(bool)), this, SLOT(visiblityTerminal(bool)));
     connect(ui->cbKeyboard, SIGNAL(toggled(bool)), this, SLOT(visiblityKeyboard(bool)));
     connect(ui->cbCommand, SIGNAL(toggled(bool)), this, SLOT(visiblityCommand(bool)));
-    connect(m_command, SIGNAL(doubleClickCmd(QString)), this, SLOT(sendData(QString)));
+    connect(m_command, &QCommand::doubleClickCmd, this, &MainWindow::sendCmd);
+    connect(m_command, &QCommand::clickCmd, this, &MainWindow::initFilter);
 
     connect(ui->checkBoxSerialConfig, &QCheckBox::clicked, this, &MainWindow::configWindowVisiblity);
+    connect(ui->pushButtonInputSet, &QPushButton::clicked, this, &MainWindow::setupDiscretInput);
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -657,7 +661,6 @@ void MainWindow::showEvent(QShowEvent* evt)
     refreshSerialPort();
 
     ui->cbCmdList->slotActivated(0);
-    ui->cbInputType->addItems(QStringList() << tr("Аналоговый")  << tr("Цифровой"));
     ui->twPeriphery->setCurrentIndex(0);
     initFilter(ui->cbCmdList->currentText());
     addrChanged(ui->sbDeviceAddress->value());
@@ -754,6 +757,21 @@ void MainWindow::configWindowVisiblity(bool state)
     {
         configurationWindow();
     }
+}
+/*!
+ * \brief MainWindow::setupDiscretInput
+ *
+ * Вызов окна настройки дискретных входов
+ */
+void MainWindow::setupDiscretInput()
+{
+    int type = 1;
+
+    if(ui->radioButtonInputSingle->isChecked())
+        type = 0;
+
+    if(m_set_intput_widget->isHidden())
+        m_set_intput_widget->open(type);
 }
 //----------------------------------
 void MainWindow::refreshSerialPort()
@@ -897,10 +915,26 @@ void MainWindow::readData()
     else if(m_responce.size() > cmd_size)
         m_responce.clear();
 }
-//------------------------
-void MainWindow::sendCmd()
+//----------------------------------------------
+void MainWindow::sendCmd(const QString& cmd_str)
 {
-    sendData(ui->cbCmdList->currentText());
+    QString cmd = ui->cbCmdList->currentText();
+
+    if(!cmd_str.isEmpty())
+        cmd = cmd_str;
+
+    if(cmd.toUpper() == "0X3A") // если команда "Запись серийного номера, то открываем дополнительное окно (команду не отправляем)
+    {
+        configWindowVisiblity(true);
+        return;
+    }
+    else if(cmd.toUpper() == "0X3F") // если команда "Настройка входа", то открываем дополнительное окно (команду не отправляем)
+    {
+        setupDiscretInput();
+        return;
+    }
+
+    sendData(cmd);
 }
 //--------------------------------------------
 void MainWindow::sendData(const QString& data)
@@ -1014,19 +1048,19 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
             }
             else if(m_cmd_last == tr("0x3F"))
             {
-                str.setNum(ui->sbInput->value(), 16);
-                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // номер входа
+//                str.setNum(ui->sbInput->value(), 16);
+//                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // номер входа
 
-                quint8 type = (ui->cbInputType->currentText().toUpper() == tr("АНАЛОГОВЫЙ"))?0x00:0x01;
+//                quint8 type = (ui->cbInputType->currentText().toUpper() == tr("АНАЛОГОВЫЙ"))?0x00:0x01;
 
-                str.setNum(type, 16);
-                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // тип входа
+//                str.setNum(type, 16);
+//                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // тип входа
 
-                str.setNum(ui->sbDuration->value(), 16);
-                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // длительность периода
+//                str.setNum(ui->sbDuration->value(), 16);
+//                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // длительность периода
 
-                str.setNum(ui->sbFaultInput->value(), 16);
-                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // погрешность периода
+//                str.setNum(ui->sbFaultInput->value(), 16);
+//                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // погрешность периода
             }
         }
         else
@@ -1200,48 +1234,29 @@ void MainWindow::outputStateChanged(quint8 id, bool state)
             write(tr("0x05"));
     }
 }
-//---------------------------------------
-void MainWindow::initFilter(QString text)
+//----------------------------------------------
+void MainWindow::initFilter(const QString& text)
 {
     if(text == tr("0x3D"))
     {
         ui->gboxInputSettings->setEnabled(true);
-        ui->sbDuration->setEnabled(true);
         ui->gboxInput->setDisabled(true);
         ui->gboxInputSettingsFilter->setDisabled(true);
     }
     else if(text == tr("0x3E"))
     {
         ui->gboxInputSettings->setEnabled(true);
-        ui->sbDuration->setDisabled(true);
         ui->gboxInput->setDisabled(true);
         ui->gboxInputSettingsFilter->setEnabled(true);
     }
     else if(text == tr("0x3F"))
     {
         ui->gboxInputSettings->setEnabled(true);
-        ui->sbDuration->setDisabled(true);
         ui->gboxInput->setEnabled(true);
         ui->gboxInputSettingsFilter->setDisabled(true);
     }
     else
         ui->gboxInputSettings->setDisabled(true);
-}
-//--------------------------------------
-void MainWindow::typeInput(QString text)
-{
-    if(text.toUpper() == tr("АНАЛОГОВЫЙ"))
-    {
-        ui->lblTextFault->setText(tr("Погрешность, %"));
-        ui->sbFaultInput->setRange(10, 50);
-        ui->sbFaultInput->setSingleStep(10);
-    }
-    else
-    {
-        ui->lblTextFault->setText(tr("Кол-во лог 0/1, %"));
-        ui->sbFaultInput->setRange(50, 100);
-        ui->sbFaultInput->setSingleStep(10);
-    }
 }
 //-------------------------------------------
 void MainWindow::autoRepeatInputs(bool state)

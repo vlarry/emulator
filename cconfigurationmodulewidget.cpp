@@ -18,6 +18,7 @@ CConfigurationModuleWidget::CConfigurationModuleWidget(QWidget* parent):
     ui->lineEditModuleNumber->setText("0000");
     ui->lineEditModuleNumberParty->setText("00");
     ui->lineEditModuleFirmwareVariant->setText("00");
+    ui->lineEditModuleFirmwareDate->setText(QDate::currentDate().toString("dd.MM.yyyy"));
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -47,11 +48,6 @@ int CConfigurationModuleWidget::moduleNumberParty() const
 int CConfigurationModuleWidget::moduleFirmwareVariant() const
 {
     return ui->lineEditModuleFirmwareVariant->text().toInt();
-}
-//----------------------------------------------------------
-QDate CConfigurationModuleWidget::moduleFirmwareDate() const
-{
-    return ui->dateEdit->date();
 }
 //-------------------------------------------------------------
 QByteArray CConfigurationModuleWidget::moduleKeyCurrent() const
@@ -94,10 +90,10 @@ void CConfigurationModuleWidget::setModuleFirmwareVariant(int variant)
 {
     ui->lineEditModuleFirmwareVariant->setText(QString::number(variant));
 }
-//-----------------------------------------------------------------------
-void CConfigurationModuleWidget::setModuleFirmwareDate(const QDate& date)
+//-------------------------------------------------------------------------
+void CConfigurationModuleWidget::setModuleFirmwareDate(const QString& date)
 {
-    ui->dateEdit->setDate(date);
+    ui->lineEditModuleFirmwareDate->setText(date);
 }
 //-----------------------------------------------------------
 void CConfigurationModuleWidget::showEvent(QShowEvent* event)

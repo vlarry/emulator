@@ -30,7 +30,11 @@
 
         signals:
             void closeCommand(bool);
-            void doubleClickCmd(QString);
+            void clickCmd(const QString&);
+            void doubleClickCmd(const QString&);
+
+        private slots:
+            void cmdClicked(QListWidgetItem* item);
 
         private slots:
             void cmdDoubleClicked(QListWidgetItem* item);

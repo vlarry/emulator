@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     qkeyboard.cpp \
     qkey.cpp \
     qcommand.cpp \
-    cconfigurationmodulewidget.cpp
+    cconfigurationmodulewidget.cpp \
+    csetinput.cpp
 
 HEADERS  += mainwindow.h \
     qcmd.h \
@@ -38,12 +39,14 @@ HEADERS  += mainwindow.h \
     qkeyboard.h \
     qkey.h \
     qcommand.h \
-    cconfigurationmodulewidget.h
+    cconfigurationmodulewidget.h \
+    csetinput.h
 
 FORMS    += mainwindow.ui \
     keyboard.ui \
     command.ui \
-    configurationmodulewidget.ui
+    configurationmodulewidget.ui \
+    setinput.ui
 
 win32::RC_FILE = \
                  resource/icon.rc

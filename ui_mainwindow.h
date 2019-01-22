@@ -25,6 +25,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
@@ -62,7 +63,7 @@ public:
     QSpacerItem *verticalSpacer_3;
     QGroupBox *groupDevices;
     QVBoxLayout *verticalLayout_33;
-    QHBoxLayout *horizontalLayout_61;
+    QHBoxLayout *horizontalLayout_14;
     QVBoxLayout *verticalLayout_7;
     QHBoxLayout *horizontalLayout_34;
     QHBoxLayout *horizontalLayout;
@@ -82,7 +83,6 @@ public:
     QHBoxLayout *horizontalLayout_19;
     QCheckBox *cboxRepeatAIN;
     QSpinBox *sbRepeatAIN;
-    QSpacerItem *verticalSpacer;
     QGroupBox *groupBox_2;
     QHBoxLayout *horizontalLayout_33;
     QLabel *lblStateDSIDIN;
@@ -91,7 +91,7 @@ public:
     QLabel *lblTimeDSDIN;
     QLineEdit *leTimeDSDIN;
     QGroupBox *gboxInputSettings;
-    QHBoxLayout *horizontalLayout_60;
+    QHBoxLayout *horizontalLayout_9;
     QVBoxLayout *verticalLayout_4;
     QGroupBox *gboxInputSettingsFilter;
     QVBoxLayout *verticalLayout_2;
@@ -111,20 +111,11 @@ public:
     QSpacerItem *verticalSpacer_2;
     QGroupBox *gboxInput;
     QVBoxLayout *verticalLayout_3;
-    QHBoxLayout *horizontalLayout_14;
-    QLabel *lblInput;
-    QSpacerItem *horizontalSpacer_13;
-    QSpinBox *sbInput;
-    QHBoxLayout *horizontalLayout_17;
-    QLabel *label_9;
-    QComboBox *cbInputType;
-    QHBoxLayout *horizontalLayout_9;
-    QLabel *lblDuration;
-    QSpacerItem *horizontalSpacer_7;
-    QSpinBox *sbDuration;
-    QHBoxLayout *horizontalLayout_16;
-    QLabel *lblTextFault;
-    QSpinBox *sbFaultInput;
+    QRadioButton *radioButtonInputSingle;
+    QRadioButton *radioButtonInputGroup;
+    QSpacerItem *verticalSpacer_4;
+    QPushButton *pushButtonInputSet;
+    QSpacerItem *verticalSpacer;
     QFrame *line;
     QTabWidget *twPeriphery;
     QWidget *tabIO;
@@ -414,7 +405,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(1057, 798);
+        MainWindow->resize(1284, 821);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_34 = new QVBoxLayout(centralWidget);
@@ -544,9 +535,9 @@ public:
         verticalLayout_33->setSpacing(6);
         verticalLayout_33->setContentsMargins(11, 11, 11, 11);
         verticalLayout_33->setObjectName(QString::fromUtf8("verticalLayout_33"));
-        horizontalLayout_61 = new QHBoxLayout();
-        horizontalLayout_61->setSpacing(6);
-        horizontalLayout_61->setObjectName(QString::fromUtf8("horizontalLayout_61"));
+        horizontalLayout_14 = new QHBoxLayout();
+        horizontalLayout_14->setSpacing(6);
+        horizontalLayout_14->setObjectName(QString::fromUtf8("horizontalLayout_14"));
         verticalLayout_7 = new QVBoxLayout();
         verticalLayout_7->setSpacing(6);
         verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
@@ -670,10 +661,6 @@ public:
 
         verticalLayout_7->addLayout(horizontalLayout_34);
 
-        verticalSpacer = new QSpacerItem(20, 18, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout_7->addItem(verticalSpacer);
-
         groupBox_2 = new QGroupBox(groupDevices);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
         groupBox_2->setAlignment(Qt::AlignCenter);
@@ -716,15 +703,15 @@ public:
         verticalLayout_7->addWidget(groupBox_2);
 
 
-        horizontalLayout_61->addLayout(verticalLayout_7);
+        horizontalLayout_14->addLayout(verticalLayout_7);
 
         gboxInputSettings = new QGroupBox(groupDevices);
         gboxInputSettings->setObjectName(QString::fromUtf8("gboxInputSettings"));
         gboxInputSettings->setAlignment(Qt::AlignCenter);
-        horizontalLayout_60 = new QHBoxLayout(gboxInputSettings);
-        horizontalLayout_60->setSpacing(6);
-        horizontalLayout_60->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_60->setObjectName(QString::fromUtf8("horizontalLayout_60"));
+        horizontalLayout_9 = new QHBoxLayout(gboxInputSettings);
+        horizontalLayout_9->setSpacing(6);
+        horizontalLayout_9->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_9->setObjectName(QString::fromUtf8("horizontalLayout_9"));
         verticalLayout_4 = new QVBoxLayout();
         verticalLayout_4->setSpacing(6);
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
@@ -839,7 +826,7 @@ public:
         verticalLayout_4->addItem(verticalSpacer_2);
 
 
-        horizontalLayout_60->addLayout(verticalLayout_4);
+        horizontalLayout_9->addLayout(verticalLayout_4);
 
         gboxInput = new QGroupBox(gboxInputSettings);
         gboxInput->setObjectName(QString::fromUtf8("gboxInput"));
@@ -848,97 +835,38 @@ public:
         verticalLayout_3->setSpacing(6);
         verticalLayout_3->setContentsMargins(11, 11, 11, 11);
         verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
-        horizontalLayout_14 = new QHBoxLayout();
-        horizontalLayout_14->setSpacing(6);
-        horizontalLayout_14->setObjectName(QString::fromUtf8("horizontalLayout_14"));
-        lblInput = new QLabel(gboxInput);
-        lblInput->setObjectName(QString::fromUtf8("lblInput"));
+        radioButtonInputSingle = new QRadioButton(gboxInput);
+        radioButtonInputSingle->setObjectName(QString::fromUtf8("radioButtonInputSingle"));
 
-        horizontalLayout_14->addWidget(lblInput);
+        verticalLayout_3->addWidget(radioButtonInputSingle);
 
-        horizontalSpacer_13 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        radioButtonInputGroup = new QRadioButton(gboxInput);
+        radioButtonInputGroup->setObjectName(QString::fromUtf8("radioButtonInputGroup"));
+        radioButtonInputGroup->setChecked(true);
 
-        horizontalLayout_14->addItem(horizontalSpacer_13);
+        verticalLayout_3->addWidget(radioButtonInputGroup);
 
-        sbInput = new QSpinBox(gboxInput);
-        sbInput->setObjectName(QString::fromUtf8("sbInput"));
-        sizePolicy6.setHeightForWidth(sbInput->sizePolicy().hasHeightForWidth());
-        sbInput->setSizePolicy(sizePolicy6);
-        sbInput->setMaximum(7);
+        verticalSpacer_4 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        horizontalLayout_14->addWidget(sbInput);
+        verticalLayout_3->addItem(verticalSpacer_4);
 
+        pushButtonInputSet = new QPushButton(gboxInput);
+        pushButtonInputSet->setObjectName(QString::fromUtf8("pushButtonInputSet"));
 
-        verticalLayout_3->addLayout(horizontalLayout_14);
-
-        horizontalLayout_17 = new QHBoxLayout();
-        horizontalLayout_17->setSpacing(6);
-        horizontalLayout_17->setObjectName(QString::fromUtf8("horizontalLayout_17"));
-        label_9 = new QLabel(gboxInput);
-        label_9->setObjectName(QString::fromUtf8("label_9"));
-
-        horizontalLayout_17->addWidget(label_9);
-
-        cbInputType = new QComboBox(gboxInput);
-        cbInputType->setObjectName(QString::fromUtf8("cbInputType"));
-
-        horizontalLayout_17->addWidget(cbInputType);
+        verticalLayout_3->addWidget(pushButtonInputSet);
 
 
-        verticalLayout_3->addLayout(horizontalLayout_17);
-
-        horizontalLayout_9 = new QHBoxLayout();
-        horizontalLayout_9->setSpacing(6);
-        horizontalLayout_9->setObjectName(QString::fromUtf8("horizontalLayout_9"));
-        lblDuration = new QLabel(gboxInput);
-        lblDuration->setObjectName(QString::fromUtf8("lblDuration"));
-        lblDuration->setScaledContents(true);
-
-        horizontalLayout_9->addWidget(lblDuration);
-
-        horizontalSpacer_7 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_9->addItem(horizontalSpacer_7);
-
-        sbDuration = new QSpinBox(gboxInput);
-        sbDuration->setObjectName(QString::fromUtf8("sbDuration"));
-        sbDuration->setMinimum(10);
-        sbDuration->setMaximum(100);
-        sbDuration->setSingleStep(10);
-
-        horizontalLayout_9->addWidget(sbDuration);
+        horizontalLayout_9->addWidget(gboxInput);
 
 
-        verticalLayout_3->addLayout(horizontalLayout_9);
-
-        horizontalLayout_16 = new QHBoxLayout();
-        horizontalLayout_16->setSpacing(6);
-        horizontalLayout_16->setObjectName(QString::fromUtf8("horizontalLayout_16"));
-        lblTextFault = new QLabel(gboxInput);
-        lblTextFault->setObjectName(QString::fromUtf8("lblTextFault"));
-        lblTextFault->setScaledContents(true);
-
-        horizontalLayout_16->addWidget(lblTextFault);
-
-        sbFaultInput = new QSpinBox(gboxInput);
-        sbFaultInput->setObjectName(QString::fromUtf8("sbFaultInput"));
-        sbFaultInput->setMinimum(10);
-        sbFaultInput->setMaximum(50);
-        sbFaultInput->setSingleStep(10);
-
-        horizontalLayout_16->addWidget(sbFaultInput);
+        horizontalLayout_14->addWidget(gboxInputSettings);
 
 
-        verticalLayout_3->addLayout(horizontalLayout_16);
+        verticalLayout_33->addLayout(horizontalLayout_14);
 
+        verticalSpacer = new QSpacerItem(20, 18, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        horizontalLayout_60->addWidget(gboxInput);
-
-
-        horizontalLayout_61->addWidget(gboxInputSettings);
-
-
-        verticalLayout_33->addLayout(horizontalLayout_61);
+        verticalLayout_33->addItem(verticalSpacer);
 
         line = new QFrame(groupDevices);
         line->setObjectName(QString::fromUtf8("line"));
@@ -2497,7 +2425,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1057, 26));
+        menuBar->setGeometry(QRect(0, 0, 1284, 26));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -2589,10 +2517,9 @@ public:
         lblDiscret->setText(QApplication::translate("MainWindow", "\320\224\320\270\321\201\320\272\321\200\320\265\321\202\320\275\320\276\321\201\321\202\321\214", nullptr));
         lblSignal->setText(QApplication::translate("MainWindow", "\320\241\320\270\320\263\320\275\320\260\320\273", nullptr));
         gboxInput->setTitle(QApplication::translate("MainWindow", "\320\222\321\205\320\276\320\264", nullptr));
-        lblInput->setText(QApplication::translate("MainWindow", "\320\222\321\205\320\276\320\264", nullptr));
-        label_9->setText(QApplication::translate("MainWindow", "\320\242\320\270\320\277", nullptr));
-        lblDuration->setText(QApplication::translate("MainWindow", "\320\224\320\273\320\270\321\202\320\265\320\273\321\214\320\275\320\276\321\201\321\202\321\214", nullptr));
-        lblTextFault->setText(QApplication::translate("MainWindow", "\320\237\320\276\320\263\321\200\320\265\321\210\320\275\320\276\321\201\321\202\321\214, %", nullptr));
+        radioButtonInputSingle->setText(QApplication::translate("MainWindow", "\320\236\320\264\320\270\320\275\320\276\321\207\320\275\321\213\320\271", nullptr));
+        radioButtonInputGroup->setText(QApplication::translate("MainWindow", "\320\223\321\200\321\203\320\277\320\277\320\260", nullptr));
+        pushButtonInputSet->setText(QApplication::translate("MainWindow", "\320\235\320\260\321\201\321\202\321\200\320\276\320\270\321\202\321\214", nullptr));
         gboxInputs->setTitle(QApplication::translate("MainWindow", "\320\222\321\205\320\276\320\264\321\213", nullptr));
         label->setText(QApplication::translate("MainWindow", "\320\232\320\260\320\275\320\260\320\273 1", nullptr));
         IN1->setText(QString());
