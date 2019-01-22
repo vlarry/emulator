@@ -27,12 +27,65 @@ CSetInput::CSetInput(QWidget* parent):
 
     connect(ui->comboBoxInputType, &QComboBox::currentTextChanged, this, &CSetInput::typeInput);
     connect(ui->pushButtonApply, &QPushButton::clicked, this, &CSetInput::apply);
+    connect(this, &CSetInput::apply, this, &CSetInput::hide);
     connect(ui->pushButtonCancel, &QPushButton::clicked, this, &CSetInput::hide);
 }
 //---------------------
 CSetInput::~CSetInput()
 {
     delete ui;
+}
+//-------------------------------------
+QString CSetInput::intputMode(int type)
+{
+    quint16 set = 0x0000;
+
+    if(type == 1)
+    {
+        for(int i = 0; i < m_inputs.count(); i++)
+        {
+            QCheckBox* checkBox = m_inputs[i];
+
+            if(checkBox)
+            {
+                if(checkBox->isChecked())
+                {
+                    set |= 1 << i;
+                }
+            }
+        }
+
+        set |= 1 << 16;
+    }
+    else
+    {
+        set = static_cast<quint16>(ui->spinBoxInputSingle->value());
+    }
+
+    QString str;
+    QString data;
+
+    str.setNum((set&0x00FF), 16);
+    data.append(QByteArray::fromHex(str.toLocal8Bit().data()));
+
+    if(type == 1)
+    {
+        str.setNum(((set >> 8)&0x000F), 16);
+        data.append(QByteArray::fromHex(str.toLocal8Bit().data()));
+    }
+
+    quint8 type_input = (ui->comboBoxInputType->currentText().toUpper() == tr("АНАЛОГОВЫЙ"))?0x00:0x01;
+
+    str.setNum(type_input, 16);
+    data.append(QByteArray::fromHex(str.toLocal8Bit().data())); // тип входа
+
+    str.setNum(ui->spinBoxDuration->value(), 16);
+    data.append(QByteArray::fromHex(str.toLocal8Bit().data())); // длительность периода
+
+    str.setNum(ui->spinBoxFaultInput->value(), 16);
+    data.append(QByteArray::fromHex(str.toLocal8Bit().data())); // погрешность периода
+
+    return data;
 }
 //----------------------------
 void CSetInput::open(int type)

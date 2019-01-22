@@ -118,6 +118,7 @@
             void configurationWindow();
             void configWindowVisiblity(bool state = false);
             void setupDiscretInput();
+            void discretInputProcess();
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

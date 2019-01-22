@@ -92,6 +92,7 @@ void MainWindow::initConnect()
 
     connect(ui->checkBoxSerialConfig, &QCheckBox::clicked, this, &MainWindow::configWindowVisiblity);
     connect(ui->pushButtonInputSet, &QPushButton::clicked, this, &MainWindow::setupDiscretInput);
+    connect(m_set_intput_widget, &CSetInput::apply, this, &MainWindow::discretInputProcess);
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -773,6 +774,29 @@ void MainWindow::setupDiscretInput()
     if(m_set_intput_widget->isHidden())
         m_set_intput_widget->open(type);
 }
+/*!
+ * \brief MainWindow::discretInputProcess
+ *
+ * Формирование запроса на запись настроек дискретных входов
+ */
+void MainWindow::discretInputProcess()
+{
+    int type = 1;
+
+    if(ui->radioButtonInputSingle->isChecked())
+    {
+        type = 0;
+    }
+
+    QString data;
+    QString str;
+
+    str.setNum(0x3F);
+    data = QByteArray::fromHex(str.toLocal8Bit().data());
+    data += m_set_intput_widget->intputMode(type);
+
+    sendData(data);
+}
 //----------------------------------
 void MainWindow::refreshSerialPort()
 {
@@ -1047,22 +1071,6 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
                 str.setNum(ui->sbSignal->value(), 16);
                 m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // длительность сигнала
             }
-            else if(m_cmd_last == tr("0x3F"))
-            {
-//                str.setNum(ui->sbInput->value(), 16);
-//                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // номер входа
-
-//                quint8 type = (ui->cbInputType->currentText().toUpper() == tr("АНАЛОГОВЫЙ"))?0x00:0x01;
-
-//                str.setNum(type, 16);
-//                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // тип входа
-
-//                str.setNum(ui->sbDuration->value(), 16);
-//                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // длительность периода
-
-//                str.setNum(ui->sbFaultInput->value(), 16);
-//                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // погрешность периода
-            }
         }
         else
         {
@@ -1229,28 +1237,28 @@ void MainWindow::outputStateChanged(quint8 id, bool state)
 
             str.setNum(cmd, 16);
 
-            sendData(((cmd >= 16)?tr("0x"):tr("0x0")) + str.toUpper());
+            sendData(((cmd >= 16)?"0x":"0x0") + str.toUpper());
         }
         else
-            write(tr("0x05"));
+            write("0x05");
     }
 }
 //----------------------------------------------
 void MainWindow::initFilter(const QString& text)
 {
-    if(text == tr("0x3D"))
+    if(text == "0x3D")
     {
         ui->gboxInputSettings->setEnabled(true);
         ui->gboxInput->setDisabled(true);
         ui->gboxInputSettingsFilter->setDisabled(true);
     }
-    else if(text == tr("0x3E"))
+    else if(text == "0x3E")
     {
         ui->gboxInputSettings->setEnabled(true);
         ui->gboxInput->setDisabled(true);
         ui->gboxInputSettingsFilter->setEnabled(true);
     }
-    else if(text == tr("0x3F"))
+    else if(text == "0x3F")
     {
         ui->gboxInputSettings->setEnabled(true);
         ui->gboxInput->setEnabled(true);
@@ -1288,11 +1296,11 @@ void MainWindow::autoRepeatTimInputs()
 {
     if(ui->sbDeviceAddress->value() != MIK_01) // устройство не МИК-01
     {
-        sendData(tr("0x00")); // чтение дискретных каналов входов
+        sendData("0x00"); // чтение дискретных каналов входов
     }
     else // устройство МИК-01
     {
-        sendData(tr("0x03")); // чтение регистра расширения дискретных каналов входов (клавиатура)
+        sendData("0x03"); // чтение регистра расширения дискретных каналов входов (клавиатура)
     }
 
     if(ui->cboxRepeatInputs->isChecked())
@@ -1301,7 +1309,7 @@ void MainWindow::autoRepeatTimInputs()
 //---------------------------------
 void MainWindow::autoRepeatTimAIN()
 {
-    sendData(tr("0x02"));
+    sendData("0x02");
 
     if(ui->cboxRepeatAIN->isChecked())
         m_timerAutoRepeatAIN->start(ui->sbRepeatAIN->value());
