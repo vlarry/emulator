@@ -369,33 +369,36 @@ public:
     QSpacerItem *horizontalSpacer_22;
     QSpacerItem *horizontalSpacer_148;
     QWidget *tabInfo;
-    QHBoxLayout *horizontalLayout_72;
-    QVBoxLayout *verticalLayout_39;
-    QGroupBox *groupError;
-    QHBoxLayout *horizontalLayout_71;
     QVBoxLayout *verticalLayout_36;
-    QLabel *label_26;
-    QLabel *label_27;
-    QLabel *label_28;
+    QHBoxLayout *horizontalLayout_17;
+    QGroupBox *groupDebugInfo;
     QVBoxLayout *verticalLayout_35;
-    QLineEdit *leErrorAddr;
-    QLineEdit *leErrorCmd;
-    QLineEdit *leErrorChecksum;
-    QGroupBox *groupDeviceInfo;
+    QGridLayout *gridLayout_3;
+    QLineEdit *lineEditErrorCmdCounter;
+    QLabel *label_34;
+    QLabel *label_28;
+    QLineEdit *lineEditErrorProcessCounter;
+    QLabel *label_27;
+    QLabel *label_35;
+    QLineEdit *lineEditRequestCounter;
+    QLineEdit *lineEditErrorChecksumCounter;
+    QLabel *label_36;
+    QLineEdit *lineEditErrorTimeoutCounter;
+    QSpacerItem *horizontalSpacer_12;
+    QGroupBox *groupSerialNumber;
     QHBoxLayout *horizontalLayout_73;
-    QVBoxLayout *verticalLayout_38;
-    QLabel *label_29;
-    QLabel *label_30;
-    QLabel *label_31;
-    QLabel *label_32;
-    QLabel *label_33;
-    QVBoxLayout *verticalLayout_37;
+    QGridLayout *gridLayout_4;
     QLineEdit *leDeviceID;
+    QLabel *label_30;
+    QLabel *label_32;
     QLineEdit *leDeviceNumber;
+    QLabel *label_31;
     QLineEdit *leDeviceLotNum;
     QLineEdit *leDeviceFirmwareVar;
+    QLabel *label_29;
+    QLabel *label_33;
     QLineEdit *leDeviceFirmwareDate;
-    QSpacerItem *horizontalSpacer_12;
+    QSpacerItem *verticalSpacer;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -408,7 +411,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(1284, 858);
+        MainWindow->resize(1153, 864);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_34 = new QVBoxLayout(centralWidget);
@@ -2260,181 +2263,233 @@ public:
         twPeriphery->addTab(tabIO, QString());
         tabInfo = new QWidget();
         tabInfo->setObjectName(QString::fromUtf8("tabInfo"));
-        horizontalLayout_72 = new QHBoxLayout(tabInfo);
-        horizontalLayout_72->setSpacing(6);
-        horizontalLayout_72->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_72->setObjectName(QString::fromUtf8("horizontalLayout_72"));
-        verticalLayout_39 = new QVBoxLayout();
-        verticalLayout_39->setSpacing(6);
-        verticalLayout_39->setObjectName(QString::fromUtf8("verticalLayout_39"));
-        groupError = new QGroupBox(tabInfo);
-        groupError->setObjectName(QString::fromUtf8("groupError"));
-        groupError->setAlignment(Qt::AlignCenter);
-        horizontalLayout_71 = new QHBoxLayout(groupError);
-        horizontalLayout_71->setSpacing(6);
-        horizontalLayout_71->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_71->setObjectName(QString::fromUtf8("horizontalLayout_71"));
-        verticalLayout_36 = new QVBoxLayout();
+        verticalLayout_36 = new QVBoxLayout(tabInfo);
         verticalLayout_36->setSpacing(6);
+        verticalLayout_36->setContentsMargins(11, 11, 11, 11);
         verticalLayout_36->setObjectName(QString::fromUtf8("verticalLayout_36"));
-        label_26 = new QLabel(groupError);
-        label_26->setObjectName(QString::fromUtf8("label_26"));
-        label_26->setScaledContents(true);
+        horizontalLayout_17 = new QHBoxLayout();
+        horizontalLayout_17->setSpacing(6);
+        horizontalLayout_17->setObjectName(QString::fromUtf8("horizontalLayout_17"));
+        groupDebugInfo = new QGroupBox(tabInfo);
+        groupDebugInfo->setObjectName(QString::fromUtf8("groupDebugInfo"));
+        QSizePolicy sizePolicy8(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy8.setHorizontalStretch(0);
+        sizePolicy8.setVerticalStretch(0);
+        sizePolicy8.setHeightForWidth(groupDebugInfo->sizePolicy().hasHeightForWidth());
+        groupDebugInfo->setSizePolicy(sizePolicy8);
+        groupDebugInfo->setAlignment(Qt::AlignCenter);
+        verticalLayout_35 = new QVBoxLayout(groupDebugInfo);
+        verticalLayout_35->setSpacing(6);
+        verticalLayout_35->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_35->setObjectName(QString::fromUtf8("verticalLayout_35"));
+        gridLayout_3 = new QGridLayout();
+        gridLayout_3->setSpacing(6);
+        gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
+        lineEditErrorCmdCounter = new QLineEdit(groupDebugInfo);
+        lineEditErrorCmdCounter->setObjectName(QString::fromUtf8("lineEditErrorCmdCounter"));
+        sizePolicy2.setHeightForWidth(lineEditErrorCmdCounter->sizePolicy().hasHeightForWidth());
+        lineEditErrorCmdCounter->setSizePolicy(sizePolicy2);
+        lineEditErrorCmdCounter->setMaxLength(5);
+        lineEditErrorCmdCounter->setAlignment(Qt::AlignCenter);
+        lineEditErrorCmdCounter->setReadOnly(true);
 
-        verticalLayout_36->addWidget(label_26);
+        gridLayout_3->addWidget(lineEditErrorCmdCounter, 1, 1, 1, 1);
 
-        label_27 = new QLabel(groupError);
-        label_27->setObjectName(QString::fromUtf8("label_27"));
-        label_27->setScaledContents(true);
+        label_34 = new QLabel(groupDebugInfo);
+        label_34->setObjectName(QString::fromUtf8("label_34"));
+        QSizePolicy sizePolicy9(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        sizePolicy9.setHorizontalStretch(0);
+        sizePolicy9.setVerticalStretch(0);
+        sizePolicy9.setHeightForWidth(label_34->sizePolicy().hasHeightForWidth());
+        label_34->setSizePolicy(sizePolicy9);
+        label_34->setScaledContents(true);
 
-        verticalLayout_36->addWidget(label_27);
+        gridLayout_3->addWidget(label_34, 0, 0, 1, 1);
 
-        label_28 = new QLabel(groupError);
+        label_28 = new QLabel(groupDebugInfo);
         label_28->setObjectName(QString::fromUtf8("label_28"));
+        sizePolicy9.setHeightForWidth(label_28->sizePolicy().hasHeightForWidth());
+        label_28->setSizePolicy(sizePolicy9);
         label_28->setScaledContents(true);
 
-        verticalLayout_36->addWidget(label_28);
+        gridLayout_3->addWidget(label_28, 2, 0, 1, 1);
+
+        lineEditErrorProcessCounter = new QLineEdit(groupDebugInfo);
+        lineEditErrorProcessCounter->setObjectName(QString::fromUtf8("lineEditErrorProcessCounter"));
+        sizePolicy2.setHeightForWidth(lineEditErrorProcessCounter->sizePolicy().hasHeightForWidth());
+        lineEditErrorProcessCounter->setSizePolicy(sizePolicy2);
+        lineEditErrorProcessCounter->setMaxLength(5);
+        lineEditErrorProcessCounter->setAlignment(Qt::AlignCenter);
+        lineEditErrorProcessCounter->setReadOnly(true);
+
+        gridLayout_3->addWidget(lineEditErrorProcessCounter, 3, 1, 1, 1);
+
+        label_27 = new QLabel(groupDebugInfo);
+        label_27->setObjectName(QString::fromUtf8("label_27"));
+        sizePolicy9.setHeightForWidth(label_27->sizePolicy().hasHeightForWidth());
+        label_27->setSizePolicy(sizePolicy9);
+        label_27->setScaledContents(true);
+
+        gridLayout_3->addWidget(label_27, 1, 0, 1, 1);
+
+        label_35 = new QLabel(groupDebugInfo);
+        label_35->setObjectName(QString::fromUtf8("label_35"));
+        sizePolicy9.setHeightForWidth(label_35->sizePolicy().hasHeightForWidth());
+        label_35->setSizePolicy(sizePolicy9);
+        label_35->setScaledContents(true);
+
+        gridLayout_3->addWidget(label_35, 3, 0, 1, 1);
+
+        lineEditRequestCounter = new QLineEdit(groupDebugInfo);
+        lineEditRequestCounter->setObjectName(QString::fromUtf8("lineEditRequestCounter"));
+        sizePolicy2.setHeightForWidth(lineEditRequestCounter->sizePolicy().hasHeightForWidth());
+        lineEditRequestCounter->setSizePolicy(sizePolicy2);
+        lineEditRequestCounter->setMaxLength(5);
+        lineEditRequestCounter->setAlignment(Qt::AlignCenter);
+        lineEditRequestCounter->setReadOnly(true);
+
+        gridLayout_3->addWidget(lineEditRequestCounter, 0, 1, 1, 1);
+
+        lineEditErrorChecksumCounter = new QLineEdit(groupDebugInfo);
+        lineEditErrorChecksumCounter->setObjectName(QString::fromUtf8("lineEditErrorChecksumCounter"));
+        sizePolicy2.setHeightForWidth(lineEditErrorChecksumCounter->sizePolicy().hasHeightForWidth());
+        lineEditErrorChecksumCounter->setSizePolicy(sizePolicy2);
+        lineEditErrorChecksumCounter->setMaxLength(5);
+        lineEditErrorChecksumCounter->setAlignment(Qt::AlignCenter);
+        lineEditErrorChecksumCounter->setReadOnly(true);
+
+        gridLayout_3->addWidget(lineEditErrorChecksumCounter, 2, 1, 1, 1);
+
+        label_36 = new QLabel(groupDebugInfo);
+        label_36->setObjectName(QString::fromUtf8("label_36"));
+        sizePolicy9.setHeightForWidth(label_36->sizePolicy().hasHeightForWidth());
+        label_36->setSizePolicy(sizePolicy9);
+        label_36->setScaledContents(true);
+
+        gridLayout_3->addWidget(label_36, 4, 0, 1, 1);
+
+        lineEditErrorTimeoutCounter = new QLineEdit(groupDebugInfo);
+        lineEditErrorTimeoutCounter->setObjectName(QString::fromUtf8("lineEditErrorTimeoutCounter"));
+        sizePolicy2.setHeightForWidth(lineEditErrorTimeoutCounter->sizePolicy().hasHeightForWidth());
+        lineEditErrorTimeoutCounter->setSizePolicy(sizePolicy2);
+        lineEditErrorTimeoutCounter->setMaxLength(5);
+        lineEditErrorTimeoutCounter->setAlignment(Qt::AlignCenter);
+        lineEditErrorTimeoutCounter->setReadOnly(true);
+
+        gridLayout_3->addWidget(lineEditErrorTimeoutCounter, 4, 1, 1, 1);
 
 
-        horizontalLayout_71->addLayout(verticalLayout_36);
-
-        verticalLayout_35 = new QVBoxLayout();
-        verticalLayout_35->setSpacing(6);
-        verticalLayout_35->setObjectName(QString::fromUtf8("verticalLayout_35"));
-        leErrorAddr = new QLineEdit(groupError);
-        leErrorAddr->setObjectName(QString::fromUtf8("leErrorAddr"));
-        sizePolicy6.setHeightForWidth(leErrorAddr->sizePolicy().hasHeightForWidth());
-        leErrorAddr->setSizePolicy(sizePolicy6);
-        leErrorAddr->setMaxLength(5);
-        leErrorAddr->setAlignment(Qt::AlignCenter);
-        leErrorAddr->setReadOnly(true);
-
-        verticalLayout_35->addWidget(leErrorAddr);
-
-        leErrorCmd = new QLineEdit(groupError);
-        leErrorCmd->setObjectName(QString::fromUtf8("leErrorCmd"));
-        sizePolicy6.setHeightForWidth(leErrorCmd->sizePolicy().hasHeightForWidth());
-        leErrorCmd->setSizePolicy(sizePolicy6);
-        leErrorCmd->setMaxLength(5);
-        leErrorCmd->setAlignment(Qt::AlignCenter);
-        leErrorCmd->setReadOnly(true);
-
-        verticalLayout_35->addWidget(leErrorCmd);
-
-        leErrorChecksum = new QLineEdit(groupError);
-        leErrorChecksum->setObjectName(QString::fromUtf8("leErrorChecksum"));
-        sizePolicy6.setHeightForWidth(leErrorChecksum->sizePolicy().hasHeightForWidth());
-        leErrorChecksum->setSizePolicy(sizePolicy6);
-        leErrorChecksum->setMaxLength(5);
-        leErrorChecksum->setAlignment(Qt::AlignCenter);
-        leErrorChecksum->setReadOnly(true);
-
-        verticalLayout_35->addWidget(leErrorChecksum);
+        verticalLayout_35->addLayout(gridLayout_3);
 
 
-        horizontalLayout_71->addLayout(verticalLayout_35);
+        horizontalLayout_17->addWidget(groupDebugInfo);
 
+        horizontalSpacer_12 = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        verticalLayout_39->addWidget(groupError);
+        horizontalLayout_17->addItem(horizontalSpacer_12);
 
-        groupDeviceInfo = new QGroupBox(tabInfo);
-        groupDeviceInfo->setObjectName(QString::fromUtf8("groupDeviceInfo"));
-        groupDeviceInfo->setAlignment(Qt::AlignCenter);
-        horizontalLayout_73 = new QHBoxLayout(groupDeviceInfo);
+        groupSerialNumber = new QGroupBox(tabInfo);
+        groupSerialNumber->setObjectName(QString::fromUtf8("groupSerialNumber"));
+        groupSerialNumber->setAlignment(Qt::AlignCenter);
+        horizontalLayout_73 = new QHBoxLayout(groupSerialNumber);
         horizontalLayout_73->setSpacing(6);
         horizontalLayout_73->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_73->setObjectName(QString::fromUtf8("horizontalLayout_73"));
-        verticalLayout_38 = new QVBoxLayout();
-        verticalLayout_38->setSpacing(6);
-        verticalLayout_38->setObjectName(QString::fromUtf8("verticalLayout_38"));
-        label_29 = new QLabel(groupDeviceInfo);
-        label_29->setObjectName(QString::fromUtf8("label_29"));
-        label_29->setScaledContents(true);
-
-        verticalLayout_38->addWidget(label_29);
-
-        label_30 = new QLabel(groupDeviceInfo);
-        label_30->setObjectName(QString::fromUtf8("label_30"));
-        label_30->setScaledContents(true);
-
-        verticalLayout_38->addWidget(label_30);
-
-        label_31 = new QLabel(groupDeviceInfo);
-        label_31->setObjectName(QString::fromUtf8("label_31"));
-        label_31->setScaledContents(true);
-
-        verticalLayout_38->addWidget(label_31);
-
-        label_32 = new QLabel(groupDeviceInfo);
-        label_32->setObjectName(QString::fromUtf8("label_32"));
-        label_32->setScaledContents(true);
-
-        verticalLayout_38->addWidget(label_32);
-
-        label_33 = new QLabel(groupDeviceInfo);
-        label_33->setObjectName(QString::fromUtf8("label_33"));
-        label_33->setScaledContents(true);
-
-        verticalLayout_38->addWidget(label_33);
-
-
-        horizontalLayout_73->addLayout(verticalLayout_38);
-
-        verticalLayout_37 = new QVBoxLayout();
-        verticalLayout_37->setSpacing(6);
-        verticalLayout_37->setObjectName(QString::fromUtf8("verticalLayout_37"));
-        leDeviceID = new QLineEdit(groupDeviceInfo);
+        gridLayout_4 = new QGridLayout();
+        gridLayout_4->setSpacing(6);
+        gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
+        leDeviceID = new QLineEdit(groupSerialNumber);
         leDeviceID->setObjectName(QString::fromUtf8("leDeviceID"));
         leDeviceID->setEnabled(false);
+        sizePolicy2.setHeightForWidth(leDeviceID->sizePolicy().hasHeightForWidth());
+        leDeviceID->setSizePolicy(sizePolicy2);
         leDeviceID->setAlignment(Qt::AlignCenter);
         leDeviceID->setReadOnly(true);
 
-        verticalLayout_37->addWidget(leDeviceID);
+        gridLayout_4->addWidget(leDeviceID, 0, 1, 1, 1);
 
-        leDeviceNumber = new QLineEdit(groupDeviceInfo);
+        label_30 = new QLabel(groupSerialNumber);
+        label_30->setObjectName(QString::fromUtf8("label_30"));
+        label_30->setScaledContents(true);
+
+        gridLayout_4->addWidget(label_30, 1, 0, 1, 1);
+
+        label_32 = new QLabel(groupSerialNumber);
+        label_32->setObjectName(QString::fromUtf8("label_32"));
+        label_32->setScaledContents(true);
+
+        gridLayout_4->addWidget(label_32, 3, 0, 1, 1);
+
+        leDeviceNumber = new QLineEdit(groupSerialNumber);
         leDeviceNumber->setObjectName(QString::fromUtf8("leDeviceNumber"));
         leDeviceNumber->setEnabled(false);
+        sizePolicy2.setHeightForWidth(leDeviceNumber->sizePolicy().hasHeightForWidth());
+        leDeviceNumber->setSizePolicy(sizePolicy2);
         leDeviceNumber->setAlignment(Qt::AlignCenter);
         leDeviceNumber->setReadOnly(true);
 
-        verticalLayout_37->addWidget(leDeviceNumber);
+        gridLayout_4->addWidget(leDeviceNumber, 1, 1, 1, 1);
 
-        leDeviceLotNum = new QLineEdit(groupDeviceInfo);
+        label_31 = new QLabel(groupSerialNumber);
+        label_31->setObjectName(QString::fromUtf8("label_31"));
+        label_31->setScaledContents(true);
+
+        gridLayout_4->addWidget(label_31, 2, 0, 1, 1);
+
+        leDeviceLotNum = new QLineEdit(groupSerialNumber);
         leDeviceLotNum->setObjectName(QString::fromUtf8("leDeviceLotNum"));
         leDeviceLotNum->setEnabled(false);
+        sizePolicy2.setHeightForWidth(leDeviceLotNum->sizePolicy().hasHeightForWidth());
+        leDeviceLotNum->setSizePolicy(sizePolicy2);
         leDeviceLotNum->setAlignment(Qt::AlignCenter);
         leDeviceLotNum->setReadOnly(true);
 
-        verticalLayout_37->addWidget(leDeviceLotNum);
+        gridLayout_4->addWidget(leDeviceLotNum, 2, 1, 1, 1);
 
-        leDeviceFirmwareVar = new QLineEdit(groupDeviceInfo);
+        leDeviceFirmwareVar = new QLineEdit(groupSerialNumber);
         leDeviceFirmwareVar->setObjectName(QString::fromUtf8("leDeviceFirmwareVar"));
         leDeviceFirmwareVar->setEnabled(false);
+        sizePolicy2.setHeightForWidth(leDeviceFirmwareVar->sizePolicy().hasHeightForWidth());
+        leDeviceFirmwareVar->setSizePolicy(sizePolicy2);
         leDeviceFirmwareVar->setAlignment(Qt::AlignCenter);
         leDeviceFirmwareVar->setReadOnly(true);
 
-        verticalLayout_37->addWidget(leDeviceFirmwareVar);
+        gridLayout_4->addWidget(leDeviceFirmwareVar, 3, 1, 1, 1);
 
-        leDeviceFirmwareDate = new QLineEdit(groupDeviceInfo);
+        label_29 = new QLabel(groupSerialNumber);
+        label_29->setObjectName(QString::fromUtf8("label_29"));
+        label_29->setScaledContents(true);
+
+        gridLayout_4->addWidget(label_29, 0, 0, 1, 1);
+
+        label_33 = new QLabel(groupSerialNumber);
+        label_33->setObjectName(QString::fromUtf8("label_33"));
+        label_33->setScaledContents(true);
+
+        gridLayout_4->addWidget(label_33, 4, 0, 1, 1);
+
+        leDeviceFirmwareDate = new QLineEdit(groupSerialNumber);
         leDeviceFirmwareDate->setObjectName(QString::fromUtf8("leDeviceFirmwareDate"));
         leDeviceFirmwareDate->setEnabled(false);
+        sizePolicy2.setHeightForWidth(leDeviceFirmwareDate->sizePolicy().hasHeightForWidth());
+        leDeviceFirmwareDate->setSizePolicy(sizePolicy2);
         leDeviceFirmwareDate->setAlignment(Qt::AlignCenter);
         leDeviceFirmwareDate->setReadOnly(true);
 
-        verticalLayout_37->addWidget(leDeviceFirmwareDate);
+        gridLayout_4->addWidget(leDeviceFirmwareDate, 4, 1, 1, 1);
 
 
-        horizontalLayout_73->addLayout(verticalLayout_37);
+        horizontalLayout_73->addLayout(gridLayout_4);
 
 
-        verticalLayout_39->addWidget(groupDeviceInfo);
+        horizontalLayout_17->addWidget(groupSerialNumber);
 
 
-        horizontalLayout_72->addLayout(verticalLayout_39);
+        verticalLayout_36->addLayout(horizontalLayout_17);
 
-        horizontalSpacer_12 = new QSpacerItem(370, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        verticalSpacer = new QSpacerItem(20, 81, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        horizontalLayout_72->addItem(horizontalSpacer_12);
+        verticalLayout_36->addItem(verticalSpacer);
 
         twPeriphery->addTab(tabInfo, QString());
 
@@ -2442,15 +2497,13 @@ public:
 
         line->raise();
         twPeriphery->raise();
-        lineEditMessageQueue->raise();
-        label_9->raise();
 
         verticalLayout_34->addWidget(groupDevices);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1284, 26));
+        menuBar->setGeometry(QRect(0, 0, 1153, 26));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -2469,9 +2522,6 @@ public:
         verticalLayout_15->setObjectName(QString::fromUtf8("verticalLayout_15"));
         pteConsole = new QPlainTextEdit(dockWidgetContents_2);
         pteConsole->setObjectName(QString::fromUtf8("pteConsole"));
-        QSizePolicy sizePolicy8(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        sizePolicy8.setHorizontalStretch(0);
-        sizePolicy8.setVerticalStretch(0);
         sizePolicy8.setHeightForWidth(pteConsole->sizePolicy().hasHeightForWidth());
         pteConsole->setSizePolicy(sizePolicy8);
         pteConsole->setReadOnly(true);
@@ -2483,7 +2533,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        twPeriphery->setCurrentIndex(0);
+        twPeriphery->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -2602,15 +2652,17 @@ public:
         lblAIN3->setText(QApplication::translate("MainWindow", "AIN3", nullptr));
         lblAIN4->setText(QApplication::translate("MainWindow", "AIN4", nullptr));
         twPeriphery->setTabText(twPeriphery->indexOf(tabIO), QApplication::translate("MainWindow", "\320\222\321\205\320\276\320\264\321\213/\320\262\321\213\321\205\320\276\320\264\321\213", nullptr));
-        groupError->setTitle(QApplication::translate("MainWindow", "\320\236\321\210\320\270\320\261\320\272\320\270", nullptr));
-        label_26->setText(QApplication::translate("MainWindow", "\320\236\321\210\320\270\320\261\320\272\320\260 \320\260\320\264\321\200\320\265\321\201\320\260\321\206\320\270\320\270:", nullptr));
-        label_27->setText(QApplication::translate("MainWindow", "\320\236\321\210\320\270\320\261\320\272\320\260 \320\272\320\276\320\274\320\260\320\275\320\264\321\213:", nullptr));
-        label_28->setText(QApplication::translate("MainWindow", "\320\236\321\210\320\270\320\261\320\272\320\260 \320\272\320\276\320\275\321\202\321\200\320\276\320\273\321\214\320\275\320\276\320\271 \321\201\321\203\320\274\320\274\321\213:", nullptr));
-        groupDeviceInfo->setTitle(QApplication::translate("MainWindow", "\320\224\320\260\320\275\320\275\321\213\320\265 \321\203\321\201\321\202\321\200\320\276\320\271\321\201\321\202\320\262\320\260", nullptr));
-        label_29->setText(QApplication::translate("MainWindow", "ID \320\243\321\201\321\202\321\200\320\276\320\271\321\201\321\202\320\262\320\260", nullptr));
+        groupDebugInfo->setTitle(QApplication::translate("MainWindow", "\320\236\321\202\320\273\320\260\320\264\320\276\321\207\320\275\320\260\321\217 \320\270\320\275\321\204\320\276\321\200\320\274\320\260\321\206\320\270\321\217", nullptr));
+        label_34->setText(QApplication::translate("MainWindow", "\320\241\321\207\320\265\321\202\321\207\320\270\320\272 \320\267\320\260\320\277\321\200\320\276\321\201\320\276\320\262", nullptr));
+        label_28->setText(QApplication::translate("MainWindow", "\320\241\321\207\320\265\321\202\321\207\320\270\320\272 \320\276\321\210\320\270\320\261\320\276\320\272 \320\272\320\276\320\275\321\202\321\200\320\276\320\273\321\214\320\275\320\276\320\271 \321\201\321\203\320\274\320\274\321\213:", nullptr));
+        label_27->setText(QApplication::translate("MainWindow", "\320\241\321\207\320\265\321\202\321\207\320\270\320\272 \320\276\321\210\320\270\320\261\320\276\320\272 \320\272\320\276\320\274\320\260\320\275\320\264\321\213", nullptr));
+        label_35->setText(QApplication::translate("MainWindow", "\320\241\321\207\320\265\321\202\321\207\320\270\320\272 \320\276\321\202\321\201\321\203\321\202\321\201\321\202\320\262\320\262\320\270\321\217 \320\276\320\261\321\200\320\260\320\261\320\276\321\202\321\207\320\270\320\272\320\260", nullptr));
+        label_36->setText(QApplication::translate("MainWindow", "\320\241\321\207\320\265\321\202\321\207\320\270\320\272 \320\276\321\210\320\270\320\261\320\276\320\272 \321\202\320\260\320\271\320\274\320\260\321\203\321\202\320\260", nullptr));
+        groupSerialNumber->setTitle(QApplication::translate("MainWindow", "\320\241\320\265\321\200\320\270\320\271\320\275\321\213\320\271 \320\275\320\276\320\274\320\265\321\200", nullptr));
         label_30->setText(QApplication::translate("MainWindow", "\320\237\320\276\321\200\321\217\320\264\320\272\320\276\320\262\321\213\320\271 \320\275\320\276\320\274\320\265\321\200", nullptr));
-        label_31->setText(QApplication::translate("MainWindow", "\320\235\320\276\320\274\320\265\321\200 \320\262 \320\277\320\260\321\200\321\202\320\270\320\270", nullptr));
         label_32->setText(QApplication::translate("MainWindow", "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 \320\277\321\200\320\276\321\210\320\270\320\262\320\272\320\270", nullptr));
+        label_31->setText(QApplication::translate("MainWindow", "\320\235\320\276\320\274\320\265\321\200 \320\262 \320\277\320\260\321\200\321\202\320\270\320\270", nullptr));
+        label_29->setText(QApplication::translate("MainWindow", "ID \320\243\321\201\321\202\321\200\320\276\320\271\321\201\321\202\320\262\320\260", nullptr));
         label_33->setText(QApplication::translate("MainWindow", "\320\224\320\260\321\202\320\260 \320\277\321\200\320\276\321\210\320\270\320\262\320\272\320\270", nullptr));
         twPeriphery->setTabText(twPeriphery->indexOf(tabInfo), QApplication::translate("MainWindow", "\320\230\320\275\321\204\320\276\321\200\320\274\320\260\321\206\320\270\321\217", nullptr));
         dwTerminal->setWindowTitle(QApplication::translate("MainWindow", "\320\242\320\265\321\200\320\274\320\270\320\275\320\260\320\273", nullptr));

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1284</width>
-    <height>858</height>
+    <width>1153</width>
+    <height>864</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -759,7 +759,7 @@
        <item>
         <widget class="QTabWidget" name="twPeriphery">
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tabIO">
           <attribute name="title">
@@ -4047,58 +4047,81 @@
           <attribute name="title">
            <string>Информация</string>
           </attribute>
-          <layout class="QHBoxLayout" name="horizontalLayout_72">
+          <layout class="QVBoxLayout" name="verticalLayout_36">
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_39">
+            <layout class="QHBoxLayout" name="horizontalLayout_17">
              <item>
-              <widget class="QGroupBox" name="groupError">
+              <widget class="QGroupBox" name="groupDebugInfo">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="title">
-                <string>Ошибки</string>
+                <string>Отладочная информация</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_71">
+               <layout class="QVBoxLayout" name="verticalLayout_35">
                 <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_36">
-                  <item>
-                   <widget class="QLabel" name="label_26">
+                 <layout class="QGridLayout" name="gridLayout_3">
+                  <item row="1" column="1">
+                   <widget class="QLineEdit" name="lineEditErrorCmdCounter">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="maxLength">
+                     <number>5</number>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_34">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="text">
-                     <string>Ошибка адресации:</string>
+                     <string>Счетчик запросов</string>
                     </property>
                     <property name="scaledContents">
                      <bool>true</bool>
                     </property>
                    </widget>
                   </item>
-                  <item>
-                   <widget class="QLabel" name="label_27">
-                    <property name="text">
-                     <string>Ошибка команды:</string>
-                    </property>
-                    <property name="scaledContents">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
+                  <item row="2" column="0">
                    <widget class="QLabel" name="label_28">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="text">
-                     <string>Ошибка контрольной суммы:</string>
+                     <string>Счетчик ошибок контрольной суммы:</string>
                     </property>
                     <property name="scaledContents">
                      <bool>true</bool>
                     </property>
                    </widget>
                   </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_35">
-                  <item>
-                   <widget class="QLineEdit" name="leErrorAddr">
+                  <item row="3" column="1">
+                   <widget class="QLineEdit" name="lineEditErrorProcessCounter">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -4114,10 +4137,42 @@
                     </property>
                    </widget>
                   </item>
-                  <item>
-                   <widget class="QLineEdit" name="leErrorCmd">
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_27">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Счетчик ошибок команды</string>
+                    </property>
+                    <property name="scaledContents">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_35">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Счетчик отсутстввия обработчика</string>
+                    </property>
+                    <property name="scaledContents">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLineEdit" name="lineEditRequestCounter">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -4133,10 +4188,45 @@
                     </property>
                    </widget>
                   </item>
-                  <item>
-                   <widget class="QLineEdit" name="leErrorChecksum">
+                  <item row="2" column="1">
+                   <widget class="QLineEdit" name="lineEditErrorChecksumCounter">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="maxLength">
+                     <number>5</number>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="label_36">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Счетчик ошибок таймаута</string>
+                    </property>
+                    <property name="scaledContents">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <widget class="QLineEdit" name="lineEditErrorTimeoutCounter">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -4158,27 +4248,49 @@
               </widget>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupDeviceInfo">
+              <spacer name="horizontalSpacer_12">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupSerialNumber">
                <property name="title">
-                <string>Данные устройства</string>
+                <string>Серийный номер</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_73">
                 <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_38">
-                  <item>
-                   <widget class="QLabel" name="label_29">
-                    <property name="text">
-                     <string>ID Устройства</string>
+                 <layout class="QGridLayout" name="gridLayout_4">
+                  <item row="0" column="1">
+                   <widget class="QLineEdit" name="leDeviceID">
+                    <property name="enabled">
+                     <bool>false</bool>
                     </property>
-                    <property name="scaledContents">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
                      <bool>true</bool>
                     </property>
                    </widget>
                   </item>
-                  <item>
+                  <item row="1" column="0">
                    <widget class="QLabel" name="label_30">
                     <property name="text">
                      <string>Порядковый номер</string>
@@ -4188,17 +4300,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item>
-                   <widget class="QLabel" name="label_31">
-                    <property name="text">
-                     <string>Номер в партии</string>
-                    </property>
-                    <property name="scaledContents">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
+                  <item row="3" column="0">
                    <widget class="QLabel" name="label_32">
                     <property name="text">
                      <string>Вариант прошивки</string>
@@ -4208,7 +4310,84 @@
                     </property>
                    </widget>
                   </item>
-                  <item>
+                  <item row="1" column="1">
+                   <widget class="QLineEdit" name="leDeviceNumber">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_31">
+                    <property name="text">
+                     <string>Номер в партии</string>
+                    </property>
+                    <property name="scaledContents">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLineEdit" name="leDeviceLotNum">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QLineEdit" name="leDeviceFirmwareVar">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_29">
+                    <property name="text">
+                     <string>ID Устройства</string>
+                    </property>
+                    <property name="scaledContents">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
                    <widget class="QLabel" name="label_33">
                     <property name="text">
                      <string>Дата прошивки</string>
@@ -4218,66 +4397,16 @@
                     </property>
                    </widget>
                   </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_37">
-                  <item>
-                   <widget class="QLineEdit" name="leDeviceID">
-                    <property name="enabled">
-                     <bool>false</bool>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="leDeviceNumber">
-                    <property name="enabled">
-                     <bool>false</bool>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="leDeviceLotNum">
-                    <property name="enabled">
-                     <bool>false</bool>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="leDeviceFirmwareVar">
-                    <property name="enabled">
-                     <bool>false</bool>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
+                  <item row="4" column="1">
                    <widget class="QLineEdit" name="leDeviceFirmwareDate">
                     <property name="enabled">
                      <bool>false</bool>
+                    </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
@@ -4295,14 +4424,14 @@
             </layout>
            </item>
            <item>
-            <spacer name="horizontalSpacer_12">
+            <spacer name="verticalSpacer">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Vertical</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>370</width>
-               <height>20</height>
+               <width>20</width>
+               <height>81</height>
               </size>
              </property>
             </spacer>
@@ -4315,9 +4444,6 @@
       <zorder>line</zorder>
       <zorder></zorder>
       <zorder>twPeriphery</zorder>
-      <zorder>lineEditMessageQueue</zorder>
-      <zorder>label_9</zorder>
-      <zorder>horizontalSpacer_7</zorder>
      </widget>
     </item>
    </layout>
@@ -4327,7 +4453,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1284</width>
+     <width>1153</width>
      <height>26</height>
     </rect>
    </property>

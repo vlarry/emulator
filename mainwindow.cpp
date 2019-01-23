@@ -393,6 +393,9 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             }
         break;
 
+        case 0x1D: // вывод отладочной информации (счетчики ошибок)
+        break;
+
         case 0x1E:
             ui->leDeviceID->setEnabled(true);
             ui->leDeviceNumber->setEnabled(true);
@@ -488,26 +491,6 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                 temp.byte[1] = data.at(2);
 
                 ui->leTimeDSDIN->setText(QString::number(temp.data));
-            }
-        break;
-
-        case 0x3D:
-            if(size == 6)
-            {
-                temp.byte[static_cast<quint8>(data.at(0))];
-                temp.byte[static_cast<quint8>(data.at(1))];
-
-                ui->leErrorAddr->setText(QString::number(temp.data));
-
-                temp.byte[static_cast<quint8>(data.at(2))];
-                temp.byte[static_cast<quint8>(data.at(3))];
-
-                ui->leErrorCmd->setText(QString::number(temp.data));
-
-                temp.byte[static_cast<quint8>(data.at(4))];
-                temp.byte[static_cast<quint8>(data.at(5))];
-
-                ui->leErrorChecksum->setText(QString::number(temp.data));
             }
         break;
     }

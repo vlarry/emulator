@@ -67,14 +67,8 @@ QByteArray CSetInput::intputSettings(int type)
         intput = static_cast<quint16>(ui->spinBoxInputSingle->value());
     }
 
-    QByteArray data;
-
-    if(type == 1)
-    {
-        data = QByteArray::fromHex(QByteArray::number(((intput >> 8)&0x008F), 16));
-    }
-
     quint8 type_input = (ui->comboBoxInputType->currentText().toUpper() == tr("АНАЛОГОВЫЙ"))?0x00:0x01;
+    QByteArray data = QByteArray::fromHex(QByteArray::number(((intput >> 8)&0x008F), 16));
     data.append(QByteArray::fromHex(QByteArray::number(intput&0x00FF, 16)));
     data.append(QByteArray::fromHex(QByteArray::number(type_input, 16))); // тип входа
     data.append(QByteArray::fromHex(QByteArray::number(ui->spinBoxDuration->value(), 16))); // длительность периода

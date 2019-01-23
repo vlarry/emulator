@@ -32,7 +32,7 @@ QCmd::QCmd(QWidget* parent):
     m_cmd.insert(tr("0x1A"), qMakePair(tr("Резерв"), 0));
     m_cmd.insert(tr("0x1B"), qMakePair(tr("Резерв"), 0));
     m_cmd.insert(tr("0x1C"), qMakePair(tr("Резерв"), 0));
-    m_cmd.insert(tr("0x1D"), qMakePair(tr("Резерв"), 0));
+    m_cmd.insert(tr("0x1D"), qMakePair(tr("Чтение ошибок"), 17));
     m_cmd.insert(tr("0x1E"), qMakePair(tr("Чтение ID"), 9));
     m_cmd.insert(tr("0x1F"), qMakePair(tr("Чтение времени срабатывания выделенного входного дискретного канала"), 4));
     m_cmd.insert(tr("0x20"), qMakePair(tr("Резерв"), 0));
@@ -64,7 +64,7 @@ QCmd::QCmd(QWidget* parent):
     m_cmd.insert(tr("0x3A"), qMakePair(tr("Запись серийного номера"), 2));
     m_cmd.insert(tr("0x3B"), qMakePair(tr("Резерв"), 0));
     m_cmd.insert(tr("0x3C"), qMakePair(tr("Резерв"), 0));
-    m_cmd.insert(tr("0x3D"), qMakePair(tr("Чтение ошибок"), 7));
+    m_cmd.insert(tr("0x3D"), qMakePair(tr("Резерв"), 0));
     m_cmd.insert(tr("0x3E"), qMakePair(tr("Установка общих настроек фильтра"), 2));
     m_cmd.insert(tr("0x3F"), qMakePair(tr("Установка настроек входа"), 2));
 
