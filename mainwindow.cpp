@@ -394,6 +394,36 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
         break;
 
         case 0x1D: // вывод отладочной информации (счетчики ошибок)
+            ui->twPeriphery->setCurrentIndex(1);
+            // чтение количества запросов
+            temp.byte[0] = static_cast<quint8>(data[0]);
+            temp.byte[1] = static_cast<quint8>(data[1]);
+
+            ui->lineEditRequestCounter->setText(QString::number(temp.data));
+
+            // чтение количества ошибок команд
+            temp.byte[0] = static_cast<quint8>(data[2]);
+            temp.byte[1] = static_cast<quint8>(data[3]);
+
+            ui->lineEditErrorCmdCounter->setText(QString::number(temp.data));
+
+            // чтение количества ошибок контрольной суммы
+            temp.byte[0] = static_cast<quint8>(data[4]);
+            temp.byte[1] = static_cast<quint8>(data[5]);
+
+            ui->lineEditErrorChecksumCounter->setText(QString::number(temp.data));
+
+            // чтение количества ошибок отсутствия обработчика команд
+            temp.byte[0] = static_cast<quint8>(data[6]);
+            temp.byte[1] = static_cast<quint8>(data[7]);
+
+            ui->lineEditErrorProcessCounter->setText(QString::number(temp.data));
+
+            // чтение количества ошибок таймаута
+            temp.byte[0] = static_cast<quint8>(data[10]);
+            temp.byte[1] = static_cast<quint8>(data[11]);
+
+            ui->lineEditErrorTimeoutCounter->setText(QString::number(temp.data));
         break;
 
         case 0x1E:
