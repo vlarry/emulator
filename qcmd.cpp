@@ -63,7 +63,7 @@ QCmd::QCmd(QWidget* parent):
     m_cmd.insert(tr("0x39"), qMakePair(tr("Резерв"), 0));
     m_cmd.insert(tr("0x3A"), qMakePair(tr("Запись серийного номера"), 2));
     m_cmd.insert(tr("0x3B"), qMakePair(tr("Резерв"), 0));
-    m_cmd.insert(tr("0x3C"), qMakePair(tr("Запись в память"), 2));
+    m_cmd.insert(tr("0x3C"), qMakePair(tr("Резерв"), 0));
     m_cmd.insert(tr("0x3D"), qMakePair(tr("Чтение ошибок"), 7));
     m_cmd.insert(tr("0x3E"), qMakePair(tr("Установка общих настроек фильтра"), 2));
     m_cmd.insert(tr("0x3F"), qMakePair(tr("Установка настроек входа"), 2));
