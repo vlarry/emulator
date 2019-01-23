@@ -35,10 +35,15 @@ CSetInput::~CSetInput()
 {
     delete ui;
 }
-//-------------------------------------
-QString CSetInput::intputMode(int type)
+//--------------------------------------------
+QByteArray CSetInput::intputSettings(int type)
 {
     quint16 set = 0x0000;
+
+    if(type == 1) // если тип "группа", то устанавливаем старший бит
+    {
+        set = 0x8000;
+    }
 
     if(type == 1)
     {
@@ -62,28 +67,18 @@ QString CSetInput::intputMode(int type)
         set = static_cast<quint16>(ui->spinBoxInputSingle->value());
     }
 
-    QString str;
-    QString data;
-
-    str.setNum((set&0x00FF), 16);
-    data.append(QByteArray::fromHex(str.toLocal8Bit().data()));
+    QByteArray data;
 
     if(type == 1)
     {
-        str.setNum(((set >> 8)&0x000F), 16);
-        data.append(QByteArray::fromHex(str.toLocal8Bit().data()));
+        data = QByteArray::fromHex(QByteArray::number(((set >> 8)&0x008F), 16));
     }
 
     quint8 type_input = (ui->comboBoxInputType->currentText().toUpper() == tr("АНАЛОГОВЫЙ"))?0x00:0x01;
-
-    str.setNum(type_input, 16);
-    data.append(QByteArray::fromHex(str.toLocal8Bit().data())); // тип входа
-
-    str.setNum(ui->spinBoxDuration->value(), 16);
-    data.append(QByteArray::fromHex(str.toLocal8Bit().data())); // длительность периода
-
-    str.setNum(ui->spinBoxFaultInput->value(), 16);
-    data.append(QByteArray::fromHex(str.toLocal8Bit().data())); // погрешность периода
+    data.append(QByteArray::fromHex(QByteArray::number(set&0x00FF, 16)));
+    data.append(QByteArray::fromHex(QByteArray::number(type_input, 16))); // тип входа
+    data.append(QByteArray::fromHex(QByteArray::number(ui->spinBoxDuration->value(), 16))); // длительность периода
+    data.append(QByteArray::fromHex(QByteArray::number(ui->spinBoxFaultInput->value(), 16))); // погрешность периода
 
     return data;
 }

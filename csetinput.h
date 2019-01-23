@@ -16,7 +16,7 @@
         public:
             explicit CSetInput(QWidget* parent = Q_NULLPTR);
             ~CSetInput();
-            QString intputMode(int type);
+            QByteArray intputSettings(int type);
 
         public slots:
             void open(int type);

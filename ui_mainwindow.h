@@ -115,7 +115,10 @@ public:
     QRadioButton *radioButtonInputGroup;
     QSpacerItem *verticalSpacer_4;
     QPushButton *pushButtonInputSet;
-    QSpacerItem *verticalSpacer;
+    QHBoxLayout *horizontalLayout_16;
+    QSpacerItem *horizontalSpacer_7;
+    QLabel *label_9;
+    QLineEdit *lineEditMessageQueue;
     QFrame *line;
     QTabWidget *twPeriphery;
     QWidget *tabIO;
@@ -405,7 +408,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(1284, 821);
+        MainWindow->resize(1284, 858);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_34 = new QVBoxLayout(centralWidget);
@@ -864,9 +867,29 @@ public:
 
         verticalLayout_33->addLayout(horizontalLayout_14);
 
-        verticalSpacer = new QSpacerItem(20, 18, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        horizontalLayout_16 = new QHBoxLayout();
+        horizontalLayout_16->setSpacing(6);
+        horizontalLayout_16->setObjectName(QString::fromUtf8("horizontalLayout_16"));
+        horizontalSpacer_7 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        verticalLayout_33->addItem(verticalSpacer);
+        horizontalLayout_16->addItem(horizontalSpacer_7);
+
+        label_9 = new QLabel(groupDevices);
+        label_9->setObjectName(QString::fromUtf8("label_9"));
+
+        horizontalLayout_16->addWidget(label_9);
+
+        lineEditMessageQueue = new QLineEdit(groupDevices);
+        lineEditMessageQueue->setObjectName(QString::fromUtf8("lineEditMessageQueue"));
+        sizePolicy.setHeightForWidth(lineEditMessageQueue->sizePolicy().hasHeightForWidth());
+        lineEditMessageQueue->setSizePolicy(sizePolicy);
+        lineEditMessageQueue->setAlignment(Qt::AlignCenter);
+        lineEditMessageQueue->setReadOnly(true);
+
+        horizontalLayout_16->addWidget(lineEditMessageQueue);
+
+
+        verticalLayout_33->addLayout(horizontalLayout_16);
 
         line = new QFrame(groupDevices);
         line->setObjectName(QString::fromUtf8("line"));
@@ -2419,6 +2442,8 @@ public:
 
         line->raise();
         twPeriphery->raise();
+        lineEditMessageQueue->raise();
+        label_9->raise();
 
         verticalLayout_34->addWidget(groupDevices);
 
@@ -2520,6 +2545,7 @@ public:
         radioButtonInputSingle->setText(QApplication::translate("MainWindow", "\320\236\320\264\320\270\320\275\320\276\321\207\320\275\321\213\320\271", nullptr));
         radioButtonInputGroup->setText(QApplication::translate("MainWindow", "\320\223\321\200\321\203\320\277\320\277\320\260", nullptr));
         pushButtonInputSet->setText(QApplication::translate("MainWindow", "\320\235\320\260\321\201\321\202\321\200\320\276\320\270\321\202\321\214", nullptr));
+        label_9->setText(QApplication::translate("MainWindow", "\320\236\321\207\320\265\321\200\320\265\320\264\321\214 \321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\271", nullptr));
         gboxInputs->setTitle(QApplication::translate("MainWindow", "\320\222\321\205\320\276\320\264\321\213", nullptr));
         label->setText(QApplication::translate("MainWindow", "\320\232\320\260\320\275\320\260\320\273 1", nullptr));
         IN1->setText(QString());

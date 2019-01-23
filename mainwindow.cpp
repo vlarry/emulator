@@ -41,6 +41,8 @@ MainWindow::MainWindow(QWidget* parent):
 
     m_conf_widget->hide();
     m_set_intput_widget->hide();
+
+    ui->lineEditMessageQueue->setText("0");
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -788,14 +790,8 @@ void MainWindow::discretInputProcess()
         type = 0;
     }
 
-    QString data;
-    QString str;
-
-    str.setNum(0x3F);
-    data = QByteArray::fromHex(str.toLocal8Bit().data());
-    data += m_set_intput_widget->intputMode(type);
-
-    sendData(data);
+    QByteArray data = m_set_intput_widget->intputSettings(type);
+    write("0x3F", data);
 }
 //----------------------------------
 void MainWindow::refreshSerialPort()
@@ -1009,14 +1005,11 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
 
         m_cmd_last  = cmd_str;
 
-        quint8 cmd = (quint8)(QString(m_cmd_last).remove(QRegExp(tr("0x"))).toInt(Q_NULLPTR, 16));
+        quint8 cmd = static_cast<quint8>(QString(m_cmd_last).remove(QRegExp(tr("0x"))).toInt(Q_NULLPTR, 16));
 
-        cmd |= ((quint8)ui->sbDeviceAddress->value()) << 6;
+        cmd |= (static_cast<quint8>(ui->sbDeviceAddress->value())) << 6;
 
-        QString cmd_temp;
-
-        cmd_temp.setNum(cmd, 16);
-        m_query.append(QByteArray::fromHex(cmd_temp.toLocal8Bit().data()));
+        m_query.append(QByteArray::fromHex(QByteArray::number(cmd, 16)));
 
         if(data.isEmpty())
         {
@@ -1077,15 +1070,15 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
             m_query.append(data);
         }
 
-        quint8 checksum = getChecksum(m_query, m_query.size()); // создать контрольную сумму
-        QString crc_str;
+        quint8 checksum = getChecksum(m_query, static_cast<quint8>(m_query.size())); // создать контрольную сумму
 
-        crc_str.setNum(checksum, 16);
-        m_query.append(QByteArray::fromHex(crc_str.toLocal8Bit().data()));
+        m_query.append(QByteArray::fromHex(QByteArray::number(checksum, 16)));
         int index = (QString(m_cmd_last).remove(QRegExp(tr("0x"))).toInt(Q_NULLPTR, 16));
         ui->pteConsole->appendPlainText(tr("КОМАНДА: ") + ui->cbCmdList->description(index));
         ui->pteConsole->appendPlainText(tr("ОТПРАВКА ДАННЫХ: ") + m_query.toHex().toUpper());
         m_port->setParity(QSerialPort::MarkParity); // enable 9 bit
+
+        ui->lineEditMessageQueue->setText(QString::number(m_queue_cmd.count()));
     }
 
     m_port->write(m_query);
