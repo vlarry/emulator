@@ -1,12 +1,12 @@
 [COM]
-port=COM6
+port=
 baudrate=115200
 
 [TERMINAL]
 visiblity=true
 
 [KEYBOARD]
-visiblity=true
+visiblity=false
 
 [COMMAND]
 visiblity=false

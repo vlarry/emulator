@@ -43,6 +43,10 @@ MainWindow::MainWindow(QWidget* parent):
     m_set_intput_widget->hide();
 
     ui->lineEditMessageQueue->setText("0");
+    ui->actionTerminal->setChecked(true);
+    ui->actionCommand->setChecked(false);
+    ui->actionSerialNumber->setChecked(false);
+    ui->actionKeyboard->setChecked(false);
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -86,13 +90,13 @@ void MainWindow::initConnect()
     connect(m_timerTimeoutQuery, SIGNAL(timeout()), this, SLOT(timeoutTim()));
 
     connect(ui->dwTerminal, SIGNAL(visibilityChanged(bool)), this, SLOT(visiblityTerminal(bool)));
-    connect(ui->cboxTerminal, SIGNAL(toggled(bool)), this, SLOT(visiblityTerminal(bool)));
-    connect(ui->cbKeyboard, SIGNAL(toggled(bool)), this, SLOT(visiblityKeyboard(bool)));
-    connect(ui->cbCommand, SIGNAL(toggled(bool)), this, SLOT(visiblityCommand(bool)));
+    connect(ui->actionTerminal, &QAction::triggered, this, &MainWindow::visiblityTerminal);
+    connect(ui->actionCommand, &QAction::triggered, this, &MainWindow::visiblityCommand);
+    connect(ui->actionSerialNumber, &QAction::triggered, this, &MainWindow::visiblitySerialNumber);
+    connect(ui->actionKeyboard, &QAction::triggered, this, &MainWindow::visiblityKeyboard);
     connect(m_command, &QCommand::doubleClickCmd, this, &MainWindow::sendCmd);
     connect(m_command, &QCommand::clickCmd, this, &MainWindow::initFilter);
 
-    connect(ui->checkBoxSerialConfig, &QCheckBox::clicked, this, &MainWindow::configWindowVisiblity);
     connect(ui->pushButtonInputSet, &QPushButton::clicked, this, &MainWindow::setupDiscretInput);
     connect(m_set_intput_widget, &CSetInput::apply, this, &MainWindow::discretInputProcess);
 }
@@ -567,16 +571,16 @@ void MainWindow::loadSettings()
     m_settings->endGroup();
 
     m_settings->beginGroup("TERMINAL");
-        ui->cboxTerminal->setChecked(m_settings->value(tr("visiblity"), true).toBool());
-        visiblityTerminal(ui->cboxTerminal->isChecked());
+        ui->actionTerminal->setChecked(m_settings->value("visiblity", true).toBool());
+        visiblityTerminal(ui->actionTerminal->isChecked());
     m_settings->endGroup();
 
     m_settings->beginGroup("KEYBOARD");
-        ui->cbKeyboard->setChecked(m_settings->value(tr("visiblity"), true).toBool());
+        ui->actionKeyboard->setChecked(m_settings->value("visiblity", true).toBool());
     m_settings->endGroup();
 
     m_settings->beginGroup("COMMAND");
-        ui->cbCommand->setChecked(m_settings->value(tr("visiblity"), true).toBool());
+        ui->actionCommand->setChecked(m_settings->value("visiblity", true).toBool());
     m_settings->endGroup();
 
     m_settings->beginGroup("GUI");
@@ -607,15 +611,15 @@ void MainWindow::saveSettings()
     m_settings->endGroup();
 
     m_settings->beginGroup("TERMINAL");
-        m_settings->setValue(tr("visiblity"), ui->cboxTerminal->isChecked());
+        m_settings->setValue("visiblity", ui->actionTerminal->isChecked());
     m_settings->endGroup();
 
     m_settings->beginGroup("KEYBOARD");
-        m_settings->setValue(tr("visiblity"), ui->cbKeyboard->isChecked());
+        m_settings->setValue("visiblity", ui->actionKeyboard->isChecked());
     m_settings->endGroup();
 
     m_settings->beginGroup("COMMAND");
-        m_settings->setValue(tr("visiblity"), ui->cbCommand->isChecked());
+        m_settings->setValue("visiblity", ui->actionCommand->isChecked());
     m_settings->endGroup();
 
     m_settings->beginGroup("GUI");
@@ -681,7 +685,7 @@ void MainWindow::showEvent(QShowEvent* evt)
     initFilter(ui->cbCmdList->currentText());
     addrChanged(ui->sbDeviceAddress->value());
     fileAinOpen();
-    ui->cbKeyboard->hide();
+    ui->actionKeyboard->setEnabled(false);
 
     QMainWindow::showEvent(evt);
 }
@@ -727,8 +731,8 @@ void MainWindow::configurationWindow()
 {
     if(m_conf_widget->isHidden())
     {
-        if(!ui->checkBoxSerialConfig->isChecked())
-            ui->checkBoxSerialConfig->setChecked(true);
+        if(!ui->actionSerialNumber->isChecked())
+            ui->actionSerialNumber->setChecked(true);
 
         sendData("0x1E");
         if(m_conf_widget->exec() == QDialog::Accepted)
@@ -758,11 +762,11 @@ void MainWindow::configurationWindow()
             write(cmd, ba);
         }
 
-        ui->checkBoxSerialConfig->setChecked(false);
+        ui->actionSerialNumber->setChecked(false);
     }
 }
 //------------------------------------------------
-void MainWindow::configWindowVisiblity(bool state)
+void MainWindow::visiblitySerialNumber(bool state)
 {
     if(!state)
     {
@@ -885,7 +889,7 @@ void MainWindow::ctrlSerialPort(bool state)
         m_port->setStopBits(QSerialPort::OneStop);
         m_port->setParity(QSerialPort::NoParity);
 
-        if(ui->cbCommand->isChecked())
+        if(ui->actionCommand->isChecked())
             m_command->show();
     }
     else
@@ -1142,7 +1146,7 @@ void MainWindow::addrChanged(int addr)
 //    Q_UNUSED(addr);
     quint8 out_count = 0;
 
-    ui->cbKeyboard->hide(); // Вызов клавиатуры МИК-01 становится видимым при выборе адреса 0х02
+    ui->actionKeyboard->setEnabled(false); // Вызов клавиатуры МИК-01 становится видимым при выборе адреса 0х02
     ui->gboxInputs->setEnabled(true);
 
     if(m_keyboard != Q_NULLPTR)
@@ -1172,7 +1176,7 @@ void MainWindow::addrChanged(int addr)
     else if(addr == MIK_01)
     {
         ui->groupDevices->setTitle(tr("Устройство МИК-01"));
-        ui->cbKeyboard->show();
+        ui->actionKeyboard->setEnabled(true);
         ui->gboxInputs->setDisabled(true);
 
         if(m_keyboard == Q_NULLPTR)
@@ -1181,7 +1185,7 @@ void MainWindow::addrChanged(int addr)
 
             connect(m_keyboard, SIGNAL(closeKeyboard(bool)), this, SLOT(visiblityKeyboard(bool)));
 
-            if(ui->cbKeyboard->isChecked())
+            if(ui->actionKeyboard->isChecked())
             {
                 m_keyboard->show();
             }
@@ -1192,7 +1196,7 @@ void MainWindow::addrChanged(int addr)
         }
         else
         {
-            if(ui->cbKeyboard->isChecked())
+            if(ui->actionKeyboard->isChecked())
             {
                 m_keyboard->show();
             }
@@ -1329,13 +1333,13 @@ void MainWindow::timeoutTim()
 //----------------------------------------------
 void MainWindow::visiblityTerminal(bool visible)
 {
-    ui->cboxTerminal->setChecked(visible);
+    ui->actionTerminal->setChecked(visible);
     ui->dwTerminal->setVisible(visible);
 }
 //----------------------------------------------
 void MainWindow::visiblityKeyboard(bool visible)
 {
-    ui->cbKeyboard->setChecked(visible);
+    ui->actionKeyboard->setChecked(visible);
 
     if(visible)
     {
@@ -1355,7 +1359,7 @@ void MainWindow::visiblityKeyboard(bool visible)
 //---------------------------------------------
 void MainWindow::visiblityCommand(bool visible)
 {
-    ui->cbCommand->setChecked(visible);
+    ui->actionCommand->setChecked(visible);
 
     if(m_port->isOpen())
     {

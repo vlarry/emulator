@@ -116,7 +116,7 @@
             void visiblityKeyboard(bool visible);
             void visiblityCommand(bool visible);
             void configurationWindow();
-            void configWindowVisiblity(bool state = false);
+            void visiblitySerialNumber(bool state = false);
             void setupDiscretInput();
             void discretInputProcess();
     };

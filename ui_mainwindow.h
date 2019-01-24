@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtGui/QIcon>
+#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
@@ -22,6 +23,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
@@ -42,25 +44,23 @@ QT_BEGIN_NAMESPACE
 class Ui_MainWindow
 {
 public:
+    QAction *actionTerminal;
+    QAction *actionCommand;
+    QAction *actionSerialNumber;
+    QAction *actionKeyboard;
     QWidget *centralWidget;
-    QVBoxLayout *verticalLayout_34;
+    QVBoxLayout *verticalLayout_5;
     QHBoxLayout *horizontalLayout_18;
-    QHBoxLayout *horizontalLayout_11;
     QGroupBox *grboxComPort;
-    QGridLayout *gridLayout;
-    QPushButton *pbCtrlPort;
-    QLabel *lblNameBaudrate;
+    QHBoxLayout *horizontalLayout_11;
+    QGridLayout *gridLayout_6;
     QLabel *lblNamePort;
+    QLabel *lblNameBaudrate;
     QToolButton *tbPortRefresh;
     QComboBox *cbPortNames;
+    QPushButton *pbCtrlPort;
     QComboBox *cbBaudrate;
-    QSpacerItem *horizontalSpacer_16;
-    QVBoxLayout *verticalLayout_5;
-    QCheckBox *cboxTerminal;
-    QCheckBox *cbKeyboard;
-    QCheckBox *cbCommand;
-    QCheckBox *checkBoxSerialConfig;
-    QSpacerItem *verticalSpacer_3;
+    QSpacerItem *horizontalSpacer_13;
     QGroupBox *groupDevices;
     QVBoxLayout *verticalLayout_33;
     QHBoxLayout *horizontalLayout_14;
@@ -400,6 +400,7 @@ public:
     QLineEdit *leDeviceFirmwareDate;
     QSpacerItem *verticalSpacer;
     QMenuBar *menuBar;
+    QMenu *menu;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
     QDockWidget *dwTerminal;
@@ -411,19 +412,28 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(1153, 864);
+        MainWindow->resize(1302, 804);
+        actionTerminal = new QAction(MainWindow);
+        actionTerminal->setObjectName(QString::fromUtf8("actionTerminal"));
+        actionTerminal->setCheckable(true);
+        actionCommand = new QAction(MainWindow);
+        actionCommand->setObjectName(QString::fromUtf8("actionCommand"));
+        actionCommand->setCheckable(true);
+        actionSerialNumber = new QAction(MainWindow);
+        actionSerialNumber->setObjectName(QString::fromUtf8("actionSerialNumber"));
+        actionSerialNumber->setCheckable(true);
+        actionKeyboard = new QAction(MainWindow);
+        actionKeyboard->setObjectName(QString::fromUtf8("actionKeyboard"));
+        actionKeyboard->setCheckable(true);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
-        verticalLayout_34 = new QVBoxLayout(centralWidget);
-        verticalLayout_34->setSpacing(6);
-        verticalLayout_34->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_34->setObjectName(QString::fromUtf8("verticalLayout_34"));
+        verticalLayout_5 = new QVBoxLayout(centralWidget);
+        verticalLayout_5->setSpacing(6);
+        verticalLayout_5->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
         horizontalLayout_18 = new QHBoxLayout();
         horizontalLayout_18->setSpacing(6);
         horizontalLayout_18->setObjectName(QString::fromUtf8("horizontalLayout_18"));
-        horizontalLayout_11 = new QHBoxLayout();
-        horizontalLayout_11->setSpacing(6);
-        horizontalLayout_11->setObjectName(QString::fromUtf8("horizontalLayout_11"));
         grboxComPort = new QGroupBox(centralWidget);
         grboxComPort->setObjectName(QString::fromUtf8("grboxComPort"));
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -431,27 +441,16 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(grboxComPort->sizePolicy().hasHeightForWidth());
         grboxComPort->setSizePolicy(sizePolicy);
-        grboxComPort->setAlignment(Qt::AlignCenter);
+        grboxComPort->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         grboxComPort->setFlat(false);
-        gridLayout = new QGridLayout(grboxComPort);
-        gridLayout->setSpacing(6);
-        gridLayout->setContentsMargins(11, 11, 11, 11);
-        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        gridLayout->setContentsMargins(-1, 5, -1, 5);
-        pbCtrlPort = new QPushButton(grboxComPort);
-        pbCtrlPort->setObjectName(QString::fromUtf8("pbCtrlPort"));
-        pbCtrlPort->setCheckable(true);
-        pbCtrlPort->setChecked(false);
-        pbCtrlPort->setAutoDefault(false);
-        pbCtrlPort->setFlat(false);
-
-        gridLayout->addWidget(pbCtrlPort, 0, 6, 1, 1);
-
-        lblNameBaudrate = new QLabel(grboxComPort);
-        lblNameBaudrate->setObjectName(QString::fromUtf8("lblNameBaudrate"));
-
-        gridLayout->addWidget(lblNameBaudrate, 2, 0, 1, 2);
-
+        horizontalLayout_11 = new QHBoxLayout(grboxComPort);
+        horizontalLayout_11->setSpacing(5);
+        horizontalLayout_11->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_11->setObjectName(QString::fromUtf8("horizontalLayout_11"));
+        horizontalLayout_11->setContentsMargins(5, 5, 5, 5);
+        gridLayout_6 = new QGridLayout();
+        gridLayout_6->setSpacing(6);
+        gridLayout_6->setObjectName(QString::fromUtf8("gridLayout_6"));
         lblNamePort = new QLabel(grboxComPort);
         lblNamePort->setObjectName(QString::fromUtf8("lblNamePort"));
         QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Preferred);
@@ -465,7 +464,12 @@ public:
         lblNamePort->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         lblNamePort->setWordWrap(false);
 
-        gridLayout->addWidget(lblNamePort, 0, 0, 1, 1);
+        gridLayout_6->addWidget(lblNamePort, 0, 0, 1, 1);
+
+        lblNameBaudrate = new QLabel(grboxComPort);
+        lblNameBaudrate->setObjectName(QString::fromUtf8("lblNameBaudrate"));
+
+        gridLayout_6->addWidget(lblNameBaudrate, 1, 0, 1, 1);
 
         tbPortRefresh = new QToolButton(grboxComPort);
         tbPortRefresh->setObjectName(QString::fromUtf8("tbPortRefresh"));
@@ -473,61 +477,45 @@ public:
         icon.addFile(QString::fromUtf8(":/images/resource/images/refresh.png"), QSize(), QIcon::Normal, QIcon::Off);
         tbPortRefresh->setIcon(icon);
 
-        gridLayout->addWidget(tbPortRefresh, 0, 4, 1, 2);
+        gridLayout_6->addWidget(tbPortRefresh, 0, 3, 1, 1);
 
         cbPortNames = new QComboBox(grboxComPort);
         cbPortNames->setObjectName(QString::fromUtf8("cbPortNames"));
+        sizePolicy.setHeightForWidth(cbPortNames->sizePolicy().hasHeightForWidth());
+        cbPortNames->setSizePolicy(sizePolicy);
 
-        gridLayout->addWidget(cbPortNames, 0, 3, 1, 1);
+        gridLayout_6->addWidget(cbPortNames, 0, 2, 1, 1);
+
+        pbCtrlPort = new QPushButton(grboxComPort);
+        pbCtrlPort->setObjectName(QString::fromUtf8("pbCtrlPort"));
+        sizePolicy.setHeightForWidth(pbCtrlPort->sizePolicy().hasHeightForWidth());
+        pbCtrlPort->setSizePolicy(sizePolicy);
+        pbCtrlPort->setCheckable(true);
+        pbCtrlPort->setChecked(false);
+        pbCtrlPort->setAutoDefault(false);
+        pbCtrlPort->setFlat(false);
+
+        gridLayout_6->addWidget(pbCtrlPort, 0, 4, 1, 1);
 
         cbBaudrate = new QComboBox(grboxComPort);
         cbBaudrate->setObjectName(QString::fromUtf8("cbBaudrate"));
+        sizePolicy.setHeightForWidth(cbBaudrate->sizePolicy().hasHeightForWidth());
+        cbBaudrate->setSizePolicy(sizePolicy);
 
-        gridLayout->addWidget(cbBaudrate, 2, 3, 1, 1);
-
-
-        horizontalLayout_11->addWidget(grboxComPort);
-
-        horizontalSpacer_16 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_11->addItem(horizontalSpacer_16);
+        gridLayout_6->addWidget(cbBaudrate, 1, 2, 1, 1);
 
 
-        horizontalLayout_18->addLayout(horizontalLayout_11);
-
-        verticalLayout_5 = new QVBoxLayout();
-        verticalLayout_5->setSpacing(6);
-        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
-        cboxTerminal = new QCheckBox(centralWidget);
-        cboxTerminal->setObjectName(QString::fromUtf8("cboxTerminal"));
-
-        verticalLayout_5->addWidget(cboxTerminal);
-
-        cbKeyboard = new QCheckBox(centralWidget);
-        cbKeyboard->setObjectName(QString::fromUtf8("cbKeyboard"));
-        cbKeyboard->setChecked(true);
-
-        verticalLayout_5->addWidget(cbKeyboard);
-
-        cbCommand = new QCheckBox(centralWidget);
-        cbCommand->setObjectName(QString::fromUtf8("cbCommand"));
-
-        verticalLayout_5->addWidget(cbCommand);
-
-        checkBoxSerialConfig = new QCheckBox(centralWidget);
-        checkBoxSerialConfig->setObjectName(QString::fromUtf8("checkBoxSerialConfig"));
-
-        verticalLayout_5->addWidget(checkBoxSerialConfig);
-
-        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout_5->addItem(verticalSpacer_3);
+        horizontalLayout_11->addLayout(gridLayout_6);
 
 
-        horizontalLayout_18->addLayout(verticalLayout_5);
+        horizontalLayout_18->addWidget(grboxComPort);
+
+        horizontalSpacer_13 = new QSpacerItem(48, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_18->addItem(horizontalSpacer_13);
 
 
-        verticalLayout_34->addLayout(horizontalLayout_18);
+        verticalLayout_5->addLayout(horizontalLayout_18);
 
         groupDevices = new QGroupBox(centralWidget);
         groupDevices->setObjectName(QString::fromUtf8("groupDevices"));
@@ -2498,12 +2486,14 @@ public:
         line->raise();
         twPeriphery->raise();
 
-        verticalLayout_34->addWidget(groupDevices);
+        verticalLayout_5->addWidget(groupDevices);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1153, 26));
+        menuBar->setGeometry(QRect(0, 0, 1302, 26));
+        menu = new QMenu(menuBar);
+        menu->setObjectName(QString::fromUtf8("menu"));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -2531,6 +2521,12 @@ public:
         dwTerminal->setWidget(dockWidgetContents_2);
         MainWindow->addDockWidget(static_cast<Qt::DockWidgetArea>(2), dwTerminal);
 
+        menuBar->addAction(menu->menuAction());
+        menu->addAction(actionTerminal);
+        menu->addAction(actionCommand);
+        menu->addAction(actionSerialNumber);
+        menu->addAction(actionKeyboard);
+
         retranslateUi(MainWindow);
 
         twPeriphery->setCurrentIndex(1);
@@ -2545,13 +2541,25 @@ public:
 #ifndef QT_NO_TOOLTIP
         MainWindow->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
+        actionTerminal->setText(QApplication::translate("MainWindow", "\320\242\320\265\321\200\320\274\320\270\320\275\320\260\320\273", nullptr));
+#ifndef QT_NO_SHORTCUT
+        actionTerminal->setShortcut(QApplication::translate("MainWindow", "Alt+Shift+T", nullptr));
+#endif // QT_NO_SHORTCUT
+        actionCommand->setText(QApplication::translate("MainWindow", "\320\232\320\276\320\274\320\260\320\275\320\264\321\213", nullptr));
+#ifndef QT_NO_SHORTCUT
+        actionCommand->setShortcut(QApplication::translate("MainWindow", "Alt+Shift+C", nullptr));
+#endif // QT_NO_SHORTCUT
+        actionSerialNumber->setText(QApplication::translate("MainWindow", "\320\241\320\265\321\200\320\270\320\271\320\275\321\213\320\271 \320\275\320\276\320\274\320\265\321\200", nullptr));
+#ifndef QT_NO_SHORTCUT
+        actionSerialNumber->setShortcut(QApplication::translate("MainWindow", "Alt+Shift+N", nullptr));
+#endif // QT_NO_SHORTCUT
+        actionKeyboard->setText(QApplication::translate("MainWindow", "\320\232\320\273\320\260\320\262\320\270\320\260\321\202\321\203\321\200\320\260", nullptr));
+#ifndef QT_NO_SHORTCUT
+        actionKeyboard->setShortcut(QApplication::translate("MainWindow", "Alt+Shift+K", nullptr));
+#endif // QT_NO_SHORTCUT
         grboxComPort->setTitle(QApplication::translate("MainWindow", "\320\235\320\260\321\201\321\202\321\200\320\276\320\271\320\272\320\270 \320\277\320\276\321\201\320\273\320\265\320\264\320\276\320\262\320\260\321\202\320\265\320\273\321\214\320\275\320\276\320\263\320\276 \320\277\320\276\321\200\321\202\320\260", nullptr));
-#ifndef QT_NO_TOOLTIP
-        pbCtrlPort->setToolTip(QApplication::translate("MainWindow", "CTRL port", nullptr));
-#endif // QT_NO_TOOLTIP
-        pbCtrlPort->setText(QApplication::translate("MainWindow", "\320\236\321\202\320\272\321\200\321\213\321\202\321\214", nullptr));
-        lblNameBaudrate->setText(QApplication::translate("MainWindow", "\320\241\320\272\320\276\321\200\320\276\321\201\321\202\321\214", nullptr));
         lblNamePort->setText(QApplication::translate("MainWindow", "\320\237\320\276\321\200\321\202", nullptr));
+        lblNameBaudrate->setText(QApplication::translate("MainWindow", "\320\241\320\272\320\276\321\200\320\276\321\201\321\202\321\214", nullptr));
 #ifndef QT_NO_TOOLTIP
         tbPortRefresh->setToolTip(QApplication::translate("MainWindow", "Refresh", nullptr));
 #endif // QT_NO_TOOLTIP
@@ -2560,12 +2568,12 @@ public:
         cbPortNames->setToolTip(QApplication::translate("MainWindow", "List ports", nullptr));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
+        pbCtrlPort->setToolTip(QApplication::translate("MainWindow", "CTRL port", nullptr));
+#endif // QT_NO_TOOLTIP
+        pbCtrlPort->setText(QApplication::translate("MainWindow", "\320\236\321\202\320\272\321\200\321\213\321\202\321\214", nullptr));
+#ifndef QT_NO_TOOLTIP
         cbBaudrate->setToolTip(QApplication::translate("MainWindow", "Baudrate", nullptr));
 #endif // QT_NO_TOOLTIP
-        cboxTerminal->setText(QApplication::translate("MainWindow", "\320\242\320\265\321\200\320\274\320\270\320\275\320\260\320\273", nullptr));
-        cbKeyboard->setText(QApplication::translate("MainWindow", "\320\232\320\273\320\260\320\262\320\270\320\260\321\202\321\203\321\200\320\260", nullptr));
-        cbCommand->setText(QApplication::translate("MainWindow", "\320\232\320\276\320\274\320\260\320\275\320\264\321\213", nullptr));
-        checkBoxSerialConfig->setText(QApplication::translate("MainWindow", "\320\241\320\265\321\200\320\270\320\271\320\275\321\213\320\271 \320\275\320\276\320\274\320\265\321\200", nullptr));
         groupDevices->setTitle(QApplication::translate("MainWindow", "\320\243\321\201\321\202\321\200\320\276\320\271\321\201\321\202\320\262\320\260", nullptr));
 #ifndef QT_NO_TOOLTIP
         cbCmdList->setToolTip(QApplication::translate("MainWindow", "Command list", nullptr));
@@ -2665,6 +2673,7 @@ public:
         label_29->setText(QApplication::translate("MainWindow", "ID \320\243\321\201\321\202\321\200\320\276\320\271\321\201\321\202\320\262\320\260", nullptr));
         label_33->setText(QApplication::translate("MainWindow", "\320\224\320\260\321\202\320\260 \320\277\321\200\320\276\321\210\320\270\320\262\320\272\320\270", nullptr));
         twPeriphery->setTabText(twPeriphery->indexOf(tabInfo), QApplication::translate("MainWindow", "\320\230\320\275\321\204\320\276\321\200\320\274\320\260\321\206\320\270\321\217", nullptr));
+        menu->setTitle(QApplication::translate("MainWindow", "\320\222\320\270\320\264", nullptr));
         dwTerminal->setWindowTitle(QApplication::translate("MainWindow", "\320\242\320\265\321\200\320\274\320\270\320\275\320\260\320\273", nullptr));
 #ifndef QT_NO_TOOLTIP
         pteConsole->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>\320\242\320\265\321\200\320\274\320\270\320\275\320\260\320\273</p><p>\320\236\321\207\320\270\321\201\321\202\320\272\320\260 ALT+C</p></body></html>", nullptr));
