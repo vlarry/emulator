@@ -31,12 +31,14 @@
         signals:
             void closeCommand(bool);
             void clickCmd(const QString&);
+            void clickCmdIndex(int);
             void doubleClickCmd(const QString&);
+
+        public slots:
+            void setCurrentIndex(int index);
 
         private slots:
             void cmdClicked(QListWidgetItem* item);
-
-        private slots:
             void cmdDoubleClicked(QListWidgetItem* item);
 
         private:

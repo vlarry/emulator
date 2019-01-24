@@ -63,8 +63,8 @@ void MainWindow::initConnect()
     connect(m_timerRefreshPort, SIGNAL(timeout()), this, SLOT(refreshSerialPort()));
     connect(ui->pbCtrlPort, SIGNAL(clicked(bool)), this, SLOT(ctrlSerialPort(bool)));
     connect(m_port, SIGNAL(readyRead()), this, SLOT(readData()));
-    connect(ui->pbCmdSend, SIGNAL(clicked()), this, SLOT(sendCmd()));
     connect(m_port, SIGNAL(bytesWritten(qint64)), this, SLOT(BytesWriten(qint64)));
+    connect(ui->pbCmdSend, SIGNAL(clicked()), this, SLOT(sendCmd()));
     connect(ui->cbCmdList, SIGNAL(changeDescription(QString)), this, SLOT(cmdDescription(QString)));
     connect(ui->sbDeviceAddress, SIGNAL(valueChanged(int)), SLOT(addrChanged(int)));
 
@@ -82,6 +82,7 @@ void MainWindow::initConnect()
     connect(m_output_dev.at(11), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
 
     connect(ui->cbCmdList, SIGNAL(currentTextChanged(const QString&)), this, SLOT(initFilter(const QString&)));
+    connect(ui->cbCmdList, SIGNAL(currentIndexChanged(int)), m_command, SLOT(setCurrentIndex(int)));
 
     connect(ui->cboxRepeatInputs, SIGNAL(clicked(bool)), this, SLOT(autoRepeatInputs(bool)));
     connect(ui->cboxRepeatAIN, SIGNAL(clicked(bool)), this, SLOT(autoRepeatAIN(bool)));
@@ -96,9 +97,12 @@ void MainWindow::initConnect()
     connect(ui->actionKeyboard, &QAction::triggered, this, &MainWindow::visiblityKeyboard);
     connect(m_command, &QCommand::doubleClickCmd, this, &MainWindow::sendCmd);
     connect(m_command, &QCommand::clickCmd, this, &MainWindow::initFilter);
+    connect(m_command, &QCommand::closeCommand, this, &MainWindow::visiblityCommand);
+    connect(m_keyboard, &QKeyboard::closeKeyboard, this, &MainWindow::visiblityKeyboard);
 
     connect(ui->pushButtonInputSet, &QPushButton::clicked, this, &MainWindow::setupDiscretInput);
     connect(m_set_intput_widget, &CSetInput::apply, this, &MainWindow::discretInputProcess);
+    connect(m_command, &QCommand::clickCmdIndex, ui->cbCmdList, &QComboBox::setCurrentIndex);
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -282,17 +286,17 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 
                 for(j = 0; j < 4; ++j)
                 {
-                    ain.byte[j] = data.at(i + j);
+                    ain.byte[j] = static_cast<quint8>(data.at(i + j));
                 }
 
                 QString str;
 
                 // запись аналоговых величин в файл
-                in << QString(QString::number(ain.number) + '\t');
+                in << QString(QString::number(static_cast<double>(ain.number)) + '\t');
 
                 if(i == 8)
                 {
-                    str = QString::number(ain.number, 'f', 2) + " " + QString(QChar(176)) + "C";
+                    str = QString::number(static_cast<double>(ain.number), 'f', 2) + " " + QString(QChar(176)) + "C";
 
                     m_ain_dev.at(2)->setToolTip(tr("Внутрення температура процессора"));
                 }
@@ -301,12 +305,12 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                 {
                     if(i == 0) // первая ячейка AIN
                     {
-                        str = QString::number(ain.number, 'f', 2) + tr(" В");
+                        str = QString::number(static_cast<double>(ain.number), 'f', 2) + tr(" В");
                         m_ain_dev.at(0)->setToolTip(tr("Наличие питания 5VP"));
                     }
                     else if(i == 4)
                     {
-                        str = QString::number(ain.number*1000, 'f', 3) + tr(" mA");
+                        str = QString::number(static_cast<double>(ain.number)*1000, 'f', 3) + tr(" mA");
                         m_ain_dev.at(1)->setToolTip(tr("Ток потребления"));
                     }
                     else if(i == 12)
@@ -322,7 +326,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 
                         m_ain_dev[3]->setPalette(p);
 
-                        str = QString::number(ain.number, 'f', 2) + " " + QString(QChar(176)) + "C";
+                        str = QString::number(static_cast<double>(ain.number), 'f', 2) + " " + QString(QChar(176)) + "C";
                         m_ain_dev.at(2)->setToolTip(tr("Внутрення температура, DS18B20"));
                     }
                 }
@@ -330,7 +334,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                 {
                     if(i == 0 || i == 4)
                     {
-                        str = QString::number(ain.number, 'f', 2) + " " + QString(QChar(176)) + "C"; // добавление знака градусов
+                        str = QString::number(static_cast<double>(ain.number), 'f', 2) + " " + QString(QChar(176)) + "C"; // добавление знака градусов
                     }
 
                     m_ain_dev.at(0)->setToolTip(tr("Температура по первому каналу"));
@@ -360,7 +364,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                         quint8 ch_num   = j + (i*8);
 
                         // кнопки 1, 2 и 3 попутаны с кнопками 7, 8 и 9 аппаратно, поэтому меняем номер канала
-                        if(ch_num >= 0 && ch_num < 3)
+                        if(static_cast<qint8>(ch_num) >= 0 && ch_num < 3)
                         {
                             ch_num += 6;
                         }
@@ -521,8 +525,8 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                     break;
                 }
 
-                temp.byte[0] = data.at(1);
-                temp.byte[1] = data.at(2);
+                temp.byte[0] = static_cast<quint8>(data[1]);
+                temp.byte[1] = static_cast<quint8>(data[2]);
 
                 ui->leTimeDSDIN->setText(QString::number(temp.data));
             }
@@ -570,21 +574,23 @@ void MainWindow::loadSettings()
         baudrate    = m_settings->value(tr("baudrate"), 115200).toString();
     m_settings->endGroup();
 
-    m_settings->beginGroup("TERMINAL");
-        ui->actionTerminal->setChecked(m_settings->value("visiblity", true).toBool());
+    m_settings->beginGroup("MODULES");
+        ui->actionTerminal->setChecked(m_settings->value("terminal", true).toBool());
+        ui->actionCommand->setChecked(m_settings->value("command", false).toBool());
+        ui->actionKeyboard->setChecked(m_settings->value("keyboard", false).toBool());
         visiblityTerminal(ui->actionTerminal->isChecked());
+        visiblityCommand(ui->actionCommand->isChecked());
     m_settings->endGroup();
 
-    m_settings->beginGroup("KEYBOARD");
-        ui->actionKeyboard->setChecked(m_settings->value("visiblity", true).toBool());
-    m_settings->endGroup();
-
-    m_settings->beginGroup("COMMAND");
-        ui->actionCommand->setChecked(m_settings->value("visiblity", true).toBool());
+    m_settings->beginGroup("INTERFACE");
+        ui->cboxRepeatInputs->setChecked(m_settings->value("inputs", false).toBool());
+        ui->cboxRepeatAIN->setChecked(m_settings->value("ain", false).toBool());
+        ui->sbRepeatInputs->setValue(m_settings->value("inputs_timer", 200).toInt());
+        ui->sbRepeatAIN->setValue(m_settings->value("ain_timer", 200).toInt());
     m_settings->endGroup();
 
     m_settings->beginGroup("GUI");
-        restoreGeometry(m_settings->value(tr("geometry")).toByteArray());
+        restoreGeometry(m_settings->value("main_window").toByteArray());
     m_settings->endGroup();
 
     if(!baudrate.isEmpty())
@@ -606,24 +612,25 @@ void MainWindow::loadSettings()
 void MainWindow::saveSettings()
 {
     m_settings->beginGroup("COM");
-        m_settings->setValue(tr("port"), ui->cbPortNames->currentText());
-        m_settings->setValue(tr("baudrate"), ui->cbBaudrate->currentText());
+        m_settings->setValue("port", ui->cbPortNames->currentText());
+        m_settings->setValue("baudrate", ui->cbBaudrate->currentText());
     m_settings->endGroup();
 
-    m_settings->beginGroup("TERMINAL");
-        m_settings->setValue("visiblity", ui->actionTerminal->isChecked());
+    m_settings->beginGroup("MODULES");
+        m_settings->setValue("terminal", ui->actionTerminal->isChecked());
+        m_settings->setValue("command", ui->actionCommand->isChecked());
+        m_settings->setValue("keyboard", ui->actionKeyboard->isChecked());
     m_settings->endGroup();
 
-    m_settings->beginGroup("KEYBOARD");
-        m_settings->setValue("visiblity", ui->actionKeyboard->isChecked());
-    m_settings->endGroup();
-
-    m_settings->beginGroup("COMMAND");
-        m_settings->setValue("visiblity", ui->actionCommand->isChecked());
+    m_settings->beginGroup("INTERFACE");
+        m_settings->setValue("inputs", ui->cboxRepeatInputs->isChecked());
+        m_settings->setValue("ain", ui->cboxRepeatAIN->isChecked());
+        m_settings->setValue("inputs_timer", ui->sbRepeatInputs->value());
+        m_settings->setValue("ain_timer", ui->sbRepeatAIN->value());
     m_settings->endGroup();
 
     m_settings->beginGroup("GUI");
-        m_settings->setValue(tr("geometry"), this->saveGeometry());
+        m_settings->setValue("main_window", this->saveGeometry());
     m_settings->endGroup();
 }
 //-------------------------------------------
@@ -668,9 +675,20 @@ void MainWindow::showEvent(QShowEvent* evt)
     if(m_command == Q_NULLPTR)
     {
         m_command = new QCommand(this);
-
-        connect(m_command, SIGNAL(closeCommand(bool)), this, SLOT(visiblityCommand(bool)));
         m_command->hide();
+    }
+
+    if(m_keyboard == Q_NULLPTR)
+    {
+        m_keyboard = new QKeyboard(this);
+        if(ui->actionKeyboard->isChecked())
+        {
+            m_keyboard->show();
+        }
+        else
+        {
+            m_keyboard->hide();
+        }
     }
 
     initSerialPort();
@@ -731,7 +749,7 @@ void MainWindow::configurationWindow()
 {
     if(m_conf_widget->isHidden())
     {
-        if(!ui->actionSerialNumber->isChecked())
+        if(ui->actionSerialNumber->isChecked())
             ui->actionSerialNumber->setChecked(true);
 
         sendData("0x1E");
@@ -768,6 +786,7 @@ void MainWindow::configurationWindow()
 //------------------------------------------------
 void MainWindow::visiblitySerialNumber(bool state)
 {
+    ui->actionSerialNumber->setChecked(state);
     if(!state)
     {
         if(m_conf_widget->isVisible())
@@ -872,7 +891,7 @@ void MainWindow::ctrlSerialPort(bool state)
             return;
         }
 
-        ui->pbCtrlPort->setText(tr("Close"));
+        ui->pbCtrlPort->setText(tr("Закрыть"));
 
         ui->groupDevices->setEnabled(true);
         ui->pbCmdSend->setEnabled(true);
@@ -888,9 +907,6 @@ void MainWindow::ctrlSerialPort(bool state)
         m_port->setDataBits(QSerialPort::Data8);
         m_port->setStopBits(QSerialPort::OneStop);
         m_port->setParity(QSerialPort::NoParity);
-
-        if(ui->actionCommand->isChecked())
-            m_command->show();
     }
     else
     {
@@ -918,6 +934,11 @@ void MainWindow::ctrlSerialPort(bool state)
     }
 
     ui->pbCtrlPort->setChecked(state);
+
+    if(ui->cboxRepeatInputs->isChecked())
+        autoRepeatInputs(state);
+    if(ui->cboxRepeatAIN->isChecked())
+        autoRepeatAIN(state);
 }
 //-------------------------
 void MainWindow::readData()
@@ -927,16 +948,16 @@ void MainWindow::readData()
     m_responce.append(ba);
 
     quint8 cmd_size = ui->cbCmdList->size(m_cmd_last);
-    quint8 responce_size = m_responce.size();
+    quint8 responce_size = static_cast<quint8>(m_responce.size());
 
     if(responce_size == cmd_size)
     {
-        quint8 checksum_calc = getChecksum(m_responce, m_responce.size() - 1);
-        quint8 checksum_read = m_responce.at(m_responce.size() - 1);
+        quint8 checksum_calc = getChecksum(m_responce, static_cast<quint8>(m_responce.size()) - 1);
+        quint8 checksum_read = static_cast<quint8>(m_responce.at(static_cast<quint8>(m_responce.size()) - 1));
 
         if(checksum_calc == checksum_read)
         {
-            cmdParser(m_responce, m_responce.size() - 1);
+            cmdParser(m_responce, static_cast<quint8>(m_responce.size()) - 1);
             ui->pteConsole->appendPlainText(tr("ЧТЕНИЕ: 0x%1\n%2").arg(QString(m_responce.toHex().toUpper())).arg("*****"));
         }
         else
@@ -1015,6 +1036,9 @@ void MainWindow::sendData(const QString& data)
 //--------------------------------------------------------------------
 void MainWindow::write(const QString& cmd_str, const QByteArray& data)
 {
+    if(!m_port->isOpen())
+        return;
+
     if(m_query.isEmpty())
     {
         if(cmd_str.isEmpty())
@@ -1035,12 +1059,12 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
 
             if(cmd >= 0x06 && cmd <= 0x0D)
             {
-                channel_id    = cmd - 0x06;
+                channel_id    = static_cast<qint8>(cmd) - 0x06;
                 channel_state = CIODevice::STATE_OFF;
             }
             else if(cmd >= 0x0E && cmd <= 0x15)
             {
-                channel_id    = cmd - 0x0E;
+                channel_id    = static_cast<qint8>(cmd) - 0x0E;
                 channel_state = CIODevice::STATE_ON;
             }
 
@@ -1062,7 +1086,7 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
                         CIODevice* out   = m_output_dev.at(i*4 + j/2);
                         quint8     state = (out->get_state() == CIODevice::STATE_OFF)?0x00:(out->get_state() == CIODevice::STATE_ON)?0x01:0x02;
 
-                        state = state << j;
+                        state = static_cast<quint8>(state << j);
                         byte |= state;
                     }
 
@@ -1122,23 +1146,8 @@ void MainWindow::BytesWriten(qint64 byte)
 //---------------------------------------------------------
 void MainWindow::cmdDescription(const QString& description)
 {
-    QString desc = description;
-    QPalette p(ui->lblCmdDescription->palette());
-
-    if(desc.toUpper() == tr("РЕЗЕРВ"))
-        p.setColor(QPalette::WindowText, QColor(Qt::red));
-    else
-        p.setColor(QPalette::WindowText, QColor(Qt::blue));
-
-    ui->lblCmdDescription->setPalette(p);
-    ui->lblCmdDescription->setToolTip(desc);
-
-    if(desc.count() > 25)
-    {
-        desc = desc.mid(0, 25) + "...";
-    }
-
-    ui->lblCmdDescription->setText(desc);
+    ui->labelCmdDescription->setToolTip(description);
+    ui->labelCmdDescription->setText(description);
 }
 //------------------------------------
 void MainWindow::addrChanged(int addr)
@@ -1179,31 +1188,13 @@ void MainWindow::addrChanged(int addr)
         ui->actionKeyboard->setEnabled(true);
         ui->gboxInputs->setDisabled(true);
 
-        if(m_keyboard == Q_NULLPTR)
+        if(ui->actionKeyboard->isChecked())
         {
-            m_keyboard = new QKeyboard(this);
-
-            connect(m_keyboard, SIGNAL(closeKeyboard(bool)), this, SLOT(visiblityKeyboard(bool)));
-
-            if(ui->actionKeyboard->isChecked())
-            {
-                m_keyboard->show();
-            }
-            else
-            {
-                m_keyboard->hide();
-            }
+            m_keyboard->show();
         }
         else
         {
-            if(ui->actionKeyboard->isChecked())
-            {
-                m_keyboard->show();
-            }
-            else
-            {
-                m_keyboard->hide();
-            }
+            m_keyboard->hide();
         }
 
         out_count = 12;
@@ -1216,13 +1207,13 @@ void MainWindow::addrChanged(int addr)
     for(CIODevice* io: m_input_dev)
     {
         io->set_state(CIODevice::STATE_OFF);
-        io->set_dev_addr(ui->sbDeviceAddress->value());
+        io->set_dev_addr(static_cast<quint8>(ui->sbDeviceAddress->value()));
     }
 
     for(CIODevice* io: m_output_dev)
     {
         io->set_state(CIODevice::STATE_OFF);
-        io->set_dev_addr(ui->sbDeviceAddress->value());
+        io->set_dev_addr(static_cast<quint8>(ui->sbDeviceAddress->value()));
     }
 
     for(quint8 i = 0; i < 12; ++i)
@@ -1333,7 +1324,6 @@ void MainWindow::timeoutTim()
 //----------------------------------------------
 void MainWindow::visiblityTerminal(bool visible)
 {
-    ui->actionTerminal->setChecked(visible);
     ui->dwTerminal->setVisible(visible);
 }
 //----------------------------------------------
@@ -1343,17 +1333,11 @@ void MainWindow::visiblityKeyboard(bool visible)
 
     if(visible)
     {
-        if(m_keyboard != Q_NULLPTR)
-        {
-            m_keyboard->show();
-        }
+        m_keyboard->show();
     }
     else
     {
-        if(m_keyboard != Q_NULLPTR)
-        {
-            m_keyboard->hide();
-        }
+        m_keyboard->hide();
     }
 }
 //---------------------------------------------
@@ -1361,21 +1345,12 @@ void MainWindow::visiblityCommand(bool visible)
 {
     ui->actionCommand->setChecked(visible);
 
-    if(m_port->isOpen())
+    if(visible)
     {
-        if(visible)
-        {
-            if(m_command != Q_NULLPTR)
-            {
-                m_command->show();
-            }
-        }
-        else
-        {
-            if(m_command != Q_NULLPTR)
-            {
-                m_command->hide();
-            }
-        }
+        m_command->show();
+    }
+    else
+    {
+        m_command->hide();
     }
 }

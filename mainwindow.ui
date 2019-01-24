@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1302</width>
-    <height>804</height>
+    <height>837</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <string/>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_5">
+   <layout class="QVBoxLayout" name="verticalLayout_37">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_18">
       <item>
@@ -184,7 +184,7 @@
        <bool>false</bool>
       </property>
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -192,185 +192,306 @@
       <property name="title">
        <string>Устройства</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_33">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_14">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_7">
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_34">
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout">
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <layout class="QGridLayout" name="gridLayout">
+              <item row="2" column="1">
+               <widget class="QPushButton" name="pbCmdSend">
+                <property name="toolTip">
+                 <string>Command send</string>
+                </property>
+                <property name="text">
+                 <string>Отправить</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QSpinBox" name="sbDeviceAddress">
+                <property name="toolTip">
+                 <string>Device address</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="maximum">
+                 <number>3</number>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QCmd" name="cbCmdList">
+                <property name="toolTip">
+                 <string>Command list</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="lblDeviceAddress">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Адрес</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="lblCommand">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Команда</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QLabel" name="labelCmdDescription">
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="gboxAutorepeat">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="title">
+               <string>Автоповтор</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_6">
+               <property name="topMargin">
+                <number>5</number>
+               </property>
+               <property name="bottomMargin">
+                <number>5</number>
+               </property>
                <item>
-                <layout class="QGridLayout" name="gridLayout_2">
-                 <property name="sizeConstraint">
-                  <enum>QLayout::SetDefaultConstraint</enum>
-                 </property>
-                 <property name="verticalSpacing">
-                  <number>6</number>
-                 </property>
-                 <item row="1" column="1">
-                  <widget class="QCmd" name="cbCmdList">
-                   <property name="toolTip">
-                    <string>Command list</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QLabel" name="lblCommand">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_20">
+                 <item>
+                  <widget class="QCheckBox" name="cboxRepeatInputs">
                    <property name="text">
-                    <string>Команда</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
+                    <string>Входы</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="lblDeviceAddress">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>Адрес</string>
-                   </property>
+                 <item>
+                  <widget class="QSpinBox" name="sbRepeatInputs">
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
                    </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="QSpinBox" name="sbDeviceAddress">
-                   <property name="toolTip">
-                    <string>Device address</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
+                   <property name="minimum">
+                    <number>10</number>
                    </property>
                    <property name="maximum">
-                    <number>3</number>
+                    <number>1000</number>
                    </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QPushButton" name="pbCmdSend">
-                   <property name="toolTip">
-                    <string>Command send</string>
+                   <property name="singleStep">
+                    <number>10</number>
                    </property>
-                   <property name="text">
-                    <string>Отправить</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="2">
-                  <widget class="QLabel" name="lblCmdDescription">
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="scaledContents">
-                    <bool>true</bool>
+                   <property name="value">
+                    <number>20</number>
                    </property>
                   </widget>
                  </item>
                 </layout>
                </item>
                <item>
-                <spacer name="horizontalSpacer">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
+                <layout class="QHBoxLayout" name="horizontalLayout_19">
+                 <item>
+                  <widget class="QCheckBox" name="cboxRepeatAIN">
+                   <property name="text">
+                    <string>AIN</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="sbRepeatAIN">
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                   <property name="minimum">
+                    <number>10</number>
+                   </property>
+                   <property name="maximum">
+                    <number>10000</number>
+                   </property>
+                   <property name="singleStep">
+                    <number>10</number>
+                   </property>
+                   <property name="value">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
-             </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>418</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="gboxInputSettings">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="title">
+             <string>Настройка входов</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
              <item>
-              <widget class="QGroupBox" name="gboxAutorepeat">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
+              <widget class="QGroupBox" name="gboxInputSettingsFilter">
                <property name="title">
-                <string>Автоповтор</string>
+                <string>Общие настройки фильтра</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
-               <layout class="QVBoxLayout" name="verticalLayout_6">
-                <property name="topMargin">
-                 <number>5</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>5</number>
-                </property>
+               <layout class="QVBoxLayout" name="verticalLayout_2">
                 <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_20">
-                  <item>
-                   <widget class="QCheckBox" name="cboxRepeatInputs">
+                 <layout class="QFormLayout" name="formLayout">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="lblPeriods">
                     <property name="text">
-                     <string>Входы</string>
+                     <string>Количество периодов</string>
                     </property>
                    </widget>
                   </item>
-                  <item>
-                   <widget class="QSpinBox" name="sbRepeatInputs">
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                  <item row="0" column="1">
+                   <widget class="QSpinBox" name="sbPeriods">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="accelerated">
+                     <bool>true</bool>
+                    </property>
+                    <property name="minimum">
+                     <number>1</number>
+                    </property>
+                    <property name="maximum">
+                     <number>100</number>
+                    </property>
+                    <property name="value">
+                     <number>3</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="lblDiscret">
+                    <property name="text">
+                     <string>Дискретность</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QSpinBox" name="sbDiscret">
+                    <property name="accelerated">
+                     <bool>true</bool>
                     </property>
                     <property name="minimum">
                      <number>10</number>
                     </property>
                     <property name="maximum">
-                     <number>1000</number>
+                     <number>40</number>
                     </property>
                     <property name="singleStep">
                      <number>10</number>
                     </property>
-                    <property name="value">
-                     <number>20</number>
-                    </property>
                    </widget>
                   </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_19">
-                  <item>
-                   <widget class="QCheckBox" name="cboxRepeatAIN">
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="lblSignal">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="text">
-                     <string>AIN</string>
+                     <string>Сигнал</string>
+                    </property>
+                    <property name="scaledContents">
+                     <bool>true</bool>
                     </property>
                    </widget>
                   </item>
-                  <item>
-                   <widget class="QSpinBox" name="sbRepeatAIN">
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                  <item row="2" column="1">
+                   <widget class="QSpinBox" name="sbSignal">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
                     </property>
                     <property name="minimum">
-                     <number>10</number>
+                     <number>1</number>
                     </property>
                     <property name="maximum">
-                     <number>10000</number>
-                    </property>
-                    <property name="singleStep">
-                     <number>10</number>
+                     <number>100</number>
                     </property>
                     <property name="value">
-                     <number>20</number>
+                     <number>5</number>
                     </property>
                    </widget>
                   </item>
@@ -379,311 +500,127 @@
                </layout>
               </widget>
              </item>
+             <item>
+              <widget class="QGroupBox" name="gboxInput">
+               <property name="title">
+                <string>Вход</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_3">
+                <item>
+                 <widget class="QRadioButton" name="radioButtonInputSingle">
+                  <property name="text">
+                   <string>Одиночный</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QRadioButton" name="radioButtonInputGroup">
+                  <property name="text">
+                   <string>Группа</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButtonInputSet">
+                  <property name="text">
+                   <string>Настроить</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
             </layout>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox_2">
-             <property name="title">
-              <string>DSDIN</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_33">
-              <item>
-               <widget class="QLabel" name="lblStateDSIDIN">
-                <property name="text">
-                 <string>Состояние</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="leStateDSDIN">
-                <property name="minimumSize">
-                 <size>
-                  <width>200</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maxLength">
-                 <number>100</number>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-                <property name="readOnly">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_44">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="QLabel" name="lblTimeDSDIN">
-                <property name="text">
-                 <string>Время</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="leTimeDSDIN">
-                <property name="maxLength">
-                 <number>8</number>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-                <property name="readOnly">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
-         </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_12">
          <item>
-          <widget class="QGroupBox" name="gboxInputSettings">
+          <widget class="QGroupBox" name="groupBox_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="title">
-            <string>Настройка входов</string>
+            <string>DSDIN</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_9">
+           <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
-              <item>
-               <widget class="QGroupBox" name="gboxInputSettingsFilter">
-                <property name="title">
-                 <string>Общие настройки фильтра</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-                <layout class="QVBoxLayout" name="verticalLayout_2">
-                 <property name="topMargin">
-                  <number>0</number>
-                 </property>
-                 <item>
-                  <layout class="QHBoxLayout" name="horizontalLayout_12">
-                   <item>
-                    <widget class="QLabel" name="lblPeriods">
-                     <property name="text">
-                      <string>Количество периодов</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QSpinBox" name="sbPeriods">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="accelerated">
-                      <bool>true</bool>
-                     </property>
-                     <property name="minimum">
-                      <number>1</number>
-                     </property>
-                     <property name="maximum">
-                      <number>100</number>
-                     </property>
-                     <property name="value">
-                      <number>3</number>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item>
-                  <layout class="QHBoxLayout" name="horizontalLayout_10">
-                   <item>
-                    <layout class="QHBoxLayout" name="horizontalLayout_13">
-                     <item>
-                      <widget class="QLabel" name="lblDiscret">
-                       <property name="text">
-                        <string>Дискретность</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_8">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>40</width>
-                         <height>20</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                     <item>
-                      <widget class="QSpinBox" name="sbDiscret">
-                       <property name="accelerated">
-                        <bool>true</bool>
-                       </property>
-                       <property name="minimum">
-                        <number>10</number>
-                       </property>
-                       <property name="maximum">
-                        <number>40</number>
-                       </property>
-                       <property name="singleStep">
-                        <number>10</number>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                  </layout>
-                 </item>
-                 <item>
-                  <layout class="QHBoxLayout" name="horizontalLayout_15">
-                   <item>
-                    <layout class="QHBoxLayout" name="horizontalLayout_8">
-                     <item>
-                      <widget class="QLabel" name="lblSignal">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="text">
-                        <string>Сигнал</string>
-                       </property>
-                       <property name="scaledContents">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_9">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>40</width>
-                         <height>20</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                     <item>
-                      <widget class="QSpinBox" name="sbSignal">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="minimum">
-                        <number>1</number>
-                       </property>
-                       <property name="maximum">
-                        <number>100</number>
-                       </property>
-                       <property name="value">
-                        <number>5</number>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item>
-               <spacer name="verticalSpacer_2">
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>20</width>
-                  <height>18</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
+             <widget class="QLabel" name="lblStateDSIDIN">
+              <property name="text">
+               <string>Состояние</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QGroupBox" name="gboxInput">
-              <property name="title">
-               <string>Вход</string>
+             <widget class="QLineEdit" name="leStateDSDIN">
+              <property name="minimumSize">
+               <size>
+                <width>200</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maxLength">
+               <number>100</number>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_3">
-               <item>
-                <widget class="QRadioButton" name="radioButtonInputSingle">
-                 <property name="text">
-                  <string>Одиночный</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="radioButtonInputGroup">
-                 <property name="text">
-                  <string>Группа</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer name="verticalSpacer_4">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item>
-                <widget class="QPushButton" name="pushButtonInputSet">
-                 <property name="text">
-                  <string>Настроить</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_44">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblTimeDSDIN">
+              <property name="text">
+               <string>Время</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="leTimeDSDIN">
+              <property name="maxLength">
+               <number>8</number>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
              </widget>
             </item>
            </layout>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_16">
          <item>
           <spacer name="horizontalSpacer_7">
            <property name="orientation">
@@ -698,27 +635,31 @@
           </spacer>
          </item>
          <item>
-          <widget class="QLabel" name="label_9">
-           <property name="text">
-            <string>Очередь сообщений</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEditMessageQueue">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_10">
+           <item>
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>Очередь сообщений</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEditMessageQueue">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -4423,6 +4364,7 @@
       <zorder>line</zorder>
       <zorder></zorder>
       <zorder>twPeriphery</zorder>
+      <zorder>groupBox_4</zorder>
      </widget>
     </item>
    </layout>

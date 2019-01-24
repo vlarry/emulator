@@ -16,6 +16,7 @@
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDockWidget>
+#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
@@ -49,7 +50,7 @@ public:
     QAction *actionSerialNumber;
     QAction *actionKeyboard;
     QWidget *centralWidget;
-    QVBoxLayout *verticalLayout_5;
+    QVBoxLayout *verticalLayout_37;
     QHBoxLayout *horizontalLayout_18;
     QGroupBox *grboxComPort;
     QHBoxLayout *horizontalLayout_11;
@@ -62,19 +63,17 @@ public:
     QComboBox *cbBaudrate;
     QSpacerItem *horizontalSpacer_13;
     QGroupBox *groupDevices;
-    QVBoxLayout *verticalLayout_33;
-    QHBoxLayout *horizontalLayout_14;
-    QVBoxLayout *verticalLayout_7;
-    QHBoxLayout *horizontalLayout_34;
-    QHBoxLayout *horizontalLayout;
-    QGridLayout *gridLayout_2;
-    QCmd *cbCmdList;
-    QLabel *lblCommand;
-    QLabel *lblDeviceAddress;
-    QSpinBox *sbDeviceAddress;
+    QVBoxLayout *verticalLayout_5;
+    QGroupBox *groupBox_4;
+    QHBoxLayout *horizontalLayout_9;
+    QVBoxLayout *verticalLayout_4;
+    QGridLayout *gridLayout;
     QPushButton *pbCmdSend;
-    QLabel *lblCmdDescription;
-    QSpacerItem *horizontalSpacer;
+    QSpinBox *sbDeviceAddress;
+    QCmd *cbCmdList;
+    QLabel *lblDeviceAddress;
+    QLabel *lblCommand;
+    QLabel *labelCmdDescription;
     QGroupBox *gboxAutorepeat;
     QVBoxLayout *verticalLayout_6;
     QHBoxLayout *horizontalLayout_20;
@@ -83,40 +82,33 @@ public:
     QHBoxLayout *horizontalLayout_19;
     QCheckBox *cboxRepeatAIN;
     QSpinBox *sbRepeatAIN;
+    QSpacerItem *horizontalSpacer;
+    QGroupBox *gboxInputSettings;
+    QHBoxLayout *horizontalLayout_8;
+    QGroupBox *gboxInputSettingsFilter;
+    QVBoxLayout *verticalLayout_2;
+    QFormLayout *formLayout;
+    QLabel *lblPeriods;
+    QSpinBox *sbPeriods;
+    QLabel *lblDiscret;
+    QSpinBox *sbDiscret;
+    QLabel *lblSignal;
+    QSpinBox *sbSignal;
+    QGroupBox *gboxInput;
+    QVBoxLayout *verticalLayout_3;
+    QRadioButton *radioButtonInputSingle;
+    QRadioButton *radioButtonInputGroup;
+    QPushButton *pushButtonInputSet;
+    QHBoxLayout *horizontalLayout_12;
     QGroupBox *groupBox_2;
-    QHBoxLayout *horizontalLayout_33;
+    QHBoxLayout *horizontalLayout;
     QLabel *lblStateDSIDIN;
     QLineEdit *leStateDSDIN;
     QSpacerItem *horizontalSpacer_44;
     QLabel *lblTimeDSDIN;
     QLineEdit *leTimeDSDIN;
-    QGroupBox *gboxInputSettings;
-    QHBoxLayout *horizontalLayout_9;
-    QVBoxLayout *verticalLayout_4;
-    QGroupBox *gboxInputSettingsFilter;
-    QVBoxLayout *verticalLayout_2;
-    QHBoxLayout *horizontalLayout_12;
-    QLabel *lblPeriods;
-    QSpinBox *sbPeriods;
-    QHBoxLayout *horizontalLayout_10;
-    QHBoxLayout *horizontalLayout_13;
-    QLabel *lblDiscret;
-    QSpacerItem *horizontalSpacer_8;
-    QSpinBox *sbDiscret;
-    QHBoxLayout *horizontalLayout_15;
-    QHBoxLayout *horizontalLayout_8;
-    QLabel *lblSignal;
-    QSpacerItem *horizontalSpacer_9;
-    QSpinBox *sbSignal;
-    QSpacerItem *verticalSpacer_2;
-    QGroupBox *gboxInput;
-    QVBoxLayout *verticalLayout_3;
-    QRadioButton *radioButtonInputSingle;
-    QRadioButton *radioButtonInputGroup;
-    QSpacerItem *verticalSpacer_4;
-    QPushButton *pushButtonInputSet;
-    QHBoxLayout *horizontalLayout_16;
     QSpacerItem *horizontalSpacer_7;
+    QHBoxLayout *horizontalLayout_10;
     QLabel *label_9;
     QLineEdit *lineEditMessageQueue;
     QFrame *line;
@@ -412,7 +404,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(1302, 804);
+        MainWindow->resize(1302, 837);
         actionTerminal = new QAction(MainWindow);
         actionTerminal->setObjectName(QString::fromUtf8("actionTerminal"));
         actionTerminal->setCheckable(true);
@@ -427,10 +419,10 @@ public:
         actionKeyboard->setCheckable(true);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
-        verticalLayout_5 = new QVBoxLayout(centralWidget);
-        verticalLayout_5->setSpacing(6);
-        verticalLayout_5->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
+        verticalLayout_37 = new QVBoxLayout(centralWidget);
+        verticalLayout_37->setSpacing(6);
+        verticalLayout_37->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_37->setObjectName(QString::fromUtf8("verticalLayout_37"));
         horizontalLayout_18 = new QHBoxLayout();
         horizontalLayout_18->setSpacing(6);
         horizontalLayout_18->setObjectName(QString::fromUtf8("horizontalLayout_18"));
@@ -515,92 +507,86 @@ public:
         horizontalLayout_18->addItem(horizontalSpacer_13);
 
 
-        verticalLayout_5->addLayout(horizontalLayout_18);
+        verticalLayout_37->addLayout(horizontalLayout_18);
 
         groupDevices = new QGroupBox(centralWidget);
         groupDevices->setObjectName(QString::fromUtf8("groupDevices"));
         groupDevices->setEnabled(false);
-        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(groupDevices->sizePolicy().hasHeightForWidth());
         groupDevices->setSizePolicy(sizePolicy2);
-        verticalLayout_33 = new QVBoxLayout(groupDevices);
-        verticalLayout_33->setSpacing(6);
-        verticalLayout_33->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_33->setObjectName(QString::fromUtf8("verticalLayout_33"));
-        horizontalLayout_14 = new QHBoxLayout();
-        horizontalLayout_14->setSpacing(6);
-        horizontalLayout_14->setObjectName(QString::fromUtf8("horizontalLayout_14"));
-        verticalLayout_7 = new QVBoxLayout();
-        verticalLayout_7->setSpacing(6);
-        verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
-        horizontalLayout_34 = new QHBoxLayout();
-        horizontalLayout_34->setSpacing(6);
-        horizontalLayout_34->setObjectName(QString::fromUtf8("horizontalLayout_34"));
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        gridLayout_2 = new QGridLayout();
-        gridLayout_2->setSpacing(6);
-        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
-        gridLayout_2->setSizeConstraint(QLayout::SetDefaultConstraint);
-        gridLayout_2->setVerticalSpacing(6);
-        cbCmdList = new QCmd(groupDevices);
-        cbCmdList->setObjectName(QString::fromUtf8("cbCmdList"));
-
-        gridLayout_2->addWidget(cbCmdList, 1, 1, 1, 1);
-
-        lblCommand = new QLabel(groupDevices);
-        lblCommand->setObjectName(QString::fromUtf8("lblCommand"));
-        QSizePolicy sizePolicy3(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        verticalLayout_5 = new QVBoxLayout(groupDevices);
+        verticalLayout_5->setSpacing(6);
+        verticalLayout_5->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
+        groupBox_4 = new QGroupBox(groupDevices);
+        groupBox_4->setObjectName(QString::fromUtf8("groupBox_4"));
+        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Fixed);
         sizePolicy3.setHorizontalStretch(0);
         sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(lblCommand->sizePolicy().hasHeightForWidth());
-        lblCommand->setSizePolicy(sizePolicy3);
-        lblCommand->setAlignment(Qt::AlignCenter);
+        sizePolicy3.setHeightForWidth(groupBox_4->sizePolicy().hasHeightForWidth());
+        groupBox_4->setSizePolicy(sizePolicy3);
+        horizontalLayout_9 = new QHBoxLayout(groupBox_4);
+        horizontalLayout_9->setSpacing(6);
+        horizontalLayout_9->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_9->setObjectName(QString::fromUtf8("horizontalLayout_9"));
+        verticalLayout_4 = new QVBoxLayout();
+        verticalLayout_4->setSpacing(6);
+        verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
+        gridLayout = new QGridLayout();
+        gridLayout->setSpacing(6);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        pbCmdSend = new QPushButton(groupBox_4);
+        pbCmdSend->setObjectName(QString::fromUtf8("pbCmdSend"));
 
-        gridLayout_2->addWidget(lblCommand, 1, 0, 1, 1);
+        gridLayout->addWidget(pbCmdSend, 2, 1, 1, 1);
 
-        lblDeviceAddress = new QLabel(groupDevices);
-        lblDeviceAddress->setObjectName(QString::fromUtf8("lblDeviceAddress"));
-        sizePolicy3.setHeightForWidth(lblDeviceAddress->sizePolicy().hasHeightForWidth());
-        lblDeviceAddress->setSizePolicy(sizePolicy3);
-        lblDeviceAddress->setAlignment(Qt::AlignCenter);
-
-        gridLayout_2->addWidget(lblDeviceAddress, 0, 0, 1, 1);
-
-        sbDeviceAddress = new QSpinBox(groupDevices);
+        sbDeviceAddress = new QSpinBox(groupBox_4);
         sbDeviceAddress->setObjectName(QString::fromUtf8("sbDeviceAddress"));
         sbDeviceAddress->setAlignment(Qt::AlignCenter);
         sbDeviceAddress->setMaximum(3);
 
-        gridLayout_2->addWidget(sbDeviceAddress, 0, 1, 1, 1);
+        gridLayout->addWidget(sbDeviceAddress, 0, 1, 1, 1);
 
-        pbCmdSend = new QPushButton(groupDevices);
-        pbCmdSend->setObjectName(QString::fromUtf8("pbCmdSend"));
+        cbCmdList = new QCmd(groupBox_4);
+        cbCmdList->setObjectName(QString::fromUtf8("cbCmdList"));
 
-        gridLayout_2->addWidget(pbCmdSend, 2, 1, 1, 1);
+        gridLayout->addWidget(cbCmdList, 1, 1, 1, 1);
 
-        lblCmdDescription = new QLabel(groupDevices);
-        lblCmdDescription->setObjectName(QString::fromUtf8("lblCmdDescription"));
-        lblCmdDescription->setScaledContents(true);
+        lblDeviceAddress = new QLabel(groupBox_4);
+        lblDeviceAddress->setObjectName(QString::fromUtf8("lblDeviceAddress"));
+        QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(lblDeviceAddress->sizePolicy().hasHeightForWidth());
+        lblDeviceAddress->setSizePolicy(sizePolicy4);
+        lblDeviceAddress->setAlignment(Qt::AlignCenter);
 
-        gridLayout_2->addWidget(lblCmdDescription, 1, 2, 1, 1);
+        gridLayout->addWidget(lblDeviceAddress, 0, 0, 1, 1);
+
+        lblCommand = new QLabel(groupBox_4);
+        lblCommand->setObjectName(QString::fromUtf8("lblCommand"));
+        sizePolicy4.setHeightForWidth(lblCommand->sizePolicy().hasHeightForWidth());
+        lblCommand->setSizePolicy(sizePolicy4);
+        lblCommand->setAlignment(Qt::AlignCenter);
+
+        gridLayout->addWidget(lblCommand, 1, 0, 1, 1);
+
+        labelCmdDescription = new QLabel(groupBox_4);
+        labelCmdDescription->setObjectName(QString::fromUtf8("labelCmdDescription"));
+
+        gridLayout->addWidget(labelCmdDescription, 1, 2, 1, 1);
 
 
-        horizontalLayout->addLayout(gridLayout_2);
+        verticalLayout_4->addLayout(gridLayout);
 
-        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout->addItem(horizontalSpacer);
-
-
-        horizontalLayout_34->addLayout(horizontalLayout);
-
-        gboxAutorepeat = new QGroupBox(groupDevices);
+        gboxAutorepeat = new QGroupBox(groupBox_4);
         gboxAutorepeat->setObjectName(QString::fromUtf8("gboxAutorepeat"));
         gboxAutorepeat->setEnabled(false);
+        sizePolicy4.setHeightForWidth(gboxAutorepeat->sizePolicy().hasHeightForWidth());
+        gboxAutorepeat->setSizePolicy(sizePolicy4);
         gboxAutorepeat->setAlignment(Qt::AlignCenter);
         verticalLayout_6 = new QVBoxLayout(gboxAutorepeat);
         verticalLayout_6->setSpacing(6);
@@ -650,65 +636,24 @@ public:
         verticalLayout_6->addLayout(horizontalLayout_19);
 
 
-        horizontalLayout_34->addWidget(gboxAutorepeat);
+        verticalLayout_4->addWidget(gboxAutorepeat);
 
 
-        verticalLayout_7->addLayout(horizontalLayout_34);
+        horizontalLayout_9->addLayout(verticalLayout_4);
 
-        groupBox_2 = new QGroupBox(groupDevices);
-        groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
-        groupBox_2->setAlignment(Qt::AlignCenter);
-        horizontalLayout_33 = new QHBoxLayout(groupBox_2);
-        horizontalLayout_33->setSpacing(6);
-        horizontalLayout_33->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_33->setObjectName(QString::fromUtf8("horizontalLayout_33"));
-        lblStateDSIDIN = new QLabel(groupBox_2);
-        lblStateDSIDIN->setObjectName(QString::fromUtf8("lblStateDSIDIN"));
+        horizontalSpacer = new QSpacerItem(418, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        horizontalLayout_33->addWidget(lblStateDSIDIN);
+        horizontalLayout_9->addItem(horizontalSpacer);
 
-        leStateDSDIN = new QLineEdit(groupBox_2);
-        leStateDSDIN->setObjectName(QString::fromUtf8("leStateDSDIN"));
-        leStateDSDIN->setMinimumSize(QSize(200, 0));
-        leStateDSDIN->setMaxLength(100);
-        leStateDSDIN->setAlignment(Qt::AlignCenter);
-        leStateDSDIN->setReadOnly(true);
-
-        horizontalLayout_33->addWidget(leStateDSDIN);
-
-        horizontalSpacer_44 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_33->addItem(horizontalSpacer_44);
-
-        lblTimeDSDIN = new QLabel(groupBox_2);
-        lblTimeDSDIN->setObjectName(QString::fromUtf8("lblTimeDSDIN"));
-
-        horizontalLayout_33->addWidget(lblTimeDSDIN);
-
-        leTimeDSDIN = new QLineEdit(groupBox_2);
-        leTimeDSDIN->setObjectName(QString::fromUtf8("leTimeDSDIN"));
-        leTimeDSDIN->setMaxLength(8);
-        leTimeDSDIN->setAlignment(Qt::AlignCenter);
-        leTimeDSDIN->setReadOnly(true);
-
-        horizontalLayout_33->addWidget(leTimeDSDIN);
-
-
-        verticalLayout_7->addWidget(groupBox_2);
-
-
-        horizontalLayout_14->addLayout(verticalLayout_7);
-
-        gboxInputSettings = new QGroupBox(groupDevices);
+        gboxInputSettings = new QGroupBox(groupBox_4);
         gboxInputSettings->setObjectName(QString::fromUtf8("gboxInputSettings"));
+        sizePolicy.setHeightForWidth(gboxInputSettings->sizePolicy().hasHeightForWidth());
+        gboxInputSettings->setSizePolicy(sizePolicy);
         gboxInputSettings->setAlignment(Qt::AlignCenter);
-        horizontalLayout_9 = new QHBoxLayout(gboxInputSettings);
-        horizontalLayout_9->setSpacing(6);
-        horizontalLayout_9->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_9->setObjectName(QString::fromUtf8("horizontalLayout_9"));
-        verticalLayout_4 = new QVBoxLayout();
-        verticalLayout_4->setSpacing(6);
-        verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
+        horizontalLayout_8 = new QHBoxLayout(gboxInputSettings);
+        horizontalLayout_8->setSpacing(6);
+        horizontalLayout_8->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_8->setObjectName(QString::fromUtf8("horizontalLayout_8"));
         gboxInputSettingsFilter = new QGroupBox(gboxInputSettings);
         gboxInputSettingsFilter->setObjectName(QString::fromUtf8("gboxInputSettingsFilter"));
         gboxInputSettingsFilter->setAlignment(Qt::AlignCenter);
@@ -716,46 +661,32 @@ public:
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        verticalLayout_2->setContentsMargins(-1, 0, -1, -1);
-        horizontalLayout_12 = new QHBoxLayout();
-        horizontalLayout_12->setSpacing(6);
-        horizontalLayout_12->setObjectName(QString::fromUtf8("horizontalLayout_12"));
+        formLayout = new QFormLayout();
+        formLayout->setSpacing(6);
+        formLayout->setObjectName(QString::fromUtf8("formLayout"));
         lblPeriods = new QLabel(gboxInputSettingsFilter);
         lblPeriods->setObjectName(QString::fromUtf8("lblPeriods"));
 
-        horizontalLayout_12->addWidget(lblPeriods);
+        formLayout->setWidget(0, QFormLayout::LabelRole, lblPeriods);
 
         sbPeriods = new QSpinBox(gboxInputSettingsFilter);
         sbPeriods->setObjectName(QString::fromUtf8("sbPeriods"));
-        QSizePolicy sizePolicy4(QSizePolicy::Maximum, QSizePolicy::Fixed);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(sbPeriods->sizePolicy().hasHeightForWidth());
-        sbPeriods->setSizePolicy(sizePolicy4);
+        QSizePolicy sizePolicy5(QSizePolicy::Maximum, QSizePolicy::Fixed);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(sbPeriods->sizePolicy().hasHeightForWidth());
+        sbPeriods->setSizePolicy(sizePolicy5);
         sbPeriods->setAccelerated(true);
         sbPeriods->setMinimum(1);
         sbPeriods->setMaximum(100);
         sbPeriods->setValue(3);
 
-        horizontalLayout_12->addWidget(sbPeriods);
+        formLayout->setWidget(0, QFormLayout::FieldRole, sbPeriods);
 
-
-        verticalLayout_2->addLayout(horizontalLayout_12);
-
-        horizontalLayout_10 = new QHBoxLayout();
-        horizontalLayout_10->setSpacing(6);
-        horizontalLayout_10->setObjectName(QString::fromUtf8("horizontalLayout_10"));
-        horizontalLayout_13 = new QHBoxLayout();
-        horizontalLayout_13->setSpacing(6);
-        horizontalLayout_13->setObjectName(QString::fromUtf8("horizontalLayout_13"));
         lblDiscret = new QLabel(gboxInputSettingsFilter);
         lblDiscret->setObjectName(QString::fromUtf8("lblDiscret"));
 
-        horizontalLayout_13->addWidget(lblDiscret);
-
-        horizontalSpacer_8 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_13->addItem(horizontalSpacer_8);
+        formLayout->setWidget(1, QFormLayout::LabelRole, lblDiscret);
 
         sbDiscret = new QSpinBox(gboxInputSettingsFilter);
         sbDiscret->setObjectName(QString::fromUtf8("sbDiscret"));
@@ -764,63 +695,37 @@ public:
         sbDiscret->setMaximum(40);
         sbDiscret->setSingleStep(10);
 
-        horizontalLayout_13->addWidget(sbDiscret);
+        formLayout->setWidget(1, QFormLayout::FieldRole, sbDiscret);
 
-
-        horizontalLayout_10->addLayout(horizontalLayout_13);
-
-
-        verticalLayout_2->addLayout(horizontalLayout_10);
-
-        horizontalLayout_15 = new QHBoxLayout();
-        horizontalLayout_15->setSpacing(6);
-        horizontalLayout_15->setObjectName(QString::fromUtf8("horizontalLayout_15"));
-        horizontalLayout_8 = new QHBoxLayout();
-        horizontalLayout_8->setSpacing(6);
-        horizontalLayout_8->setObjectName(QString::fromUtf8("horizontalLayout_8"));
         lblSignal = new QLabel(gboxInputSettingsFilter);
         lblSignal->setObjectName(QString::fromUtf8("lblSignal"));
-        QSizePolicy sizePolicy5(QSizePolicy::Minimum, QSizePolicy::Preferred);
-        sizePolicy5.setHorizontalStretch(0);
-        sizePolicy5.setVerticalStretch(0);
-        sizePolicy5.setHeightForWidth(lblSignal->sizePolicy().hasHeightForWidth());
-        lblSignal->setSizePolicy(sizePolicy5);
+        QSizePolicy sizePolicy6(QSizePolicy::Minimum, QSizePolicy::Preferred);
+        sizePolicy6.setHorizontalStretch(0);
+        sizePolicy6.setVerticalStretch(0);
+        sizePolicy6.setHeightForWidth(lblSignal->sizePolicy().hasHeightForWidth());
+        lblSignal->setSizePolicy(sizePolicy6);
         lblSignal->setScaledContents(true);
 
-        horizontalLayout_8->addWidget(lblSignal);
-
-        horizontalSpacer_9 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_8->addItem(horizontalSpacer_9);
+        formLayout->setWidget(2, QFormLayout::LabelRole, lblSignal);
 
         sbSignal = new QSpinBox(gboxInputSettingsFilter);
         sbSignal->setObjectName(QString::fromUtf8("sbSignal"));
-        QSizePolicy sizePolicy6(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        sizePolicy6.setHorizontalStretch(0);
-        sizePolicy6.setVerticalStretch(0);
-        sizePolicy6.setHeightForWidth(sbSignal->sizePolicy().hasHeightForWidth());
-        sbSignal->setSizePolicy(sizePolicy6);
+        QSizePolicy sizePolicy7(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy7.setHorizontalStretch(0);
+        sizePolicy7.setVerticalStretch(0);
+        sizePolicy7.setHeightForWidth(sbSignal->sizePolicy().hasHeightForWidth());
+        sbSignal->setSizePolicy(sizePolicy7);
         sbSignal->setMinimum(1);
         sbSignal->setMaximum(100);
         sbSignal->setValue(5);
 
-        horizontalLayout_8->addWidget(sbSignal);
+        formLayout->setWidget(2, QFormLayout::FieldRole, sbSignal);
 
 
-        horizontalLayout_15->addLayout(horizontalLayout_8);
+        verticalLayout_2->addLayout(formLayout);
 
 
-        verticalLayout_2->addLayout(horizontalLayout_15);
-
-
-        verticalLayout_4->addWidget(gboxInputSettingsFilter);
-
-        verticalSpacer_2 = new QSpacerItem(20, 18, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout_4->addItem(verticalSpacer_2);
-
-
-        horizontalLayout_9->addLayout(verticalLayout_4);
+        horizontalLayout_8->addWidget(gboxInputSettingsFilter);
 
         gboxInput = new QGroupBox(gboxInputSettings);
         gboxInput->setObjectName(QString::fromUtf8("gboxInput"));
@@ -840,35 +745,77 @@ public:
 
         verticalLayout_3->addWidget(radioButtonInputGroup);
 
-        verticalSpacer_4 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout_3->addItem(verticalSpacer_4);
-
         pushButtonInputSet = new QPushButton(gboxInput);
         pushButtonInputSet->setObjectName(QString::fromUtf8("pushButtonInputSet"));
 
         verticalLayout_3->addWidget(pushButtonInputSet);
 
 
-        horizontalLayout_9->addWidget(gboxInput);
+        horizontalLayout_8->addWidget(gboxInput);
 
 
-        horizontalLayout_14->addWidget(gboxInputSettings);
+        horizontalLayout_9->addWidget(gboxInputSettings);
 
 
-        verticalLayout_33->addLayout(horizontalLayout_14);
+        verticalLayout_5->addWidget(groupBox_4);
 
-        horizontalLayout_16 = new QHBoxLayout();
-        horizontalLayout_16->setSpacing(6);
-        horizontalLayout_16->setObjectName(QString::fromUtf8("horizontalLayout_16"));
+        horizontalLayout_12 = new QHBoxLayout();
+        horizontalLayout_12->setSpacing(6);
+        horizontalLayout_12->setObjectName(QString::fromUtf8("horizontalLayout_12"));
+        groupBox_2 = new QGroupBox(groupDevices);
+        groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
+        sizePolicy.setHeightForWidth(groupBox_2->sizePolicy().hasHeightForWidth());
+        groupBox_2->setSizePolicy(sizePolicy);
+        groupBox_2->setAlignment(Qt::AlignCenter);
+        horizontalLayout = new QHBoxLayout(groupBox_2);
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        lblStateDSIDIN = new QLabel(groupBox_2);
+        lblStateDSIDIN->setObjectName(QString::fromUtf8("lblStateDSIDIN"));
+
+        horizontalLayout->addWidget(lblStateDSIDIN);
+
+        leStateDSDIN = new QLineEdit(groupBox_2);
+        leStateDSDIN->setObjectName(QString::fromUtf8("leStateDSDIN"));
+        leStateDSDIN->setMinimumSize(QSize(200, 0));
+        leStateDSDIN->setMaxLength(100);
+        leStateDSDIN->setAlignment(Qt::AlignCenter);
+        leStateDSDIN->setReadOnly(true);
+
+        horizontalLayout->addWidget(leStateDSDIN);
+
+        horizontalSpacer_44 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer_44);
+
+        lblTimeDSDIN = new QLabel(groupBox_2);
+        lblTimeDSDIN->setObjectName(QString::fromUtf8("lblTimeDSDIN"));
+
+        horizontalLayout->addWidget(lblTimeDSDIN);
+
+        leTimeDSDIN = new QLineEdit(groupBox_2);
+        leTimeDSDIN->setObjectName(QString::fromUtf8("leTimeDSDIN"));
+        leTimeDSDIN->setMaxLength(8);
+        leTimeDSDIN->setAlignment(Qt::AlignCenter);
+        leTimeDSDIN->setReadOnly(true);
+
+        horizontalLayout->addWidget(leTimeDSDIN);
+
+
+        horizontalLayout_12->addWidget(groupBox_2);
+
         horizontalSpacer_7 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        horizontalLayout_16->addItem(horizontalSpacer_7);
+        horizontalLayout_12->addItem(horizontalSpacer_7);
 
+        horizontalLayout_10 = new QHBoxLayout();
+        horizontalLayout_10->setSpacing(6);
+        horizontalLayout_10->setObjectName(QString::fromUtf8("horizontalLayout_10"));
         label_9 = new QLabel(groupDevices);
         label_9->setObjectName(QString::fromUtf8("label_9"));
 
-        horizontalLayout_16->addWidget(label_9);
+        horizontalLayout_10->addWidget(label_9);
 
         lineEditMessageQueue = new QLineEdit(groupDevices);
         lineEditMessageQueue->setObjectName(QString::fromUtf8("lineEditMessageQueue"));
@@ -877,19 +824,22 @@ public:
         lineEditMessageQueue->setAlignment(Qt::AlignCenter);
         lineEditMessageQueue->setReadOnly(true);
 
-        horizontalLayout_16->addWidget(lineEditMessageQueue);
+        horizontalLayout_10->addWidget(lineEditMessageQueue);
 
 
-        verticalLayout_33->addLayout(horizontalLayout_16);
+        horizontalLayout_12->addLayout(horizontalLayout_10);
+
+
+        verticalLayout_5->addLayout(horizontalLayout_12);
 
         line = new QFrame(groupDevices);
         line->setObjectName(QString::fromUtf8("line"));
-        sizePolicy2.setHeightForWidth(line->sizePolicy().hasHeightForWidth());
-        line->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(line->sizePolicy().hasHeightForWidth());
+        line->setSizePolicy(sizePolicy3);
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);
 
-        verticalLayout_33->addWidget(line);
+        verticalLayout_5->addWidget(line);
 
         twPeriphery = new QTabWidget(groupDevices);
         twPeriphery->setObjectName(QString::fromUtf8("twPeriphery"));
@@ -2126,11 +2076,11 @@ public:
 
         groupAIN = new QGroupBox(tabIO);
         groupAIN->setObjectName(QString::fromUtf8("groupAIN"));
-        QSizePolicy sizePolicy7(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy7.setHorizontalStretch(0);
-        sizePolicy7.setVerticalStretch(0);
-        sizePolicy7.setHeightForWidth(groupAIN->sizePolicy().hasHeightForWidth());
-        groupAIN->setSizePolicy(sizePolicy7);
+        QSizePolicy sizePolicy8(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy8.setHorizontalStretch(0);
+        sizePolicy8.setVerticalStretch(0);
+        sizePolicy8.setHeightForWidth(groupAIN->sizePolicy().hasHeightForWidth());
+        groupAIN->setSizePolicy(sizePolicy8);
         groupAIN->setAlignment(Qt::AlignCenter);
         horizontalLayout_6 = new QHBoxLayout(groupAIN);
         horizontalLayout_6->setSpacing(6);
@@ -2260,11 +2210,8 @@ public:
         horizontalLayout_17->setObjectName(QString::fromUtf8("horizontalLayout_17"));
         groupDebugInfo = new QGroupBox(tabInfo);
         groupDebugInfo->setObjectName(QString::fromUtf8("groupDebugInfo"));
-        QSizePolicy sizePolicy8(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        sizePolicy8.setHorizontalStretch(0);
-        sizePolicy8.setVerticalStretch(0);
-        sizePolicy8.setHeightForWidth(groupDebugInfo->sizePolicy().hasHeightForWidth());
-        groupDebugInfo->setSizePolicy(sizePolicy8);
+        sizePolicy2.setHeightForWidth(groupDebugInfo->sizePolicy().hasHeightForWidth());
+        groupDebugInfo->setSizePolicy(sizePolicy2);
         groupDebugInfo->setAlignment(Qt::AlignCenter);
         verticalLayout_35 = new QVBoxLayout(groupDebugInfo);
         verticalLayout_35->setSpacing(6);
@@ -2275,8 +2222,8 @@ public:
         gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
         lineEditErrorCmdCounter = new QLineEdit(groupDebugInfo);
         lineEditErrorCmdCounter->setObjectName(QString::fromUtf8("lineEditErrorCmdCounter"));
-        sizePolicy2.setHeightForWidth(lineEditErrorCmdCounter->sizePolicy().hasHeightForWidth());
-        lineEditErrorCmdCounter->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(lineEditErrorCmdCounter->sizePolicy().hasHeightForWidth());
+        lineEditErrorCmdCounter->setSizePolicy(sizePolicy3);
         lineEditErrorCmdCounter->setMaxLength(5);
         lineEditErrorCmdCounter->setAlignment(Qt::AlignCenter);
         lineEditErrorCmdCounter->setReadOnly(true);
@@ -2304,8 +2251,8 @@ public:
 
         lineEditErrorProcessCounter = new QLineEdit(groupDebugInfo);
         lineEditErrorProcessCounter->setObjectName(QString::fromUtf8("lineEditErrorProcessCounter"));
-        sizePolicy2.setHeightForWidth(lineEditErrorProcessCounter->sizePolicy().hasHeightForWidth());
-        lineEditErrorProcessCounter->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(lineEditErrorProcessCounter->sizePolicy().hasHeightForWidth());
+        lineEditErrorProcessCounter->setSizePolicy(sizePolicy3);
         lineEditErrorProcessCounter->setMaxLength(5);
         lineEditErrorProcessCounter->setAlignment(Qt::AlignCenter);
         lineEditErrorProcessCounter->setReadOnly(true);
@@ -2330,8 +2277,8 @@ public:
 
         lineEditRequestCounter = new QLineEdit(groupDebugInfo);
         lineEditRequestCounter->setObjectName(QString::fromUtf8("lineEditRequestCounter"));
-        sizePolicy2.setHeightForWidth(lineEditRequestCounter->sizePolicy().hasHeightForWidth());
-        lineEditRequestCounter->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(lineEditRequestCounter->sizePolicy().hasHeightForWidth());
+        lineEditRequestCounter->setSizePolicy(sizePolicy3);
         lineEditRequestCounter->setMaxLength(5);
         lineEditRequestCounter->setAlignment(Qt::AlignCenter);
         lineEditRequestCounter->setReadOnly(true);
@@ -2340,8 +2287,8 @@ public:
 
         lineEditErrorChecksumCounter = new QLineEdit(groupDebugInfo);
         lineEditErrorChecksumCounter->setObjectName(QString::fromUtf8("lineEditErrorChecksumCounter"));
-        sizePolicy2.setHeightForWidth(lineEditErrorChecksumCounter->sizePolicy().hasHeightForWidth());
-        lineEditErrorChecksumCounter->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(lineEditErrorChecksumCounter->sizePolicy().hasHeightForWidth());
+        lineEditErrorChecksumCounter->setSizePolicy(sizePolicy3);
         lineEditErrorChecksumCounter->setMaxLength(5);
         lineEditErrorChecksumCounter->setAlignment(Qt::AlignCenter);
         lineEditErrorChecksumCounter->setReadOnly(true);
@@ -2358,8 +2305,8 @@ public:
 
         lineEditErrorTimeoutCounter = new QLineEdit(groupDebugInfo);
         lineEditErrorTimeoutCounter->setObjectName(QString::fromUtf8("lineEditErrorTimeoutCounter"));
-        sizePolicy2.setHeightForWidth(lineEditErrorTimeoutCounter->sizePolicy().hasHeightForWidth());
-        lineEditErrorTimeoutCounter->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(lineEditErrorTimeoutCounter->sizePolicy().hasHeightForWidth());
+        lineEditErrorTimeoutCounter->setSizePolicy(sizePolicy3);
         lineEditErrorTimeoutCounter->setMaxLength(5);
         lineEditErrorTimeoutCounter->setAlignment(Qt::AlignCenter);
         lineEditErrorTimeoutCounter->setReadOnly(true);
@@ -2389,8 +2336,8 @@ public:
         leDeviceID = new QLineEdit(groupSerialNumber);
         leDeviceID->setObjectName(QString::fromUtf8("leDeviceID"));
         leDeviceID->setEnabled(false);
-        sizePolicy2.setHeightForWidth(leDeviceID->sizePolicy().hasHeightForWidth());
-        leDeviceID->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(leDeviceID->sizePolicy().hasHeightForWidth());
+        leDeviceID->setSizePolicy(sizePolicy3);
         leDeviceID->setAlignment(Qt::AlignCenter);
         leDeviceID->setReadOnly(true);
 
@@ -2411,8 +2358,8 @@ public:
         leDeviceNumber = new QLineEdit(groupSerialNumber);
         leDeviceNumber->setObjectName(QString::fromUtf8("leDeviceNumber"));
         leDeviceNumber->setEnabled(false);
-        sizePolicy2.setHeightForWidth(leDeviceNumber->sizePolicy().hasHeightForWidth());
-        leDeviceNumber->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(leDeviceNumber->sizePolicy().hasHeightForWidth());
+        leDeviceNumber->setSizePolicy(sizePolicy3);
         leDeviceNumber->setAlignment(Qt::AlignCenter);
         leDeviceNumber->setReadOnly(true);
 
@@ -2427,8 +2374,8 @@ public:
         leDeviceLotNum = new QLineEdit(groupSerialNumber);
         leDeviceLotNum->setObjectName(QString::fromUtf8("leDeviceLotNum"));
         leDeviceLotNum->setEnabled(false);
-        sizePolicy2.setHeightForWidth(leDeviceLotNum->sizePolicy().hasHeightForWidth());
-        leDeviceLotNum->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(leDeviceLotNum->sizePolicy().hasHeightForWidth());
+        leDeviceLotNum->setSizePolicy(sizePolicy3);
         leDeviceLotNum->setAlignment(Qt::AlignCenter);
         leDeviceLotNum->setReadOnly(true);
 
@@ -2437,8 +2384,8 @@ public:
         leDeviceFirmwareVar = new QLineEdit(groupSerialNumber);
         leDeviceFirmwareVar->setObjectName(QString::fromUtf8("leDeviceFirmwareVar"));
         leDeviceFirmwareVar->setEnabled(false);
-        sizePolicy2.setHeightForWidth(leDeviceFirmwareVar->sizePolicy().hasHeightForWidth());
-        leDeviceFirmwareVar->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(leDeviceFirmwareVar->sizePolicy().hasHeightForWidth());
+        leDeviceFirmwareVar->setSizePolicy(sizePolicy3);
         leDeviceFirmwareVar->setAlignment(Qt::AlignCenter);
         leDeviceFirmwareVar->setReadOnly(true);
 
@@ -2459,8 +2406,8 @@ public:
         leDeviceFirmwareDate = new QLineEdit(groupSerialNumber);
         leDeviceFirmwareDate->setObjectName(QString::fromUtf8("leDeviceFirmwareDate"));
         leDeviceFirmwareDate->setEnabled(false);
-        sizePolicy2.setHeightForWidth(leDeviceFirmwareDate->sizePolicy().hasHeightForWidth());
-        leDeviceFirmwareDate->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(leDeviceFirmwareDate->sizePolicy().hasHeightForWidth());
+        leDeviceFirmwareDate->setSizePolicy(sizePolicy3);
         leDeviceFirmwareDate->setAlignment(Qt::AlignCenter);
         leDeviceFirmwareDate->setReadOnly(true);
 
@@ -2481,12 +2428,13 @@ public:
 
         twPeriphery->addTab(tabInfo, QString());
 
-        verticalLayout_33->addWidget(twPeriphery);
+        verticalLayout_5->addWidget(twPeriphery);
 
         line->raise();
         twPeriphery->raise();
+        groupBox_4->raise();
 
-        verticalLayout_5->addWidget(groupDevices);
+        verticalLayout_37->addWidget(groupDevices);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -2512,8 +2460,8 @@ public:
         verticalLayout_15->setObjectName(QString::fromUtf8("verticalLayout_15"));
         pteConsole = new QPlainTextEdit(dockWidgetContents_2);
         pteConsole->setObjectName(QString::fromUtf8("pteConsole"));
-        sizePolicy8.setHeightForWidth(pteConsole->sizePolicy().hasHeightForWidth());
-        pteConsole->setSizePolicy(sizePolicy8);
+        sizePolicy2.setHeightForWidth(pteConsole->sizePolicy().hasHeightForWidth());
+        pteConsole->setSizePolicy(sizePolicy2);
         pteConsole->setReadOnly(true);
 
         verticalLayout_15->addWidget(pteConsole);
@@ -2575,25 +2523,23 @@ public:
         cbBaudrate->setToolTip(QApplication::translate("MainWindow", "Baudrate", nullptr));
 #endif // QT_NO_TOOLTIP
         groupDevices->setTitle(QApplication::translate("MainWindow", "\320\243\321\201\321\202\321\200\320\276\320\271\321\201\321\202\320\262\320\260", nullptr));
-#ifndef QT_NO_TOOLTIP
-        cbCmdList->setToolTip(QApplication::translate("MainWindow", "Command list", nullptr));
-#endif // QT_NO_TOOLTIP
-        lblCommand->setText(QApplication::translate("MainWindow", "\320\232\320\276\320\274\320\260\320\275\320\264\320\260", nullptr));
-        lblDeviceAddress->setText(QApplication::translate("MainWindow", "\320\220\320\264\321\200\320\265\321\201", nullptr));
-#ifndef QT_NO_TOOLTIP
-        sbDeviceAddress->setToolTip(QApplication::translate("MainWindow", "Device address", nullptr));
-#endif // QT_NO_TOOLTIP
+        groupBox_4->setTitle(QString());
 #ifndef QT_NO_TOOLTIP
         pbCmdSend->setToolTip(QApplication::translate("MainWindow", "Command send", nullptr));
 #endif // QT_NO_TOOLTIP
         pbCmdSend->setText(QApplication::translate("MainWindow", "\320\236\321\202\320\277\321\200\320\260\320\262\320\270\321\202\321\214", nullptr));
-        lblCmdDescription->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        sbDeviceAddress->setToolTip(QApplication::translate("MainWindow", "Device address", nullptr));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        cbCmdList->setToolTip(QApplication::translate("MainWindow", "Command list", nullptr));
+#endif // QT_NO_TOOLTIP
+        lblDeviceAddress->setText(QApplication::translate("MainWindow", "\320\220\320\264\321\200\320\265\321\201", nullptr));
+        lblCommand->setText(QApplication::translate("MainWindow", "\320\232\320\276\320\274\320\260\320\275\320\264\320\260", nullptr));
+        labelCmdDescription->setText(QString());
         gboxAutorepeat->setTitle(QApplication::translate("MainWindow", "\320\220\320\262\321\202\320\276\320\277\320\276\320\262\321\202\320\276\321\200", nullptr));
         cboxRepeatInputs->setText(QApplication::translate("MainWindow", "\320\222\321\205\320\276\320\264\321\213", nullptr));
         cboxRepeatAIN->setText(QApplication::translate("MainWindow", "AIN", nullptr));
-        groupBox_2->setTitle(QApplication::translate("MainWindow", "DSDIN", nullptr));
-        lblStateDSIDIN->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\276\321\217\320\275\320\270\320\265", nullptr));
-        lblTimeDSDIN->setText(QApplication::translate("MainWindow", "\320\222\321\200\320\265\320\274\321\217", nullptr));
         gboxInputSettings->setTitle(QApplication::translate("MainWindow", "\320\235\320\260\321\201\321\202\321\200\320\276\320\271\320\272\320\260 \320\262\321\205\320\276\320\264\320\276\320\262", nullptr));
         gboxInputSettingsFilter->setTitle(QApplication::translate("MainWindow", "\320\236\320\261\321\211\320\270\320\265 \320\275\320\260\321\201\321\202\321\200\320\276\320\271\320\272\320\270 \321\204\320\270\320\273\321\214\321\202\321\200\320\260", nullptr));
         lblPeriods->setText(QApplication::translate("MainWindow", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \320\277\320\265\321\200\320\270\320\276\320\264\320\276\320\262", nullptr));
@@ -2603,6 +2549,9 @@ public:
         radioButtonInputSingle->setText(QApplication::translate("MainWindow", "\320\236\320\264\320\270\320\275\320\276\321\207\320\275\321\213\320\271", nullptr));
         radioButtonInputGroup->setText(QApplication::translate("MainWindow", "\320\223\321\200\321\203\320\277\320\277\320\260", nullptr));
         pushButtonInputSet->setText(QApplication::translate("MainWindow", "\320\235\320\260\321\201\321\202\321\200\320\276\320\270\321\202\321\214", nullptr));
+        groupBox_2->setTitle(QApplication::translate("MainWindow", "DSDIN", nullptr));
+        lblStateDSIDIN->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\276\321\217\320\275\320\270\320\265", nullptr));
+        lblTimeDSDIN->setText(QApplication::translate("MainWindow", "\320\222\321\200\320\265\320\274\321\217", nullptr));
         label_9->setText(QApplication::translate("MainWindow", "\320\236\321\207\320\265\321\200\320\265\320\264\321\214 \321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\271", nullptr));
         gboxInputs->setTitle(QApplication::translate("MainWindow", "\320\222\321\205\320\276\320\264\321\213", nullptr));
         label->setText(QApplication::translate("MainWindow", "\320\232\320\260\320\275\320\260\320\273 1", nullptr));

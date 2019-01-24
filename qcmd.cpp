@@ -70,7 +70,8 @@ QCmd::QCmd(QWidget* parent):
 
     foreach(QString cmd, m_cmd.keys())
     {
-        this->addItem(cmd);
+        if(m_cmd.find(cmd)->second != 0)
+            addItem(cmd);
     }
 
     connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
@@ -88,7 +89,7 @@ quint8 QCmd::size(const QString& cmd) const
 }
 //-----------------------------------
 const QCmd::cmd_t& QCmd::list() const
-{
+{    
     return m_cmd;
 }
 //---------------------------------

@@ -39,6 +39,7 @@ QCommand::QCommand(QWidget* parent):
 
     connect(ui->lwCmd, &QListWidget::itemDoubleClicked, this, &QCommand::cmdDoubleClicked);
     connect(ui->lwCmd, &QListWidget::itemClicked, this, &QCommand::cmdClicked);
+    connect(ui->lwCmd, &QListWidget::currentRowChanged, this, &QCommand::clickCmdIndex);
 
     size.setHeight(static_cast<int>(size.height()*count*1.5f));
 
@@ -66,8 +67,12 @@ void QCommand::showEvent(QShowEvent* event)
 void QCommand::closeEvent(QCloseEvent* event)
 {
     emit closeCommand(false);
-
     QWidget::closeEvent(event);
+}
+//---------------------------------------
+void QCommand::setCurrentIndex(int index)
+{
+    ui->lwCmd->setCurrentRow(index);
 }
 //----------------------------------------------
 void QCommand::cmdClicked(QListWidgetItem* item)
