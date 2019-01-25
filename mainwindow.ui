@@ -4362,7 +4362,6 @@
        </item>
       </layout>
       <zorder>line</zorder>
-      <zorder></zorder>
       <zorder>twPeriphery</zorder>
       <zorder>groupBox_4</zorder>
      </widget>
@@ -4384,7 +4383,6 @@
     </property>
     <addaction name="actionTerminal"/>
     <addaction name="actionCommand"/>
-    <addaction name="actionSerialNumber"/>
     <addaction name="actionKeyboard"/>
    </widget>
    <addaction name="menu"/>
@@ -4449,17 +4447,6 @@
    </property>
    <property name="shortcut">
     <string>Alt+Shift+C</string>
-   </property>
-  </action>
-  <action name="actionSerialNumber">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Серийный номер</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+Shift+N</string>
    </property>
   </action>
   <action name="actionKeyboard">

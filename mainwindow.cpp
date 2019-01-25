@@ -45,7 +45,6 @@ MainWindow::MainWindow(QWidget* parent):
     ui->lineEditMessageQueue->setText("0");
     ui->actionTerminal->setChecked(true);
     ui->actionCommand->setChecked(false);
-    ui->actionSerialNumber->setChecked(false);
     ui->actionKeyboard->setChecked(false);
 }
 //-----------------------
@@ -66,6 +65,7 @@ void MainWindow::initConnect()
     connect(m_port, SIGNAL(bytesWritten(qint64)), this, SLOT(BytesWriten(qint64)));
     connect(ui->pbCmdSend, SIGNAL(clicked()), this, SLOT(sendCmd()));
     connect(ui->cbCmdList, SIGNAL(changeDescription(QString)), this, SLOT(cmdDescription(QString)));
+    connect(ui->cbCmdList, SIGNAL(currentIndexChanged(int)), ui->cbCmdList, SLOT(slotActivated(int)));
     connect(ui->sbDeviceAddress, SIGNAL(valueChanged(int)), SLOT(addrChanged(int)));
 
     connect(m_output_dev.at(0), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
@@ -93,7 +93,6 @@ void MainWindow::initConnect()
     connect(ui->dwTerminal, SIGNAL(visibilityChanged(bool)), this, SLOT(visiblityTerminal(bool)));
     connect(ui->actionTerminal, &QAction::triggered, this, &MainWindow::visiblityTerminal);
     connect(ui->actionCommand, &QAction::triggered, this, &MainWindow::visiblityCommand);
-    connect(ui->actionSerialNumber, &QAction::triggered, this, &MainWindow::visiblitySerialNumber);
     connect(ui->actionKeyboard, &QAction::triggered, this, &MainWindow::visiblityKeyboard);
     connect(m_command, &QCommand::doubleClickCmd, this, &MainWindow::sendCmd);
     connect(m_command, &QCommand::clickCmd, this, &MainWindow::initFilter);
@@ -702,7 +701,6 @@ void MainWindow::showEvent(QShowEvent* evt)
     ui->twPeriphery->setCurrentIndex(0);
     initFilter(ui->cbCmdList->currentText());
     addrChanged(ui->sbDeviceAddress->value());
-    fileAinOpen();
     ui->actionKeyboard->setEnabled(false);
 
     QMainWindow::showEvent(evt);
@@ -747,11 +745,8 @@ bool MainWindow::is_blockSend()
 //------------------------------------
 void MainWindow::configurationWindow()
 {
-    if(m_conf_widget->isHidden())
+    if(!m_conf_widget->isHidden())
     {
-        if(ui->actionSerialNumber->isChecked())
-            ui->actionSerialNumber->setChecked(true);
-
         sendData("0x1E");
         if(m_conf_widget->exec() == QDialog::Accepted)
         {
@@ -779,14 +774,11 @@ void MainWindow::configurationWindow()
 
             write(cmd, ba);
         }
-
-        ui->actionSerialNumber->setChecked(false);
     }
 }
 //------------------------------------------------
 void MainWindow::visiblitySerialNumber(bool state)
 {
-    ui->actionSerialNumber->setChecked(state);
     if(!state)
     {
         if(m_conf_widget->isVisible())
@@ -989,7 +981,10 @@ void MainWindow::sendCmd(const QString& cmd_str)
     if(cmd.toUpper() == "0X3A") // если команда "Запись серийного номера, то открываем дополнительное окно (команду не отправляем)
     {
         if(m_conf_widget->isHidden())
+        {
             m_conf_widget->show();
+            configurationWindow();
+        }
         return;
     }
     else if(cmd.toUpper() == "0X3F") // если команда "Настройка входа", то открываем дополнительное окно (команду не отправляем)
@@ -1041,8 +1036,8 @@ void MainWindow::sendData(const QString& data)
 //--------------------------------------------------------------------
 void MainWindow::write(const QString& cmd_str, const QByteArray& data)
 {
-    if(!m_port->isOpen())
-        return;
+//    if(!m_port->isOpen())
+//        return;
 
     if(m_query.isEmpty())
     {
@@ -1119,7 +1114,8 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
         quint8 checksum = getChecksum(m_query, static_cast<quint8>(m_query.size())); // создать контрольную сумму
 
         m_query.append(QByteArray::fromHex(QByteArray::number(checksum, 16)));
-        int index = (QString(m_cmd_last).remove(QRegExp(tr("0x"))).toInt(Q_NULLPTR, 16));
+
+        int index = ui->cbCmdList->findText(m_cmd_last);
         ui->pteConsole->appendPlainText(tr("КОМАНДА: ") + ui->cbCmdList->description(index));
         ui->pteConsole->appendPlainText(tr("ОТПРАВКА ДАННЫХ: ") + m_query.toHex().toUpper());
         m_port->setParity(QSerialPort::MarkParity); // enable 9 bit

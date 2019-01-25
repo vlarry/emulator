@@ -47,7 +47,6 @@ class Ui_MainWindow
 public:
     QAction *actionTerminal;
     QAction *actionCommand;
-    QAction *actionSerialNumber;
     QAction *actionKeyboard;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_37;
@@ -411,9 +410,6 @@ public:
         actionCommand = new QAction(MainWindow);
         actionCommand->setObjectName(QString::fromUtf8("actionCommand"));
         actionCommand->setCheckable(true);
-        actionSerialNumber = new QAction(MainWindow);
-        actionSerialNumber->setObjectName(QString::fromUtf8("actionSerialNumber"));
-        actionSerialNumber->setCheckable(true);
         actionKeyboard = new QAction(MainWindow);
         actionKeyboard->setObjectName(QString::fromUtf8("actionKeyboard"));
         actionKeyboard->setCheckable(true);
@@ -2472,7 +2468,6 @@ public:
         menuBar->addAction(menu->menuAction());
         menu->addAction(actionTerminal);
         menu->addAction(actionCommand);
-        menu->addAction(actionSerialNumber);
         menu->addAction(actionKeyboard);
 
         retranslateUi(MainWindow);
@@ -2496,10 +2491,6 @@ public:
         actionCommand->setText(QApplication::translate("MainWindow", "\320\232\320\276\320\274\320\260\320\275\320\264\321\213", nullptr));
 #ifndef QT_NO_SHORTCUT
         actionCommand->setShortcut(QApplication::translate("MainWindow", "Alt+Shift+C", nullptr));
-#endif // QT_NO_SHORTCUT
-        actionSerialNumber->setText(QApplication::translate("MainWindow", "\320\241\320\265\321\200\320\270\320\271\320\275\321\213\320\271 \320\275\320\276\320\274\320\265\321\200", nullptr));
-#ifndef QT_NO_SHORTCUT
-        actionSerialNumber->setShortcut(QApplication::translate("MainWindow", "Alt+Shift+N", nullptr));
 #endif // QT_NO_SHORTCUT
         actionKeyboard->setText(QApplication::translate("MainWindow", "\320\232\320\273\320\260\320\262\320\270\320\260\321\202\321\203\321\200\320\260", nullptr));
 #ifndef QT_NO_SHORTCUT
