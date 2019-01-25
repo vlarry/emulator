@@ -875,6 +875,11 @@ void MainWindow::refreshSerialPort()
 
         m_port_name = ui->cbPortNames->currentText(); // сохраняем порт
     }
+    else if(count != 0 && ui->cbPortNames->count() != 0)
+    {
+        ui->cbPortNames->clear();
+        ui->cbPortNames->addItems(port_list);
+    }
 
     m_timerRefreshPort->start(500); // опрос наличия подлкюченных последовательных портов каждые 500мс
 }
