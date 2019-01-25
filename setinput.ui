@@ -57,7 +57,7 @@
                <set>Qt::AlignCenter</set>
               </property>
               <property name="maximum">
-               <number>7</number>
+               <number>12</number>
               </property>
              </widget>
             </item>
