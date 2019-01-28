@@ -9,3 +9,4 @@ Makefile
 *.pro.user.*
 ui_*.h
 *.8-pre1
+*.cnf
