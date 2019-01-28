@@ -13,5 +13,7 @@
         <file>resource/images/arrow_up.png</file>
         <file>resource/images/key_off.png</file>
         <file>resource/images/key_on.png</file>
+        <file>resource/images/help.png</file>
+        <file>resource/images/input_help.png</file>
     </qresource>
 </RCC>

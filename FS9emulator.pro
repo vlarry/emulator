@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     qkey.cpp \
     qcommand.cpp \
     cconfigurationmodulewidget.cpp \
-    csetinput.cpp
+    csetinput.cpp \
+    cinputhelp.cpp
 
 HEADERS  += mainwindow.h \
     qcmd.h \
@@ -40,13 +41,15 @@ HEADERS  += mainwindow.h \
     qkey.h \
     qcommand.h \
     cconfigurationmodulewidget.h \
-    csetinput.h
+    csetinput.h \
+    cinputhelp.h
 
 FORMS    += mainwindow.ui \
     keyboard.ui \
     command.ui \
     configurationmodulewidget.ui \
-    setinput.ui
+    setinput.ui \
+    inputhelp.ui
 
 win32::RC_FILE = \
                  resource/icon.rc

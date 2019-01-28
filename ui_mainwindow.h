@@ -62,7 +62,7 @@ public:
     QComboBox *cbBaudrate;
     QSpacerItem *horizontalSpacer_13;
     QGroupBox *groupDevices;
-    QVBoxLayout *verticalLayout_5;
+    QVBoxLayout *verticalLayout_7;
     QGroupBox *groupBox_4;
     QHBoxLayout *horizontalLayout_9;
     QVBoxLayout *verticalLayout_4;
@@ -98,6 +98,9 @@ public:
     QRadioButton *radioButtonInputSingle;
     QRadioButton *radioButtonInputGroup;
     QPushButton *pushButtonInputSet;
+    QVBoxLayout *verticalLayout_5;
+    QToolButton *toolButtonInputHelp;
+    QSpacerItem *verticalSpacer_2;
     QHBoxLayout *horizontalLayout_12;
     QGroupBox *groupBox_2;
     QHBoxLayout *horizontalLayout;
@@ -513,10 +516,10 @@ public:
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(groupDevices->sizePolicy().hasHeightForWidth());
         groupDevices->setSizePolicy(sizePolicy2);
-        verticalLayout_5 = new QVBoxLayout(groupDevices);
-        verticalLayout_5->setSpacing(6);
-        verticalLayout_5->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
+        verticalLayout_7 = new QVBoxLayout(groupDevices);
+        verticalLayout_7->setSpacing(6);
+        verticalLayout_7->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
         groupBox_4 = new QGroupBox(groupDevices);
         groupBox_4->setObjectName(QString::fromUtf8("groupBox_4"));
         QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -749,11 +752,31 @@ public:
 
         horizontalLayout_8->addWidget(gboxInput);
 
+        verticalLayout_5 = new QVBoxLayout();
+        verticalLayout_5->setSpacing(6);
+        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
+        toolButtonInputHelp = new QToolButton(gboxInputSettings);
+        toolButtonInputHelp->setObjectName(QString::fromUtf8("toolButtonInputHelp"));
+        toolButtonInputHelp->setMinimumSize(QSize(24, 24));
+        toolButtonInputHelp->setMaximumSize(QSize(24, 24));
+        QIcon icon1;
+        icon1.addFile(QString::fromUtf8(":/images/resource/images/help.png"), QSize(), QIcon::Normal, QIcon::Off);
+        toolButtonInputHelp->setIcon(icon1);
+
+        verticalLayout_5->addWidget(toolButtonInputHelp);
+
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_5->addItem(verticalSpacer_2);
+
+
+        horizontalLayout_8->addLayout(verticalLayout_5);
+
 
         horizontalLayout_9->addWidget(gboxInputSettings);
 
 
-        verticalLayout_5->addWidget(groupBox_4);
+        verticalLayout_7->addWidget(groupBox_4);
 
         horizontalLayout_12 = new QHBoxLayout();
         horizontalLayout_12->setSpacing(6);
@@ -826,7 +849,7 @@ public:
         horizontalLayout_12->addLayout(horizontalLayout_10);
 
 
-        verticalLayout_5->addLayout(horizontalLayout_12);
+        verticalLayout_7->addLayout(horizontalLayout_12);
 
         line = new QFrame(groupDevices);
         line->setObjectName(QString::fromUtf8("line"));
@@ -835,7 +858,7 @@ public:
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);
 
-        verticalLayout_5->addWidget(line);
+        verticalLayout_7->addWidget(line);
 
         twPeriphery = new QTabWidget(groupDevices);
         twPeriphery->setObjectName(QString::fromUtf8("twPeriphery"));
@@ -2424,7 +2447,7 @@ public:
 
         twPeriphery->addTab(tabInfo, QString());
 
-        verticalLayout_5->addWidget(twPeriphery);
+        verticalLayout_7->addWidget(twPeriphery);
 
         line->raise();
         twPeriphery->raise();
@@ -2535,11 +2558,15 @@ public:
         gboxInputSettingsFilter->setTitle(QApplication::translate("MainWindow", "\320\236\320\261\321\211\320\270\320\265 \320\275\320\260\321\201\321\202\321\200\320\276\320\271\320\272\320\270 \321\204\320\270\320\273\321\214\321\202\321\200\320\260", nullptr));
         lblPeriods->setText(QApplication::translate("MainWindow", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \320\277\320\265\321\200\320\270\320\276\320\264\320\276\320\262", nullptr));
         lblDiscret->setText(QApplication::translate("MainWindow", "\320\224\320\270\321\201\320\272\321\200\320\265\321\202\320\275\320\276\321\201\321\202\321\214", nullptr));
-        lblSignal->setText(QApplication::translate("MainWindow", "\320\241\320\270\320\263\320\275\320\260\320\273", nullptr));
+        lblSignal->setText(QApplication::translate("MainWindow", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \320\265\320\264\320\270\320\275\320\270\321\206 \320\275\320\260 \320\277\320\265\321\200\320\270\320\276\320\264", nullptr));
         gboxInput->setTitle(QApplication::translate("MainWindow", "\320\222\321\205\320\276\320\264", nullptr));
         radioButtonInputSingle->setText(QApplication::translate("MainWindow", "\320\236\320\264\320\270\320\275\320\276\321\207\320\275\321\213\320\271", nullptr));
         radioButtonInputGroup->setText(QApplication::translate("MainWindow", "\320\223\321\200\321\203\320\277\320\277\320\260", nullptr));
         pushButtonInputSet->setText(QApplication::translate("MainWindow", "\320\235\320\260\321\201\321\202\321\200\320\276\320\270\321\202\321\214", nullptr));
+#ifndef QT_NO_TOOLTIP
+        toolButtonInputHelp->setToolTip(QApplication::translate("MainWindow", "\320\241\320\277\321\200\320\260\320\262\320\272\320\260 \320\277\320\276 \320\275\320\260\321\201\321\202\321\200\320\276\320\271\320\272\320\265 \320\262\321\205\320\276\320\264\320\276\320\262", nullptr));
+#endif // QT_NO_TOOLTIP
+        toolButtonInputHelp->setText(QApplication::translate("MainWindow", "...", nullptr));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "DSDIN", nullptr));
         lblStateDSIDIN->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\276\321\217\320\275\320\270\320\265", nullptr));
         lblTimeDSDIN->setText(QApplication::translate("MainWindow", "\320\222\321\200\320\265\320\274\321\217", nullptr));

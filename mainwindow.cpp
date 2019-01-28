@@ -15,7 +15,8 @@ MainWindow::MainWindow(QWidget* parent):
     m_block_send(false),
     m_keyboard(Q_NULLPTR),
     m_command(Q_NULLPTR),
-    m_set_intput_widget(Q_NULLPTR)
+    m_set_intput_widget(Q_NULLPTR),
+    m_input_help_widget(Q_NULLPTR)
 {
     ui->setupUi(this);
 
@@ -38,6 +39,7 @@ MainWindow::MainWindow(QWidget* parent):
     m_conf_widget          = new CConfigurationModuleWidget(this);
     m_file_ain             = new QFile;
     m_set_intput_widget    = new CSetInput(this);
+    m_input_help_widget    = new CInputHelp(QPixmap(":/images/resource/images/input_help.png"), this);
 
     m_conf_widget->hide();
     m_set_intput_widget->hide();
@@ -102,6 +104,7 @@ void MainWindow::initConnect()
     connect(ui->pushButtonInputSet, &QPushButton::clicked, this, &MainWindow::setupDiscretInput);
     connect(m_set_intput_widget, &CSetInput::apply, this, &MainWindow::discretInputProcess);
     connect(m_command, &QCommand::clickCmdIndex, ui->cbCmdList, &QComboBox::setCurrentIndex);
+    connect(ui->toolButtonInputHelp, &QToolButton::clicked, this, &MainWindow::discretInputHelp);
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -820,6 +823,12 @@ void MainWindow::discretInputProcess()
 
     QByteArray data = m_set_intput_widget->intputSettings(type);
     write("0x3F", data);
+}
+//---------------------------------
+void MainWindow::discretInputHelp()
+{
+    if(m_input_help_widget->isHidden())
+        m_input_help_widget->show();
 }
 //----------------------------------
 void MainWindow::refreshSerialPort()

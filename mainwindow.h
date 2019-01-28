@@ -21,6 +21,7 @@
     #include "qcommand.h"
     #include "cconfigurationmodulewidget.h"
     #include "csetinput.h"
+    #include "cinputhelp.h"
     //----------
     namespace Ui
     {
@@ -72,6 +73,7 @@
             QCommand*                   m_command;
             CConfigurationModuleWidget* m_conf_widget;
             CSetInput*                  m_set_intput_widget;
+            CInputHelp*                 m_input_help_widget;
 
         private:
             void   initConnect();
@@ -119,6 +121,7 @@
             void visiblitySerialNumber(bool state = false);
             void setupDiscretInput();
             void discretInputProcess();
+            void discretInputHelp();
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)
