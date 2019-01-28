@@ -96,8 +96,8 @@ void CIODevice::slotState(bool state)
     // изменение состояния - только для выходов
     if(m_type)
     {
-        if(m_dev_addr == 0x02 && m_ctrl == true) // только для МИК-01 - переход в альтернативный режим при нажатии на
-        {                                       // клавишу CTRL
+        if(m_dev_addr == MIK_01 && m_ctrl == true) // только для МИК-01 - переход в альтернативный режим при нажатии на
+        {                                          // клавишу CTRL
             m_state = STATE_ALT;
         }
         else

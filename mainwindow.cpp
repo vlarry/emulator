@@ -238,7 +238,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 
     switch(cmd)
     {
-        case 0x00:
+        case 0x00: // чтение дискретных каналов входов
             if(ui->sbDeviceAddress->value() != MIK_01)
             {
                 for(quint8 i = 0; i < size; ++i)
@@ -262,7 +262,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             }
         break;
 
-        case 0x01:
+        case 0x01: // чтение дискретных каналов выходов
             if(ui->sbDeviceAddress->value() != MIK_01)
             {
                 if(size == 1)
@@ -281,7 +281,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             }
         break;
 
-        case 0x02:
+        case 0x02: // чтение расчетных величин 1..4 формата FLOAT
             for(quint8 i = 0; i < size; i += 4)
             {
                 quint8 j;
@@ -349,8 +349,8 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             in << '\n';
         break;
 
-        case 0x03:
-            if(ui->sbDeviceAddress->value() == MIK_01)
+        case 0x03: // чтение регистра расширения дискретных каналов входов
+            if(ui->sbDeviceAddress->value() == MDVV_02 || ui->sbDeviceAddress->value() == MIK_01)
             {
                 for(quint8 i = 0; i < size; ++i)
                 {
@@ -379,8 +379,8 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             }
         break;
 
-        case 0x04:
-            if(ui->sbDeviceAddress->value() == MIK_01)
+        case 0x04: // чтение регистра расширения дискретных каналов выходов
+            if(ui->sbDeviceAddress->value() == MDVV_02 || ui->sbDeviceAddress->value() == MIK_01)
             {
                 for(quint8 i = 0; i < size; ++i)
                 {
@@ -400,6 +400,13 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                         setChannel(io, ch_state);
                     }
                 }
+            }
+        break;
+
+        case 0x05: // запись регистра расширения дискретных каналов выходов
+            if(ui->sbDeviceAddress->value() == MDVV_02 || ui->sbDeviceAddress->value() == MIK_01)
+            {
+
             }
         break;
 
@@ -548,12 +555,12 @@ void MainWindow::setChannel(CIODevice* io, quint8 ch_state)
             io->set_state(CIODevice::STATE_ON);
         break;
 
-        case 0x02: // ошибка
-        case 0x03: // канала
+        case 0x02: // ошибка канала для МДВВ-01 (мигание для остальных модулей)
+        case 0x03: // ошибка канала для МДВВ-01 (резерв для остальных модулей = миганию)
             CIODevice::state_t state;
             quint8 addr = io->get_addr();
 
-            if(addr == 2) // устройство МИК-01
+            if(addr == MIK_01) // устройство МИК-01
             {
                 state = CIODevice::STATE_ALT;
             }

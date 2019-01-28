@@ -4,6 +4,13 @@
     #include <QToolButton>
     #include <QMouseEvent>
     #include <QDebug>
+    //--------------
+    enum DEVICE_Type
+    {
+        MDVV_01 = 0x00,
+        MDVV_02 = 0x01,
+        MIK_01  = 0x02
+    };
     //---------------------------------
     class CIODevice: public QToolButton
     {

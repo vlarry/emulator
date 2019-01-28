@@ -33,13 +33,6 @@
         quint8 byte[sizeof(float)];
         float  number;
     } Float_t;
-    //--
-    enum DEVICE_Type
-    {
-        MDVV_01 = 0x00,
-        MDVV_02 = 0x01,
-        MIK_01  = 0x02
-    };
     //----------------------------------
     class MainWindow: public QMainWindow
     {
