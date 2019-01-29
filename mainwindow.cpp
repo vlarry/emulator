@@ -13,11 +13,10 @@ MainWindow::MainWindow(QWidget* parent):
     m_timerRefreshPort(Q_NULLPTR),
     m_file_ain(Q_NULLPTR),
     m_block_send(false),
-    m_keyboard(Q_NULLPTR),
+    m_mik_interface(Q_NULLPTR),
     m_command(Q_NULLPTR),
     m_set_intput_widget(Q_NULLPTR),
-    m_input_help_widget(Q_NULLPTR),
-    m_mik_interface(Q_NULLPTR)
+    m_input_help_widget(Q_NULLPTR)
 {
     ui->setupUi(this);
 
@@ -49,9 +48,6 @@ MainWindow::MainWindow(QWidget* parent):
     ui->actionTerminal->setChecked(true);
     ui->actionCommand->setChecked(false);
     ui->actionKeyboard->setChecked(false);
-
-    m_mik_interface = new CBZUInterface(this);
-    m_mik_interface->show();
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -103,7 +99,7 @@ void MainWindow::initConnect()
     connect(m_command, &QCommand::doubleClickCmd, this, &MainWindow::sendCmd);
     connect(m_command, &QCommand::clickCmd, this, &MainWindow::initFilter);
     connect(m_command, &QCommand::closeCommand, this, &MainWindow::visiblityCommand);
-    connect(m_keyboard, &QKeyboard::closeKeyboard, this, &MainWindow::visiblityKeyboard);
+    connect(m_mik_interface, &CBZUInterface::closed, this, &MainWindow::visiblityKeyboard);
 
     connect(ui->pushButtonInputSet, &QPushButton::clicked, this, &MainWindow::setupDiscretInput);
     connect(m_set_intput_widget, &CSetInput::apply, this, &MainWindow::discretInputProcess);
@@ -377,7 +373,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 //                        else if(ch_num >= 6 && ch_num < 9)
 //                            ch_num -= 6;
 
-                        m_keyboard->setStateKey(ch_num, ch_state);
+                        m_mik_interface->setKeyboardKeyState(ch_num, ch_state);
                     }
                 }
             }
@@ -684,16 +680,16 @@ void MainWindow::showEvent(QShowEvent* evt)
         m_command->hide();
     }
 
-    if(m_keyboard == Q_NULLPTR)
+    if(m_mik_interface == Q_NULLPTR)
     {
-        m_keyboard = new QKeyboard(this);
+        m_mik_interface = new CBZUInterface(this);
         if(ui->actionKeyboard->isChecked())
         {
-            m_keyboard->show();
+            m_mik_interface->show();
         }
         else
         {
-            m_keyboard->hide();
+            m_mik_interface->hide();
         }
     }
 
@@ -1201,10 +1197,10 @@ void MainWindow::addrChanged(int addr)
     ui->actionKeyboard->setEnabled(false); // Вызов клавиатуры МИК-01 становится видимым при выборе адреса 0х02
     ui->gboxInputs->setEnabled(true);
 
-    if(m_keyboard != Q_NULLPTR)
+    if(m_mik_interface != Q_NULLPTR)
     {
-        if(!m_keyboard->isHidden())
-            m_keyboard->hide();
+        if(!m_mik_interface->isHidden())
+            m_mik_interface->hide();
     }
 
     if(addr == MDVV_01)
@@ -1233,11 +1229,11 @@ void MainWindow::addrChanged(int addr)
 
         if(ui->actionKeyboard->isChecked())
         {
-            m_keyboard->show();
+            m_mik_interface->show();
         }
         else
         {
-            m_keyboard->hide();
+            m_mik_interface->hide();
         }
 
         out_count = 12;
@@ -1376,11 +1372,11 @@ void MainWindow::visiblityKeyboard(bool visible)
 
     if(visible)
     {
-        m_keyboard->show();
+        m_mik_interface->show();
     }
     else
     {
-        m_keyboard->hide();
+        m_mik_interface->hide();
     }
 }
 //---------------------------------------------

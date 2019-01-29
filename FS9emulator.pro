@@ -27,7 +27,6 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     qcmd.cpp \
     ciodevice.cpp \
-    qkeyboard.cpp \
     qkey.cpp \
     qcommand.cpp \
     cconfigurationmodulewidget.cpp \
@@ -39,7 +38,6 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     qcmd.h \
     ciodevice.h \
-    qkeyboard.h \
     qkey.h \
     qcommand.h \
     cconfigurationmodulewidget.h \
@@ -49,7 +47,6 @@ HEADERS  += mainwindow.h \
     qled.h
 
 FORMS    += mainwindow.ui \
-    keyboard.ui \
     command.ui \
     configurationmodulewidget.ui \
     setinput.ui \

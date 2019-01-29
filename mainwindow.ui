@@ -4497,10 +4497,10 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Клавиатура</string>
+    <string>Интерфейс МИК-01</string>
    </property>
    <property name="shortcut">
-    <string>Alt+Shift+K</string>
+    <string>Alt+Shift+I</string>
    </property>
   </action>
  </widget>

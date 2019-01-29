@@ -21,7 +21,7 @@
             void setKeyboardKeyState(int key, bool state);
 
         signals:
-            void closed();
+            void closed(bool);
 
         private:
             void closeEvent(QCloseEvent* event);

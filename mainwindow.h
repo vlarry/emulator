@@ -17,7 +17,6 @@
     #include <QScrollBar>
     #include "qcmd.h"
     #include "ciodevice.h"
-    #include "qkeyboard.h"
     #include "qcommand.h"
     #include "cconfigurationmodulewidget.h"
     #include "csetinput.h"
@@ -63,12 +62,11 @@
             QFile*                      m_file_ain;
             bool                        m_block_send;
             QString                     m_port_name; // имя порта по умолчанию
-            QKeyboard*                  m_keyboard;
+            CBZUInterface*              m_mik_interface;
             QCommand*                   m_command;
             CConfigurationModuleWidget* m_conf_widget;
             CSetInput*                  m_set_intput_widget;
             CInputHelp*                 m_input_help_widget;
-            CBZUInterface*              m_mik_interface;
 
         private:
             void   initConnect();

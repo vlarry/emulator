@@ -65,7 +65,7 @@ void CBZUInterface::setKeyboardKeyState(int key, bool state)
 //------------------------------------------------
 void CBZUInterface::closeEvent(QCloseEvent* event)
 {
-    emit closed();
+    emit closed(false);
 
     for(QKey* key: m_keyboard)
         key->setState(false);
