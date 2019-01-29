@@ -10,6 +10,16 @@ QLed::QLed(QWidget* parent):
     connect(this, &QLed::clicked, this, &QLed::ledClick);
     connect(&m_timer, &QTimer::timeout, this, &QLed::timeout);
 }
+//--------------------------------
+QLed::LedState QLed::state() const
+{
+    LedState state = m_state;
+
+    if(m_flash)
+        state = LED_FLASH;
+
+    return state;
+}
 //-------------------------------------------
 void QLed::setColor(const LedColor led_color)
 {
@@ -24,7 +34,8 @@ void QLed::setState(LedState state)
 
     if(m_state == LED_ON)
     {
-        icon = QIcon((m_color == LED_RED)?QPixmap(":/images/resource/images/led_red.png"):QPixmap(":/images/resource/images/led_green.png"));
+        icon = QIcon((m_color == LED_RED)?QPixmap(":/images/resource/images/led_red.png"):(m_color == LED_GREEN)?
+                                          QPixmap(":/images/resource/images/led_green.png"):QPixmap(":/images/resource/images/led_yellow.png"));
     }
     else
     {
@@ -71,5 +82,12 @@ void QLed::setLedModeFlash()
 {
     m_flash = true;
     timeout();
-    m_timer.start(500);
+    m_timer.start(1000);
+}
+//----------------
+void QLed::reset()
+{
+    m_state = LED_OFF;
+    m_flash = false;
+    m_timer.stop();
 }

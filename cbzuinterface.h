@@ -3,6 +3,7 @@
     //----------------
     #include <QWidget>
     #include <QCloseEvent>
+    #include <QByteArray>
     #include "qkey.h"
     #include "qled.h"
     //----------
@@ -18,11 +19,14 @@
         public:
             explicit CBZUInterface(QWidget* parent = Q_NULLPTR);
             ~CBZUInterface();
+            void ledReset();
+            QByteArray ledStates();
             void setKeyboardState(const QByteArray& keyboards);
             void setLedState(const QByteArray& leds);
 
         signals:
             void closed(bool);
+            void ledStateSave();
 
         private:
             void closeEvent(QCloseEvent* event);

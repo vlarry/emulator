@@ -18,5 +18,6 @@
         <file>resource/images/led_gray.png</file>
         <file>resource/images/led_green.png</file>
         <file>resource/images/led_red.png</file>
+        <file>resource/images/led_yellow.png</file>
     </qresource>
 </RCC>

@@ -722,7 +722,7 @@
        <item>
         <widget class="QTabWidget" name="twPeriphery">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tabIO">
           <attribute name="title">

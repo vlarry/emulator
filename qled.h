@@ -15,7 +15,8 @@
             enum LedColor
             {
                 LED_RED,
-                LED_GREEN
+                LED_GREEN,
+                LED_YELLOW
             };
 
             enum LedState
@@ -28,8 +29,10 @@
 
         public:
             QLed(QWidget* parent = Q_NULLPTR);
+            LedState state() const;
             void setColor(const LedColor led_color);
             void setLedModeFlash();
+            void reset();
 
         public slots:
             void setState(LedState state);
