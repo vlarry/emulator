@@ -22,6 +22,7 @@
     #include "cconfigurationmodulewidget.h"
     #include "csetinput.h"
     #include "cinputhelp.h"
+    #include "cbzuinterface.h"
     //----------
     namespace Ui
     {
@@ -51,8 +52,8 @@
             quint8                      m_query_count; // количество отправленных байт
             QByteArray                  m_responce; // массив байт ответа устройства
             QString                     m_cmd_last; // последняя отправленная команда
-            QVector<CIODevice*>         m_input_dev;
-            QVector<CIODevice*>         m_output_dev;
+            QVector<CIODevice*>         m_input_dev; // массив указателей на входы устройства
+            QVector<CIODevice*>         m_output_dev; // массив указателей на выходы устройства
             QVector<QLineEdit*>         m_ain_dev;
             QVector<QString>            m_queue_cmd;
             QTimer*                     m_timerAutoRepeatInput;
@@ -67,6 +68,7 @@
             CConfigurationModuleWidget* m_conf_widget;
             CSetInput*                  m_set_intput_widget;
             CInputHelp*                 m_input_help_widget;
+            CBZUInterface*              m_mik_interface;
 
         private:
             void   initConnect();
@@ -115,6 +117,7 @@
             void setupDiscretInput();
             void discretInputProcess();
             void discretInputHelp();
+            void setupExtandOut();
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

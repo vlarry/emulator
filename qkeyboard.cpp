@@ -44,7 +44,7 @@ void QKeyboard::setStateKey(int channel, bool state)
 {
     if(channel < m_keys.count())
     {
-        m_keys.at(channel)->changeState(state);
+        m_keys.at(channel)->setState(state);
     }
 }
 //------------------------------

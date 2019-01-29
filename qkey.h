@@ -8,7 +8,7 @@
     {
         public:
             QKey(QWidget* parent = Q_NULLPTR);
-            void changeState(bool state);
+            void setState(bool state);
 
         private:
             bool m_state;

@@ -4,14 +4,14 @@ QKey::QKey(QWidget* parent):
     QToolButton(parent),
     m_state(false)
 {
-    changeState(m_state);
+    setState(m_state);
 }
-//--------------------------------
-void QKey::changeState(bool state)
+//-----------------------------
+void QKey::setState(bool state)
 {
     m_state = state;
 
-    QString color_str = (m_state)?tr("QToolButton { background: green }"):tr("QToolButton { background: gray; }");
+    QString color_str = ((m_state)?"QToolButton { background: green }":"QToolButton { background: gray; }");
 
     this->setStyleSheet(color_str);
 }

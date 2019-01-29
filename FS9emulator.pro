@@ -32,7 +32,9 @@ SOURCES += main.cpp\
     qcommand.cpp \
     cconfigurationmodulewidget.cpp \
     csetinput.cpp \
-    cinputhelp.cpp
+    cinputhelp.cpp \
+    cbzuinterface.cpp \
+    qled.cpp
 
 HEADERS  += mainwindow.h \
     qcmd.h \
@@ -42,14 +44,17 @@ HEADERS  += mainwindow.h \
     qcommand.h \
     cconfigurationmodulewidget.h \
     csetinput.h \
-    cinputhelp.h
+    cinputhelp.h \
+    cbzuinterface.h \
+    qled.h
 
 FORMS    += mainwindow.ui \
     keyboard.ui \
     command.ui \
     configurationmodulewidget.ui \
     setinput.ui \
-    inputhelp.ui
+    inputhelp.ui \
+    bzuinterface.ui
 
 win32::RC_FILE = \
                  resource/icon.rc

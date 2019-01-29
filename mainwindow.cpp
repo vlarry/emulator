@@ -16,7 +16,8 @@ MainWindow::MainWindow(QWidget* parent):
     m_keyboard(Q_NULLPTR),
     m_command(Q_NULLPTR),
     m_set_intput_widget(Q_NULLPTR),
-    m_input_help_widget(Q_NULLPTR)
+    m_input_help_widget(Q_NULLPTR),
+    m_mik_interface(Q_NULLPTR)
 {
     ui->setupUi(this);
 
@@ -48,6 +49,9 @@ MainWindow::MainWindow(QWidget* parent):
     ui->actionTerminal->setChecked(true);
     ui->actionCommand->setChecked(false);
     ui->actionKeyboard->setChecked(false);
+
+    m_mik_interface = new CBZUInterface(this);
+    m_mik_interface->show();
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -366,12 +370,12 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                         quint8 ch_num   = j + (i*8);
 
                         // кнопки 1, 2 и 3 попутаны с кнопками 7, 8 и 9 аппаратно, поэтому меняем номер канала
-                        if(static_cast<qint8>(ch_num) >= 0 && ch_num < 3)
-                        {
-                            ch_num += 6;
-                        }
-                        else if(ch_num >= 6 && ch_num < 9)
-                            ch_num -= 6;
+//                        if(static_cast<qint8>(ch_num) >= 0 && ch_num < 3)
+//                        {
+//                            ch_num += 6;
+//                        }
+//                        else if(ch_num >= 6 && ch_num < 9)
+//                            ch_num -= 6;
 
                         m_keyboard->setStateKey(ch_num, ch_state);
                     }
@@ -400,13 +404,6 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                         setChannel(io, ch_state);
                     }
                 }
-            }
-        break;
-
-        case 0x05: // запись регистра расширения дискретных каналов выходов
-            if(ui->sbDeviceAddress->value() == MDVV_02 || ui->sbDeviceAddress->value() == MIK_01)
-            {
-
             }
         break;
 
@@ -837,6 +834,31 @@ void MainWindow::discretInputHelp()
     if(m_input_help_widget->isHidden())
         m_input_help_widget->show();
 }
+//-------------------------------
+void MainWindow::setupExtandOut()
+{
+    if(ui->sbDeviceAddress->value() == MDVV_02 || ui->sbDeviceAddress->value() == MIK_01)
+    {
+        QByteArray data;
+        quint8 channels = 0x00;
+
+        for(quint8 i = 0, bits = 0; i < m_output_dev.size(); i++)
+        {
+            if(bits == 8)
+            {
+                data.append(QByteArray::fromHex(QByteArray::number(channels, 16)));
+                channels = 0x00;
+                bits = 0;
+            }
+
+            channels |= (static_cast<quint8>(m_output_dev[i]->get_state()) << bits);
+
+            bits += 2;
+        }
+
+        write("0x05", data);
+    }
+}
 //----------------------------------
 void MainWindow::refreshSerialPort()
 {
@@ -994,7 +1016,11 @@ void MainWindow::sendCmd(const QString& cmd_str)
     if(!cmd_str.isEmpty())
         cmd = cmd_str;
 
-    if(cmd.toUpper() == "0X3A") // если команда "Запись серийного номера, то открываем дополнительное окно (команду не отправляем)
+    if(cmd.toUpper() == "0X05")
+    {
+        setupExtandOut(); // запись регистра расширения дискретных каналов выходов
+    }
+    else if(cmd.toUpper() == "0X3A") // если команда "Запись серийного номера, то открываем дополнительное окно (команду не отправляем)
     {
         if(m_conf_widget->isHidden())
         {

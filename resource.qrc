@@ -15,5 +15,8 @@
         <file>resource/images/key_on.png</file>
         <file>resource/images/help.png</file>
         <file>resource/images/input_help.png</file>
+        <file>resource/images/led_gray.png</file>
+        <file>resource/images/led_green.png</file>
+        <file>resource/images/led_red.png</file>
     </qresource>
 </RCC>
