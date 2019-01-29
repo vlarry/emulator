@@ -21,12 +21,15 @@
             enum LedState
             {
                 LED_OFF,
-                LED_ON
+                LED_ON,
+                LED_FLASH,
+                LED_RESERVE
             };
 
         public:
             QLed(QWidget* parent = Q_NULLPTR);
             void setColor(const LedColor led_color);
+            void setLedModeFlash();
 
         public slots:
             void setState(LedState state);
@@ -35,9 +38,6 @@
 
         protected:
             void mouseDoubleClickEvent(QMouseEvent* event);
-
-        private:
-            void setLedModeFlash();
 
         private:
             LedState m_state;

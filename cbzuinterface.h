@@ -18,7 +18,8 @@
         public:
             explicit CBZUInterface(QWidget* parent = Q_NULLPTR);
             ~CBZUInterface();
-            void setKeyboardKeyState(int key, bool state);
+            void setKeyboardState(const QByteArray& keyboards);
+            void setLedState(const QByteArray& leds);
 
         signals:
             void closed(bool);

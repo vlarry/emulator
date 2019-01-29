@@ -350,37 +350,14 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
         break;
 
         case 0x03: // чтение регистра расширения дискретных каналов входов
-            if(ui->sbDeviceAddress->value() == MDVV_02 || ui->sbDeviceAddress->value() == MIK_01)
+            if(ui->sbDeviceAddress->value() == MIK_01)
             {
-                for(quint8 i = 0; i < size; ++i)
-                {
-                    quint8 byte = static_cast<quint8>(data.at(i));
-
-                    for(quint8 j = 0; j < 8; ++j)
-                    {
-                        quint8 channels = byte;
-
-                        channels >>= j;
-
-                        quint8 ch_state = channels&0x01;
-                        quint8 ch_num   = j + (i*8);
-
-                        // кнопки 1, 2 и 3 попутаны с кнопками 7, 8 и 9 аппаратно, поэтому меняем номер канала
-//                        if(static_cast<qint8>(ch_num) >= 0 && ch_num < 3)
-//                        {
-//                            ch_num += 6;
-//                        }
-//                        else if(ch_num >= 6 && ch_num < 9)
-//                            ch_num -= 6;
-
-                        m_mik_interface->setKeyboardKeyState(ch_num, ch_state);
-                    }
-                }
+                m_mik_interface->setKeyboardState(data);
             }
         break;
 
         case 0x04: // чтение регистра расширения дискретных каналов выходов
-            if(ui->sbDeviceAddress->value() == MDVV_02 || ui->sbDeviceAddress->value() == MIK_01)
+            if(ui->sbDeviceAddress->value() == MDVV_02)
             {
                 for(quint8 i = 0; i < size; ++i)
                 {
@@ -400,6 +377,10 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
                         setChannel(io, ch_state);
                     }
                 }
+            }
+            else if(ui->sbDeviceAddress->value() == MIK_01)
+            {
+                m_mik_interface->setLedState(data);
             }
         break;
 
@@ -1074,8 +1055,8 @@ void MainWindow::sendData(const QString& data)
 //--------------------------------------------------------------------
 void MainWindow::write(const QString& cmd_str, const QByteArray& data)
 {
-//    if(!m_port->isOpen())
-//        return;
+    if(!m_port->isOpen())
+        return;
 
     if(m_query.isEmpty())
     {

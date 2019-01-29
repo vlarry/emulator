@@ -71,5 +71,5 @@ void QLed::setLedModeFlash()
 {
     m_flash = true;
     timeout();
-    m_timer.start(250);
+    m_timer.start(500);
 }
