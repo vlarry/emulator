@@ -580,6 +580,7 @@ void MainWindow::loadSettings()
     m_settings->endGroup();
 
     m_settings->beginGroup("MODULES");
+        ui->sbDeviceAddress->setValue(m_settings->value("address", 0).toInt());
         ui->actionTerminal->setChecked(m_settings->value("terminal", true).toBool());
         ui->actionCommand->setChecked(m_settings->value("command_visiblity", false).toBool());
         ui->actionInterfaceMIK01->setChecked(m_settings->value("mik01_visiblity", true).toBool());
@@ -624,6 +625,7 @@ void MainWindow::saveSettings()
     m_settings->endGroup();
 
     m_settings->beginGroup("MODULES");
+        m_settings->setValue("address", ui->sbDeviceAddress->value());
         m_settings->setValue("terminal", ui->actionTerminal->isChecked());
         m_settings->setValue("command_visiblity", ui->actionCommand->isChecked());
         m_settings->setValue("mik01_visiblity", ui->actionInterfaceMIK01->isChecked());
@@ -959,6 +961,9 @@ void MainWindow::ctrlSerialPort(bool state)
         m_port->setDataBits(QSerialPort::Data8);
         m_port->setStopBits(QSerialPort::OneStop);
         m_port->setParity(QSerialPort::NoParity);
+
+        if(static_cast<DEVICE_Type>(ui->sbDeviceAddress->value()) == MIK_01)
+            sendCmd("0x04");
     }
     else
     {
