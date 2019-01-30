@@ -33,6 +33,8 @@
         quint8 byte[sizeof(float)];
         float  number;
     } Float_t;
+    //---------------------------------------
+    typedef QMap<QString, QString> CmdBind_t; // связанные команды (для реализации отправки автоматического чтения после записи)
     //----------------------------------
     class MainWindow: public QMainWindow
     {
@@ -67,6 +69,10 @@
             CConfigurationModuleWidget* m_conf_widget;
             CSetInput*                  m_set_intput_widget;
             CInputHelp*                 m_input_help_widget;
+            QString                     m_cmd_save; // отправленная команда на запись параметров (сохраняется, если идет запись, чтобы автоматом отправить
+                                                    // чтение
+            CmdBind_t                   m_cmd_bind; // хранение связанных команд
+            QTimer                      m_cmd_read_timer; // таймер для чтения данных после записи
 
         private:
             void   initConnect();
@@ -116,6 +122,7 @@
             void discretInputProcess();
             void discretInputHelp();
             void setupExtandOut();
+            void timeoutCmdBindRead();
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

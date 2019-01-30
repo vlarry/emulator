@@ -16,7 +16,8 @@ MainWindow::MainWindow(QWidget* parent):
     m_mik_interface(Q_NULLPTR),
     m_command(Q_NULLPTR),
     m_set_intput_widget(Q_NULLPTR),
-    m_input_help_widget(Q_NULLPTR)
+    m_input_help_widget(Q_NULLPTR),
+    m_cmd_save("")
 {
     ui->setupUi(this);
 
@@ -48,6 +49,26 @@ MainWindow::MainWindow(QWidget* parent):
     ui->actionTerminal->setChecked(true);
     ui->actionCommand->setChecked(false);
     ui->actionInterfaceMIK01->setChecked(false);
+
+    // Заполение списка связанных команд
+    m_cmd_bind["0x05"] = "0x04";
+    m_cmd_bind["0x3A"] = "0x1E";
+    m_cmd_bind["0x06"] = "0x01";
+    m_cmd_bind["0x07"] = "0x01";
+    m_cmd_bind["0x08"] = "0x01";
+    m_cmd_bind["0x09"] = "0x01";
+    m_cmd_bind["0x0A"] = "0x01";
+    m_cmd_bind["0x0B"] = "0x01";
+    m_cmd_bind["0x0C"] = "0x01";
+    m_cmd_bind["0x0D"] = "0x01";
+    m_cmd_bind["0x0E"] = "0x01";
+    m_cmd_bind["0x0F"] = "0x01";
+    m_cmd_bind["0x10"] = "0x01";
+    m_cmd_bind["0x11"] = "0x01";
+    m_cmd_bind["0x12"] = "0x01";
+    m_cmd_bind["0x13"] = "0x01";
+    m_cmd_bind["0x14"] = "0x01";
+    m_cmd_bind["0x15"] = "0x01";
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -848,6 +869,13 @@ void MainWindow::setupExtandOut()
         write("0x05", data);
     }
 }
+//-----------------------------------
+void MainWindow::timeoutCmdBindRead()
+{
+    QString cmd_read = m_cmd_bind[m_cmd_save];
+    sendCmd(cmd_read); // читаем после записи
+    m_cmd_save.clear();
+}
 //----------------------------------
 void MainWindow::refreshSerialPort()
 {
@@ -993,9 +1021,17 @@ void MainWindow::readData()
         m_query_count = 0;
         m_responce.clear();
         sendData(); // подтверждаем принятие данных отправкой пустого сообщения
+
+        if(!m_cmd_save.isEmpty())
+        {
+            m_cmd_read_timer.singleShot(10, this, &MainWindow::timeoutCmdBindRead);
+        }
     }
     else if(m_responce.size() > cmd_size)
+    {
         m_responce.clear();
+        m_cmd_save.clear();
+    }
 }
 //----------------------------------------------
 void MainWindow::sendCmd(const QString& cmd_str)
@@ -1133,6 +1169,10 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
         m_port->setParity(QSerialPort::MarkParity); // enable 9 bit
 
         ui->lineEditMessageQueue->setText(QString::number(m_queue_cmd.count()));
+
+        // Сохранение команды, если она устанавливает параметры на модуле, для автоматического запроса чтения
+        if(m_cmd_bind.find(m_cmd_last) != m_cmd_bind.end())
+            m_cmd_save = m_cmd_last; // Запись регистра расширения дискретных каналов выходов
     }
 
     m_port->write(m_query);
