@@ -108,7 +108,7 @@
             void autoRepeatTimAIN();
             void timeoutTim();
             void visiblityTerminal(bool visible);
-            void visiblityKeyboard(bool visible);
+            void visiblityInterfaceMIK01(bool visible);
             void visiblityCommand(bool visible);
             void configurationWindow();
             void visiblitySerialNumber(bool state = false);

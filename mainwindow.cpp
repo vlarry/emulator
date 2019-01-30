@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget* parent):
     ui->lineEditMessageQueue->setText("0");
     ui->actionTerminal->setChecked(true);
     ui->actionCommand->setChecked(false);
-    ui->actionKeyboard->setChecked(false);
+    ui->actionInterfaceMIK01->setChecked(false);
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -95,11 +95,11 @@ void MainWindow::initConnect()
     connect(ui->dwTerminal, SIGNAL(visibilityChanged(bool)), this, SLOT(visiblityTerminal(bool)));
     connect(ui->actionTerminal, &QAction::triggered, this, &MainWindow::visiblityTerminal);
     connect(ui->actionCommand, &QAction::triggered, this, &MainWindow::visiblityCommand);
-    connect(ui->actionKeyboard, &QAction::triggered, this, &MainWindow::visiblityKeyboard);
+    connect(ui->actionInterfaceMIK01, &QAction::triggered, this, &MainWindow::visiblityInterfaceMIK01);
     connect(m_command, &QCommand::doubleClickCmd, this, &MainWindow::sendCmd);
     connect(m_command, &QCommand::clickCmd, this, &MainWindow::initFilter);
     connect(m_command, &QCommand::closeCommand, this, &MainWindow::visiblityCommand);
-    connect(m_mik_interface, &CBZUInterface::closed, this, &MainWindow::visiblityKeyboard);
+    connect(m_mik_interface, &CBZUInterface::closed, this, &MainWindow::visiblityInterfaceMIK01);
 
     connect(ui->pushButtonInputSet, &QPushButton::clicked, this, &MainWindow::setupDiscretInput);
     connect(m_set_intput_widget, &CSetInput::apply, this, &MainWindow::discretInputProcess);
@@ -560,10 +560,12 @@ void MainWindow::loadSettings()
 
     m_settings->beginGroup("MODULES");
         ui->actionTerminal->setChecked(m_settings->value("terminal", true).toBool());
-        ui->actionCommand->setChecked(m_settings->value("command", false).toBool());
-        ui->actionKeyboard->setChecked(m_settings->value("keyboard", false).toBool());
+        ui->actionCommand->setChecked(m_settings->value("command_visiblity", false).toBool());
+        ui->actionInterfaceMIK01->setChecked(m_settings->value("mik01_visiblity", true).toBool());
         visiblityTerminal(ui->actionTerminal->isChecked());
         visiblityCommand(ui->actionCommand->isChecked());
+        m_mik_interface->restoreGeometry(m_settings->value("mik01_widget").toByteArray());
+        m_command->restoreGeometry(m_settings->value("command_widget").toByteArray());
     m_settings->endGroup();
 
     m_settings->beginGroup("INTERFACE");
@@ -602,8 +604,12 @@ void MainWindow::saveSettings()
 
     m_settings->beginGroup("MODULES");
         m_settings->setValue("terminal", ui->actionTerminal->isChecked());
-        m_settings->setValue("command", ui->actionCommand->isChecked());
-        m_settings->setValue("keyboard", ui->actionKeyboard->isChecked());
+        m_settings->setValue("command_visiblity", ui->actionCommand->isChecked());
+        m_settings->setValue("mik01_visiblity", ui->actionInterfaceMIK01->isChecked());
+        if(ui->actionInterfaceMIK01->isChecked())
+            m_settings->setValue("mik01_widget", m_mik_interface->saveGeometry());
+        if(ui->actionCommand->isChecked())
+            m_settings->setValue("command_widget", m_command->saveGeometry());
     m_settings->endGroup();
 
     m_settings->beginGroup("INTERFACE");
@@ -665,7 +671,7 @@ void MainWindow::showEvent(QShowEvent* evt)
     if(m_mik_interface == Q_NULLPTR)
     {
         m_mik_interface = new CBZUInterface(this);
-        if(ui->actionKeyboard->isChecked())
+        if(ui->actionInterfaceMIK01->isChecked())
         {
             m_mik_interface->show();
         }
@@ -686,7 +692,7 @@ void MainWindow::showEvent(QShowEvent* evt)
     ui->twPeriphery->setCurrentIndex(0);
     initFilter(ui->cbCmdList->currentText());
     addrChanged(ui->sbDeviceAddress->value());
-    ui->actionKeyboard->setEnabled(false);
+    ui->actionInterfaceMIK01->setEnabled(false);
 
     QMainWindow::showEvent(evt);
 }
@@ -1159,11 +1165,10 @@ void MainWindow::cmdDescription(const QString& description)
 //------------------------------------
 void MainWindow::addrChanged(int addr)
 {
-//    Q_UNUSED(addr);
     quint8 out_count = 0;
 
-    ui->actionKeyboard->setEnabled(false); // Вызов клавиатуры МИК-01 становится видимым при выборе адреса 0х02
-    ui->gboxInputs->setEnabled(true);
+    ui->actionInterfaceMIK01->setEnabled(false); // Вызов клавиатуры МИК-01 становится видимым при выборе адреса 0х02
+    ui->groupBoxDSDIN->hide();
 
     if(m_mik_interface != Q_NULLPTR)
     {
@@ -1177,6 +1182,9 @@ void MainWindow::addrChanged(int addr)
         ui->lblAIN1->setText(tr("Напряжение"));
         ui->lblAIN2->setText(tr("Ток"));
         ui->lblAIN3->setText(tr("Температура"));
+        ui->groupBoxInputs->setEnabled(true);
+        ui->groupBoxOutputs->setEnabled(true);
+        ui->groupBoxDSDIN->show();
 
         out_count = 6;
     }
@@ -1186,16 +1194,19 @@ void MainWindow::addrChanged(int addr)
         ui->lblAIN1->setText(tr("Температура"));
         ui->lblAIN2->setText(tr("Температура"));
         ui->lblAIN3->setText(tr("Температура"));
+        ui->groupBoxInputs->setEnabled(true);
+        ui->groupBoxOutputs->setEnabled(true);
 
         out_count = 7;
     }
     else if(addr == MIK_01)
     {
         ui->groupDevices->setTitle(tr("Устройство МИК-01"));
-        ui->actionKeyboard->setEnabled(true);
-        ui->gboxInputs->setDisabled(true);
+        ui->actionInterfaceMIK01->setEnabled(true);
+        ui->groupBoxInputs->setDisabled(true);
+        ui->groupBoxOutputs->setDisabled(true);
 
-        if(ui->actionKeyboard->isChecked())
+        if(ui->actionInterfaceMIK01->isChecked())
         {
             m_mik_interface->show();
         }
@@ -1333,10 +1344,10 @@ void MainWindow::visiblityTerminal(bool visible)
 {
     ui->dwTerminal->setVisible(visible);
 }
-//----------------------------------------------
-void MainWindow::visiblityKeyboard(bool visible)
+//----------------------------------------------------
+void MainWindow::visiblityInterfaceMIK01(bool visible)
 {
-    ui->actionKeyboard->setChecked(visible);
+    ui->actionInterfaceMIK01->setChecked(visible);
 
     if(visible)
     {
