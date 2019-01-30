@@ -33,11 +33,13 @@
             void setColor(const LedColor led_color);
             void setLedModeFlash();
             void reset();
+            void setID(quint8 id);
+            quint8 id() const;
 
         public slots:
             void setState(LedState state);
             void ledClick();
-            void timeout();
+            bool stateFlash() const;
 
         protected:
             void mouseDoubleClickEvent(QMouseEvent* event);
@@ -47,5 +49,6 @@
             bool     m_flash;
             LedColor m_color;
             QTimer   m_timer;
+            quint8   m_id;
     };
 #endif // QLED_H

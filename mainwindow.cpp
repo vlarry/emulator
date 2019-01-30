@@ -983,6 +983,8 @@ void MainWindow::ctrlSerialPort(bool state)
 
         if(!m_command->isHidden())
             m_command->hide();
+
+        m_mik_interface->ledReset();
     }
 
     ui->pbCtrlPort->setChecked(state);
@@ -1246,14 +1248,7 @@ void MainWindow::addrChanged(int addr)
         ui->groupBoxInputs->setDisabled(true);
         ui->groupBoxOutputs->setDisabled(true);
 
-        if(ui->actionInterfaceMIK01->isChecked())
-        {
-            m_mik_interface->show();
-        }
-        else
-        {
-            m_mik_interface->hide();
-        }
+        visiblityInterfaceMIK01(ui->actionInterfaceMIK01->isChecked());
 
         out_count = 12;
     }
@@ -1392,6 +1387,10 @@ void MainWindow::visiblityInterfaceMIK01(bool visible)
     if(visible)
     {
         m_mik_interface->show();
+        if(m_port->isOpen())
+        {
+            sendCmd("0x04");
+        }
     }
     else
     {

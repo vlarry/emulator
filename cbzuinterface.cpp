@@ -3,7 +3,8 @@
 //--------------------------------------------
 CBZUInterface::CBZUInterface(QWidget* parent):
     QWidget(parent),
-    ui(new Ui::CBZUInterface)
+    ui(new Ui::CBZUInterface),
+    m_state_flash(QLed::LED_OFF)
 {
     ui->setupUi(this);
 
@@ -28,6 +29,19 @@ CBZUInterface::CBZUInterface(QWidget* parent):
     m_keyboard.append(ui->key_down);
     m_keyboard.append(ui->key_reset);
 
+    ui->led_1->setID(0);
+    ui->led_2->setID(1);
+    ui->led_3->setID(2);
+    ui->led_4->setID(3);
+    ui->led_5->setID(4);
+    ui->led_6->setID(5);
+    ui->led_7->setID(6);
+    ui->led_8->setID(7);
+    ui->led_9->setID(8);
+    ui->led_10->setID(9);
+    ui->led_11->setID(10);
+    ui->led_12->setID(11);
+
     ui->led_12->setColor(QLed::LED_GREEN);
     ui->led_9->setColor(QLed::LED_YELLOW);
 
@@ -49,6 +63,7 @@ CBZUInterface::CBZUInterface(QWidget* parent):
     setFixedSize(this->width(), this->height());
 
     connect(ui->pushButtonSaveLed, &QPushButton::clicked, this, &CBZUInterface::ledStateSave);
+    connect(&m_timer_flash, &QTimer::timeout, this, &CBZUInterface::timeoutLedFlash);
 }
 //-----------------------------
 CBZUInterface::~CBZUInterface()
@@ -142,6 +157,19 @@ void CBZUInterface::setLedState(const QByteArray& leds)
         }
     }
 }
+//-----------------------------------
+void CBZUInterface::timeoutLedFlash()
+{
+    m_state_flash = (m_state_flash == QLed::LED_OFF)?QLed::LED_ON:QLed::LED_OFF;
+
+    for(QLed* led: m_led)
+    {
+        if(led->stateFlash())
+        {
+            led->setState(m_state_flash);
+        }
+    }
+}
 //------------------------------------------------
 void CBZUInterface::closeEvent(QCloseEvent* event)
 {
@@ -150,7 +178,14 @@ void CBZUInterface::closeEvent(QCloseEvent* event)
     for(QKey* key: m_keyboard)
         key->setState(false);
 
+    m_timer_flash.stop();
     ledReset();
 
     QWidget::closeEvent(event);
+}
+//----------------------------------------------
+void CBZUInterface::showEvent(QShowEvent* event)
+{
+    m_timer_flash.start(1000);
+    QWidget::showEvent(event);
 }

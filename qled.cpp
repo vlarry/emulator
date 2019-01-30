@@ -4,11 +4,11 @@ QLed::QLed(QWidget* parent):
     QToolButton(parent),
     m_state(LED_OFF),
     m_flash(false),
-    m_color(LED_RED)
+    m_color(LED_RED),
+    m_id(0)
 {
     setState(LED_OFF);
     connect(this, &QLed::clicked, this, &QLed::ledClick);
-    connect(&m_timer, &QTimer::timeout, this, &QLed::timeout);
 }
 //--------------------------------
 QLed::LedState QLed::state() const
@@ -51,7 +51,6 @@ void QLed::ledClick()
 
     if(m_flash)
     {
-        m_timer.stop();
         m_flash = false;
         state = LED_OFF;
     }
@@ -62,11 +61,10 @@ void QLed::ledClick()
 
     setState(state);
 }
-//------------------
-void QLed::timeout()
+//---------------------------
+bool QLed::stateFlash() const
 {
-    LedState state = ((m_state == LED_OFF)?LED_ON:LED_OFF);
-    setState(state);
+    return m_flash;
 }
 //--------------------------------------------------
 void QLed::mouseDoubleClickEvent(QMouseEvent* event)
@@ -81,13 +79,21 @@ void QLed::mouseDoubleClickEvent(QMouseEvent* event)
 void QLed::setLedModeFlash()
 {
     m_flash = true;
-    timeout();
-    m_timer.start(1000);
 }
 //----------------
 void QLed::reset()
 {
     m_state = LED_OFF;
     m_flash = false;
-    m_timer.stop();
+    setState(m_state);
+}
+//-------------------------
+void QLed::setID(quint8 id)
+{
+    m_id = id;
+}
+//---------------------
+quint8 QLed::id() const
+{
+    return m_id;
 }
