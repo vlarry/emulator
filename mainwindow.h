@@ -22,6 +22,7 @@
     #include "csetinput.h"
     #include "cinputhelp.h"
     #include "cbzuinterface.h"
+    #include "cdbcontroller.h"
     //----------
     namespace Ui
     {
@@ -73,6 +74,7 @@
                                                     // чтение
             CmdBind_t                   m_cmd_bind; // хранение связанных команд
             QTimer                      m_cmd_read_timer; // таймер для чтения данных после записи
+            CDbController*              m_db_controller;
 
         private:
             void   initConnect();

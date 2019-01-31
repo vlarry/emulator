@@ -33,7 +33,8 @@ SOURCES += main.cpp\
     csetinput.cpp \
     cinputhelp.cpp \
     cbzuinterface.cpp \
-    qled.cpp
+    qled.cpp \
+    cdbcontroller.cpp
 
 HEADERS  += mainwindow.h \
     qcmd.h \
@@ -44,7 +45,8 @@ HEADERS  += mainwindow.h \
     csetinput.h \
     cinputhelp.h \
     cbzuinterface.h \
-    qled.h
+    qled.h \
+    cdbcontroller.h
 
 FORMS    += mainwindow.ui \
     command.ui \

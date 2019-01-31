@@ -7,18 +7,18 @@ CConfigurationModuleWidget::CConfigurationModuleWidget(QWidget* parent):
 {
     ui->setupUi(this);
 
-    ui->lineEditModuleKeyCurrent->setInputMask("HH HH HH HH");
-    ui->lineEditModuleKeyNew->setInputMask("HH HH HH HH");
-    ui->lineEditModuleNumber->setValidator(new QIntValidator(0, 9999));
-    ui->lineEditModuleNumberParty->setValidator(new QIntValidator(0, 99));
-    ui->lineEditModuleFirmwareVariant->setValidator(new QIntValidator(0, 99));
+//    ui->lineEditModuleKeyCurrent->setInputMask("HH HH HH HH");
+//    ui->lineEditModuleKeyNew->setInputMask("HH HH HH HH");
+//    ui->lineEditModuleNumber->setValidator(new QIntValidator(0, 9999));
+//    ui->lineEditModuleNumberParty->setValidator(new QIntValidator(0, 99));
+//    ui->lineEditModuleFirmwareVariant->setValidator(new QIntValidator(0, 99));
 
-    ui->lineEditModuleKeyCurrent->setText("00000000");
-    ui->lineEditModuleKeyNew->setText("00000000");
-    ui->lineEditModuleNumber->setText("0000");
-    ui->lineEditModuleNumberParty->setText("00");
-    ui->lineEditModuleFirmwareVariant->setText("00");
-    ui->lineEditModuleFirmwareDate->setText(QDate::currentDate().toString("dd.MM.yyyy"));
+//    ui->lineEditModuleKeyCurrent->setText("00000000");
+//    ui->lineEditModuleKeyNew->setText("00000000");
+//    ui->lineEditModuleNumber->setText("0000");
+//    ui->lineEditModuleNumberParty->setText("00");
+//    ui->lineEditModuleFirmwareVariant->setText("00");
+//    ui->lineEditModuleFirmwareDate->setText(QDate::currentDate().toString("dd.MM.yyyy"));
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -29,25 +29,25 @@ CConfigurationModuleWidget::~CConfigurationModuleWidget()
 {
     delete ui;
 }
-//------------------------------------------------
-int CConfigurationModuleWidget::moduleType() const
-{
-    return ui->comboBoxModuleType->currentIndex() + 0x48;
-}
-//--------------------------------------------------
-int CConfigurationModuleWidget::moduleNumber() const
-{
-    return ui->lineEditModuleNumber->text().toInt();
-}
-//-------------------------------------------------------
-int CConfigurationModuleWidget::moduleNumberParty() const
-{
-    return ui->lineEditModuleNumberParty->text().toInt();
-}
 //-----------------------------------------------------------
-int CConfigurationModuleWidget::moduleFirmwareVariant() const
+int CConfigurationModuleWidget::moduleType(type_t type) const
 {
-    return ui->lineEditModuleFirmwareVariant->text().toInt();
+    return (type == CURRENT)?ui->lineEditModuleTypeCurrent->property("TYPE").toInt():ui->lineEditModuleTypeNew->property("TYPE").toInt();
+}
+//-------------------------------------------------------------
+int CConfigurationModuleWidget::moduleNumber(type_t type) const
+{
+    return (type == CURRENT)?ui->lineEditModuleNumberCurrent->text().toInt():ui->lineEditModuleNumberNew->text().toInt();
+}
+//------------------------------------------------------------------
+int CConfigurationModuleWidget::moduleNumberParty(type_t type) const
+{
+    return (type == CURRENT)?ui->lineEditModuleNumberPartyCurrent->text().toInt():ui->lineEditModuleNumberPartyNew->text().toInt();
+}
+//----------------------------------------------------------------------
+int CConfigurationModuleWidget::moduleFirmwareVariant(type_t type) const
+{
+    return (type == CURRENT)?ui->lineEditModuleFirmwareDateCurrent->text().toInt():ui->lineEditModuleFirmwareVariantNew->text().toInt();
 }
 //-------------------------------------------------------------
 QByteArray CConfigurationModuleWidget::moduleKeyCurrent() const
@@ -69,31 +69,37 @@ QByteArray CConfigurationModuleWidget::moduleKeyNew() const
     hex.remove(" ");
     return QByteArray::fromHex(hex.toUtf8());
 }
-//------------------------------------------------------
-void CConfigurationModuleWidget::setModuleType(int type)
+//--------------------------------------------------------------------------
+void CConfigurationModuleWidget::setModuleType(int module_type, type_t type)
 {
-    if(type < ui->comboBoxModuleType->count())
-        ui->comboBoxModuleType->setCurrentIndex(type);
+    QLineEdit* lineEdit = (type == CURRENT)?ui->lineEditModuleTypeCurrent:ui->lineEditModuleTypeNew;
+    QString text = (module_type == 0x48)?tr("МДВВ-01"):(module_type == 0x49)?tr("МДВВ-02"):tr("МИК-01");
+    lineEdit->setText(text);
+    lineEdit->setProperty("TYPE", module_type);
 }
-//----------------------------------------------------------
-void CConfigurationModuleWidget::setModuleNumber(int number)
+//-----------------------------------------------------------------------
+void CConfigurationModuleWidget::setModuleNumber(int number, type_t type)
 {
-    ui->lineEditModuleNumber->setText(QString::number(number));
+    QLineEdit* lineEdit = (type == CURRENT)?ui->lineEditModuleNumberCurrent:ui->lineEditModuleNumberNew;
+    lineEdit->setText(QString::number(number));
 }
-//---------------------------------------------------------------
-void CConfigurationModuleWidget::setModuleNumberParty(int number)
+//----------------------------------------------------------------------------
+void CConfigurationModuleWidget::setModuleNumberParty(int number, type_t type)
 {
-    ui->lineEditModuleNumberParty->setText(QString::number(number));
+    QLineEdit* lineEdit = (type == CURRENT)?ui->lineEditModuleNumberPartyCurrent:ui->lineEditModuleNumberPartyNew;
+    lineEdit->setText(QString::number(number));
 }
-//--------------------------------------------------------------------
-void CConfigurationModuleWidget::setModuleFirmwareVariant(int variant)
+//---------------------------------------------------------------------------------
+void CConfigurationModuleWidget::setModuleFirmwareVariant(int variant, type_t type)
 {
-    ui->lineEditModuleFirmwareVariant->setText(QString::number(variant));
+    QLineEdit* lineEdit = (type == CURRENT)?ui->lineEditModuleFirmwareVariantCurrent:ui->lineEditModuleFirmwareVariantNew;
+    lineEdit->setText(QString::number(variant));
 }
-//-------------------------------------------------------------------------
-void CConfigurationModuleWidget::setModuleFirmwareDate(const QString& date)
+//--------------------------------------------------------------------------------------
+void CConfigurationModuleWidget::setModuleFirmwareDate(const QString& date, type_t type)
 {
-    ui->lineEditModuleFirmwareDate->setText(date);
+    QLineEdit* lineEdit = (type == CURRENT)?ui->lineEditModuleFirmwareDateCurrent:ui->lineEditModuleFirmwareDateNew;
+    lineEdit->setText(date);
 }
 //-----------------------------------------------------------
 void CConfigurationModuleWidget::showEvent(QShowEvent* event)

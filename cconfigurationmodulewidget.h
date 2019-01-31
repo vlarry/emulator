@@ -14,19 +14,26 @@
         Q_OBJECT
 
         public:
+            enum type_t
+            {
+                CURRENT,
+                NEW
+            };
+
+        public:
             explicit CConfigurationModuleWidget(QWidget* parent = nullptr);
             ~CConfigurationModuleWidget();
-            int        moduleType() const;
-            int        moduleNumber() const;
-            int        moduleNumberParty() const;
-            int        moduleFirmwareVariant() const;
+            int        moduleType(type_t type) const;
+            int        moduleNumber(type_t type) const;
+            int        moduleNumberParty(type_t type) const;
+            int        moduleFirmwareVariant(type_t type) const;
             QByteArray moduleKeyCurrent() const;
             QByteArray moduleKeyNew() const;
-            void       setModuleType(int type);
-            void       setModuleNumber(int number);
-            void       setModuleNumberParty(int number);
-            void       setModuleFirmwareVariant(int variant);
-            void       setModuleFirmwareDate(const QString& date);
+            void       setModuleType(int module_type, type_t type);
+            void       setModuleNumber(int number, type_t type);
+            void       setModuleNumberParty(int number, type_t type);
+            void       setModuleFirmwareVariant(int variant, type_t type);
+            void       setModuleFirmwareDate(const QString& date, type_t type);
 
         protected:
             void showEvent(QShowEvent* event);

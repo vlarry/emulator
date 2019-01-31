@@ -17,7 +17,8 @@ MainWindow::MainWindow(QWidget* parent):
     m_command(Q_NULLPTR),
     m_set_intput_widget(Q_NULLPTR),
     m_input_help_widget(Q_NULLPTR),
-    m_cmd_save("")
+    m_cmd_save(""),
+    m_db_controller(Q_NULLPTR)
 {
     ui->setupUi(this);
 
@@ -41,6 +42,7 @@ MainWindow::MainWindow(QWidget* parent):
     m_file_ain             = new QFile;
     m_set_intput_widget    = new CSetInput(this);
     m_input_help_widget    = new CInputHelp(QPixmap(":/images/resource/images/input_help.png"), this);
+    m_db_controller        = new CDbController("db/serialdb.db");
 
     m_conf_widget->hide();
     m_set_intput_widget->hide();
@@ -75,6 +77,12 @@ MainWindow::~MainWindow()
 {
     if(m_file_ain->isOpen())
         m_file_ain->close();
+
+    if(m_db_controller)
+    {
+        delete m_db_controller;
+        m_db_controller = Q_NULLPTR;
+    }
 
     delete ui;
 }
@@ -469,23 +477,23 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             }
 
             ui->leDeviceID->setText(s);
-            m_conf_widget->setModuleType(data.at(0) - 0x48);
+            m_conf_widget->setModuleType(data.at(0), CConfigurationModuleWidget::CURRENT);
 
             tdata = static_cast<quint8>(data.at(1));
             tdata = ((tdata >> 4)&0x0F)*1000 + (tdata&0x0F)*100;
             tdata += ((static_cast<quint8>(data.at(2))) >> 4)*10 + ((static_cast<quint8>(data.at(2)))&0x0F);
             ui->leDeviceNumber->setText(QString::number(tdata, 10));
-            m_conf_widget->setModuleNumber(tdata);
+            m_conf_widget->setModuleNumber(tdata, CConfigurationModuleWidget::CURRENT);
 
             tdata = static_cast<quint8>(data.at(3));
             tdata = ((tdata >> 4)&0x0F)*10 + (tdata&0x0F);
             ui->leDeviceLotNum->setText(QString::number(tdata, 10));
-            m_conf_widget->setModuleNumberParty(tdata);
+            m_conf_widget->setModuleNumberParty(tdata, CConfigurationModuleWidget::CURRENT);
 
             tdata = static_cast<quint8>(data.at(4));
             tdata = ((tdata >> 4)&0x0F)*10 + (tdata&0x0F);
             ui->leDeviceFirmwareVar->setText(QString::number(tdata, 10));
-            m_conf_widget->setModuleFirmwareVariant(tdata);
+            m_conf_widget->setModuleFirmwareVariant(tdata, CConfigurationModuleWidget::CURRENT);
 
             tdata = static_cast<quint8>(data.at(7));
             tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
@@ -503,7 +511,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             s += ".20" + QString::number(tdata, 10);
 
             ui->leDeviceFirmwareDate->setText(s);
-            m_conf_widget->setModuleFirmwareDate(s);
+            m_conf_widget->setModuleFirmwareDate(s, CConfigurationModuleWidget::CURRENT);
         break;
 
         case 0x1F:
@@ -767,9 +775,9 @@ void MainWindow::configurationWindow()
             QString    cmd          = "0x3A";
             QByteArray keyCurrent   = m_conf_widget->moduleKeyCurrent();
             QByteArray keyNew       = m_conf_widget->moduleKeyNew();
-            int        num          = m_conf_widget->moduleNumber();
-            int        numParty     = m_conf_widget->moduleNumberParty();
-            int        firmwareVar  = m_conf_widget->moduleFirmwareVariant();
+            int        num          = m_conf_widget->moduleNumber(CConfigurationModuleWidget::NEW);
+            int        numParty     = m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::NEW);
+            int        firmwareVar  = m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::NEW);
 
 /* FORMAT SERIAL NUMBER CMD
 * -----------------------------------------------------------------------------------------------------------------------------
