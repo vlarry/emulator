@@ -23,6 +23,7 @@
     #include "cinputhelp.h"
     #include "cbzuinterface.h"
     #include "cdbcontroller.h"
+    #include "cdbjornal.h"
     //----------
     namespace Ui
     {
@@ -75,6 +76,7 @@
             CmdBind_t                   m_cmd_bind; // хранение связанных команд
             QTimer                      m_cmd_read_timer; // таймер для чтения данных после записи
             CDbController*              m_db_controller;
+            CDbJornal*                  m_db_journal;
 
         private:
             void   initConnect();
@@ -125,6 +127,8 @@
             void discretInputHelp();
             void setupExtandOut();
             void timeoutCmdBindRead();
+            void openDbJournal();
+            void closeDbJournal();
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

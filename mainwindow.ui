@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1302</width>
-    <height>837</height>
+    <height>842</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -4506,7 +4506,14 @@
     <addaction name="actionCommand"/>
     <addaction name="actionInterfaceMIK01"/>
    </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>Инструменты</string>
+    </property>
+    <addaction name="actionDbJournal"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -4579,6 +4586,14 @@
    </property>
    <property name="shortcut">
     <string>Alt+Shift+I</string>
+   </property>
+  </action>
+  <action name="actionDbJournal">
+   <property name="text">
+    <string>Журнал БД</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Shift+J</string>
    </property>
   </action>
  </widget>

@@ -18,7 +18,8 @@ MainWindow::MainWindow(QWidget* parent):
     m_set_intput_widget(Q_NULLPTR),
     m_input_help_widget(Q_NULLPTR),
     m_cmd_save(""),
-    m_db_controller(Q_NULLPTR)
+    m_db_controller(Q_NULLPTR),
+    m_db_journal(Q_NULLPTR)
 {
     ui->setupUi(this);
 
@@ -135,6 +136,7 @@ void MainWindow::initConnect()
     connect(m_command, &QCommand::clickCmdIndex, ui->cbCmdList, &QComboBox::setCurrentIndex);
     connect(ui->toolButtonInputHelp, &QToolButton::clicked, this, &MainWindow::discretInputHelp);
     connect(m_mik_interface, &CBZUInterface::ledStateSave, this, &MainWindow::setupExtandOut);
+    connect(ui->actionDbJournal, &QAction::triggered, this, &MainWindow::openDbJournal);
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -885,6 +887,26 @@ void MainWindow::timeoutCmdBindRead()
     QString cmd_read = m_cmd_bind[m_cmd_save];
     sendCmd(cmd_read); // читаем после записи
     m_cmd_save.clear();
+}
+//------------------------------
+void MainWindow::openDbJournal()
+{
+    if(!m_db_journal)
+    {
+        m_db_journal = new CDbJornal(this);
+        connect(m_db_journal, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
+        m_db_journal->show();
+    }
+}
+//-------------------------------
+void MainWindow::closeDbJournal()
+{
+    if(m_db_journal)
+    {
+        disconnect(m_db_journal, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
+        delete m_db_journal;
+        m_db_journal = Q_NULLPTR;
+    }
 }
 //----------------------------------
 void MainWindow::refreshSerialPort()

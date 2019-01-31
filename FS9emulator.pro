@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     cinputhelp.cpp \
     cbzuinterface.cpp \
     qled.cpp \
-    cdbcontroller.cpp
+    cdbcontroller.cpp \
+    cdbjornal.cpp
 
 HEADERS  += mainwindow.h \
     qcmd.h \
@@ -46,14 +47,16 @@ HEADERS  += mainwindow.h \
     cinputhelp.h \
     cbzuinterface.h \
     qled.h \
-    cdbcontroller.h
+    cdbcontroller.h \
+    cdbjornal.h
 
 FORMS    += mainwindow.ui \
     command.ui \
     configurationmodulewidget.ui \
     setinput.ui \
     inputhelp.ui \
-    bzuinterface.ui
+    bzuinterface.ui \
+    dbjornal.ui
 
 win32::RC_FILE = \
                  resource/icon.rc
