@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
-    <height>519</height>
+    <width>327</width>
+    <height>542</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -159,46 +159,20 @@
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_16">
-          <property name="text">
-           <string>Дата</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="lineEditModuleNumberPartyNew">
-          <property name="text">
-           <string>00</string>
-          </property>
-          <property name="maxLength">
-           <number>2</number>
-          </property>
+        <item row="4" column="1">
+         <widget class="QLineEdit" name="lineEditModuleFirmwareDateNew">
           <property name="alignment">
            <set>Qt::AlignCenter</set>
           </property>
-         </widget>
-        </item>
-        <item row="8" column="2">
-         <widget class="QCheckBox" name="checkBoxNewKey">
-          <property name="toolTip">
-           <string>Установить новый ключ</string>
-          </property>
-          <property name="text">
-           <string/>
+          <property name="readOnly">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
-         <widget class="QLineEdit" name="lineEditModuleFirmwareVariantNew">
+        <item row="6" column="0">
+         <widget class="QLabel" name="label_18">
           <property name="text">
-           <string>00</string>
-          </property>
-          <property name="maxLength">
-           <number>2</number>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <string>Заказчик</string>
           </property>
          </widget>
         </item>
@@ -218,6 +192,42 @@
           </property>
          </widget>
         </item>
+        <item row="3" column="1">
+         <widget class="QLineEdit" name="lineEditModuleFirmwareVariantNew">
+          <property name="text">
+           <string>00</string>
+          </property>
+          <property name="maxLength">
+           <number>2</number>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_16">
+          <property name="text">
+           <string>Дата</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QComboBox" name="comboBoxModuleModificationNew"/>
+        </item>
+        <item row="8" column="2">
+         <widget class="QCheckBox" name="checkBoxNewKey">
+          <property name="toolTip">
+           <string>Установить новый ключ</string>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::RightToLeft</enum>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
         <item row="3" column="0">
          <widget class="QLabel" name="label_12">
           <property name="text">
@@ -225,29 +235,40 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="1">
-         <widget class="QLineEdit" name="lineEditModuleKeyNew">
+        <item row="5" column="0">
+         <widget class="QLabel" name="label_17">
           <property name="text">
-           <string>0000</string>
+           <string>Модификация</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="lineEditModuleNumberPartyNew">
+          <property name="text">
+           <string>00</string>
           </property>
           <property name="maxLength">
-           <number>4</number>
+           <number>2</number>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
-        <item row="5" column="1">
-         <widget class="QComboBox" name="comboBoxModuleModificationNew"/>
-        </item>
-        <item row="4" column="1">
-         <widget class="QLineEdit" name="lineEditModuleFirmwareDateNew">
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineEditModuleTypeNew">
           <property name="alignment">
            <set>Qt::AlignCenter</set>
           </property>
           <property name="readOnly">
            <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>Порядковый номер</string>
           </property>
          </widget>
         </item>
@@ -265,6 +286,20 @@
           </property>
          </widget>
         </item>
+        <item row="7" column="0">
+         <widget class="QLabel" name="label_10">
+          <property name="text">
+           <string>Текущий ключ</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0">
+         <widget class="QLabel" name="label_14">
+          <property name="text">
+           <string>Новый ключ</string>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="1">
          <widget class="QLineEdit" name="lineEditModuleNumberNew">
           <property name="text">
@@ -278,57 +313,79 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="0">
-         <widget class="QLabel" name="label_10">
+        <item row="8" column="1">
+         <widget class="QLineEdit" name="lineEditModuleKeyNew">
           <property name="text">
-           <string>Текущий ключ</string>
+           <string>0000</string>
+          </property>
+          <property name="maxLength">
+           <number>4</number>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_11">
+        <item row="6" column="2">
+         <widget class="QToolButton" name="toolButtonCustomerAppend">
+          <property name="minimumSize">
+           <size>
+            <width>18</width>
+            <height>18</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>18</width>
+            <height>18</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Добавить нового заказчика</string>
+          </property>
           <property name="text">
-           <string>Порядковый номер</string>
+           <string>+</string>
           </property>
          </widget>
         </item>
-        <item row="8" column="0">
-         <widget class="QLabel" name="label_14">
-          <property name="text">
-           <string>Новый ключ</string>
+        <item row="5" column="2">
+         <widget class="QToolButton" name="toolButtonModificationAppend">
+          <property name="minimumSize">
+           <size>
+            <width>18</width>
+            <height>18</height>
+           </size>
           </property>
-         </widget>
-        </item>
-        <item row="5" column="0">
-         <widget class="QLabel" name="label_17">
-          <property name="text">
-           <string>Модификация</string>
+          <property name="maximumSize">
+           <size>
+            <width>18</width>
+            <height>18</height>
+           </size>
           </property>
-         </widget>
-        </item>
-        <item row="6" column="0">
-         <widget class="QLabel" name="label_18">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Добавить новую модификацию</string>
+          </property>
           <property name="text">
-           <string>Заказчик</string>
+           <string>+</string>
           </property>
          </widget>
         </item>
         <item row="6" column="1">
-         <widget class="QLineEdit" name="lineEditCustomerNew">
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEditModuleTypeNew">
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
+         <widget class="QComboBox" name="comboBoxModuleCustomerNew"/>
         </item>
        </layout>
       </item>

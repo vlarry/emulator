@@ -14,9 +14,25 @@
 
         private:
             void createDb();
+            bool findEqualData(const QString& field, const QString& data);
+
+        public:
+            struct serial_num_t
+            {
+                int     type; // аппаратный адрес устройства
+                QString serial_num;
+                QString date;
+                QString time;
+                QString modification;
+                QString customer;
+            };
 
         public:
             CDbController(const QString& path);
             ~CDbController();
+            serial_num_t serialNumberRead(int type);
+            void         serialNumberWrite(const serial_num_t& sn);
+            QStringList modificationList();
+            QStringList customerList();
     };
 #endif // CDBCONTROLLER_H

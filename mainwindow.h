@@ -24,6 +24,7 @@
     #include "cbzuinterface.h"
     #include "cdbcontroller.h"
     #include "cdbjornal.h"
+    #include <windows.h> // для вызова задержки Sleep();
     //----------
     namespace Ui
     {
@@ -82,6 +83,7 @@
             void   initConnect();
             void   initSerialPort();
             void   initIO();
+            void   initDbController(CDbController* controller);
             void   setIO(const QVector<CIODevice*>& io_dev, bool type);
             void   showMessage(const QString& message);
             quint8 getChecksum(const QByteArray& ba, const quint8 size);
@@ -96,6 +98,7 @@
             void   blockSend();
             void   unblockSend();
             bool   is_blockSend();
+            QByteArray formatSerialNumber(); // форматирование серийного номера
 
         protected:
             void keyPressEvent(QKeyEvent *event);

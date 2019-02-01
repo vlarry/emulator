@@ -212,6 +212,17 @@ void MainWindow::initIO()
     m_ain_dev.append(ui->leAIN3);
     m_ain_dev.append(ui->leAIN4);
 }
+//----------------------------------------------------------
+void MainWindow::initDbController(CDbController* controller)
+{
+    if(controller)
+    {
+        QStringList listModification = controller->modificationList();
+        QStringList listCustomer = controller->customerList();
+
+        m_conf_widget->initLIst(listModification, listCustomer);
+    }
+}
 //------------------------------------------------------------------
 void MainWindow::setIO(const QVector<CIODevice*>& io_dev, bool type)
 {
@@ -717,6 +728,7 @@ void MainWindow::showEvent(QShowEvent* evt)
     initSerialPort();
     initIO();
     initConnect();
+    initDbController(m_db_controller);
 
     loadSettings();
     refreshSerialPort();
@@ -766,37 +778,56 @@ bool MainWindow::is_blockSend()
 {
     return m_block_send;
 }
-//------------------------------------
-void MainWindow::configurationWindow()
+//-----------------------------------------
+QByteArray MainWindow::formatSerialNumber()
 {
-    if(!m_conf_widget->isHidden())
-    {
-        sendData("0x1E");
-        if(m_conf_widget->exec() == QDialog::Accepted)
-        {
-            QString    cmd          = "0x3A";
-            QByteArray keyCurrent   = m_conf_widget->moduleKeyCurrent();
-            QByteArray keyNew       = m_conf_widget->moduleKeyNew();
-            int        num          = m_conf_widget->moduleNumber(CConfigurationModuleWidget::NEW);
-            int        numParty     = m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::NEW);
-            int        firmwareVar  = m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::NEW);
+    QByteArray keyCurrent   = m_conf_widget->moduleKeyCurrent();
+    QByteArray keyNew       = m_conf_widget->moduleKeyNew();
+    int        num          = m_conf_widget->moduleNumber(CConfigurationModuleWidget::NEW);
+    int        numParty     = m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::NEW);
+    int        firmwareVar  = m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::NEW);
 
 /* FORMAT SERIAL NUMBER CMD
 * -----------------------------------------------------------------------------------------------------------------------------
 * | cmd | key_cur | key_cur | key_cur | key_cur | key_new | key_new | key_new | key_new | num | num | party | firmware | CRC8 |
 * -----------------------------------------------------------------------------------------------------------------------------
 */
-            QByteArray ba;
+    QByteArray ba;
 
-            ba.append(keyCurrent);
-            ba.append(keyNew);
-            ba.append(QByteArray::fromHex(QByteArray::number(((num/1000 << 4) | (num%1000)/100), 16)));
-            num = num%100;
-            ba.append(QByteArray::fromHex(QByteArray::number(((num/10 << 4) | (num%10)), 16)));
-            ba.append(QByteArray::fromHex(QByteArray::number(((numParty/10 << 4) | (numParty%10)), 16)));
-            ba.append(QByteArray::fromHex(QByteArray::number(((firmwareVar/10 << 4) | (firmwareVar%10)), 16)));
+    ba.append(keyCurrent);
+    ba.append(keyNew);
+    ba.append(QByteArray::fromHex(QByteArray::number(((num/1000 << 4) | (num%1000)/100), 16)));
+    num = num%100;
+    ba.append(QByteArray::fromHex(QByteArray::number(((num/10 << 4) | (num%10)), 16)));
+    ba.append(QByteArray::fromHex(QByteArray::number(((numParty/10 << 4) | (numParty%10)), 16)));
+    ba.append(QByteArray::fromHex(QByteArray::number(((firmwareVar/10 << 4) | (firmwareVar%10)), 16)));
 
-            write(cmd, ba);
+    return ba;
+}
+//------------------------------------
+void MainWindow::configurationWindow()
+{
+    if(!m_conf_widget->isHidden())
+    {
+        sendData("0x1E");
+        Sleep(10); // засыпаем на 10мс, чтобы данные были прочитаны и записаны
+
+        CDbController::serial_num_t sn = m_db_controller->serialNumberRead(ui->sbDeviceAddress->value());
+
+        m_conf_widget->setModuleType(m_conf_widget->moduleType(CConfigurationModuleWidget::CURRENT), CConfigurationModuleWidget::NEW);
+        m_conf_widget->setModuleFirmwareDate(QDate::currentDate().toString("dd.MM.yyyy"), CConfigurationModuleWidget::NEW);
+
+        if(!sn.serial_num.isEmpty()) // если данные в базе присутствуют
+        {
+
+        }
+
+        if(m_conf_widget->exec() == QDialog::Accepted)
+        {
+            QString    cmd = "0x3A";
+            QByteArray sn  = formatSerialNumber();
+
+            write(cmd, sn);
         }
     }
 }
@@ -886,6 +917,21 @@ void MainWindow::timeoutCmdBindRead()
 {
     QString cmd_read = m_cmd_bind[m_cmd_save];
     sendCmd(cmd_read); // читаем после записи
+
+    if(m_cmd_save == "0x3A") // если это запись серийного номера, т.е. значит она прошла успешно, то заносим данные в базу данных
+    {
+        CDbController::serial_num_t sn;
+
+        sn.type         = ui->sbDeviceAddress->value();
+        sn.serial_num   = formatSerialNumber();
+        sn.date         = QDate::currentDate().toString("yyyy-MM-dd");
+        sn.time         = QTime::currentTime().toString("hh:mm:ss");
+        sn.modification = m_conf_widget->moduleModification();
+        sn.customer     = m_conf_widget->moduleCustomer();
+
+        m_db_controller->serialNumberWrite(sn);
+    }
+
     m_cmd_save.clear();
 }
 //------------------------------
@@ -1073,6 +1119,9 @@ void MainWindow::readData()
 //----------------------------------------------
 void MainWindow::sendCmd(const QString& cmd_str)
 {
+    if(!m_port->isOpen())
+        return;
+
     QString cmd = ui->cbCmdList->currentText();
 
     if(!cmd_str.isEmpty())
@@ -1102,6 +1151,9 @@ void MainWindow::sendCmd(const QString& cmd_str)
 //--------------------------------------------
 void MainWindow::sendData(const QString& data)
 {
+    if(!m_port->isOpen())
+        return;
+
     if(!is_blockSend()) // если не блокирована передача
     {
         if(!data.isEmpty())

@@ -3,6 +3,7 @@
     //----------------
     #include <QDialog>
     #include <QDate>
+    #include "cappendinfodialog.h"
     //----------
     namespace Ui
     {
@@ -29,11 +30,17 @@
             int        moduleFirmwareVariant(type_t type) const;
             QByteArray moduleKeyCurrent() const;
             QByteArray moduleKeyNew() const;
+            QString    moduleModification() const;
+            QString    moduleCustomer() const;
             void       setModuleType(int module_type, type_t type);
             void       setModuleNumber(int number, type_t type);
             void       setModuleNumberParty(int number, type_t type);
             void       setModuleFirmwareVariant(int variant, type_t type);
             void       setModuleFirmwareDate(const QString& date, type_t type);
+            void       initLIst(const QStringList& modification, const QStringList& customer);
+
+        public slots:
+            void appendText();
 
         protected:
             void showEvent(QShowEvent* event);

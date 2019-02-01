@@ -35,7 +35,8 @@ SOURCES += main.cpp\
     cbzuinterface.cpp \
     qled.cpp \
     cdbcontroller.cpp \
-    cdbjornal.cpp
+    cdbjornal.cpp \
+    cappendinfodialog.cpp
 
 HEADERS  += mainwindow.h \
     qcmd.h \
@@ -48,7 +49,8 @@ HEADERS  += mainwindow.h \
     cbzuinterface.h \
     qled.h \
     cdbcontroller.h \
-    cdbjornal.h
+    cdbjornal.h \
+    cappendinfodialog.h
 
 FORMS    += mainwindow.ui \
     command.ui \
@@ -56,7 +58,8 @@ FORMS    += mainwindow.ui \
     setinput.ui \
     inputhelp.ui \
     bzuinterface.ui \
-    dbjornal.ui
+    dbjornal.ui \
+    appendinfodialog.ui
 
 win32::RC_FILE = \
                  resource/icon.rc
