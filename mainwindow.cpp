@@ -43,7 +43,13 @@ MainWindow::MainWindow(QWidget* parent):
     m_file_ain             = new QFile;
     m_set_intput_widget    = new CSetInput(this);
     m_input_help_widget    = new CInputHelp(QPixmap(":/images/resource/images/input_help.png"), this);
-    m_db_controller        = new CDbController("db/serialdb.db");
+
+    QDir dir;
+
+    if(!dir.exists("db"))
+        dir.mkdir("db");
+
+    m_db_controller = new CDbController("db/serialdb.db");
 
     m_conf_widget->hide();
     m_set_intput_widget->hide();
@@ -812,22 +818,39 @@ void MainWindow::configurationWindow()
         sendData("0x1E");
         Sleep(10); // засыпаем на 10мс, чтобы данные были прочитаны и записаны
 
-        CDbController::serial_num_t sn = m_db_controller->serialNumberRead(ui->sbDeviceAddress->value());
+        CDbController::serial_num_t sn = m_db_controller->serialNumberRead();
 
         m_conf_widget->setModuleType(m_conf_widget->moduleType(CConfigurationModuleWidget::CURRENT), CConfigurationModuleWidget::NEW);
         m_conf_widget->setModuleFirmwareDate(QDate::currentDate().toString("dd.MM.yyyy"), CConfigurationModuleWidget::NEW);
 
-        if(!sn.serial_num.isEmpty()) // если данные в базе присутствуют
+        if(sn.dev_code != -1) // если данные в базе присутствуют
         {
-
+            m_conf_widget->setModuleNumber(sn.dev_num + 1, CConfigurationModuleWidget::NEW);
+            m_conf_widget->setModuleNumberParty(sn.dev_party, CConfigurationModuleWidget::NEW);
+            m_conf_widget->setModuleFirmwareVariant(sn.dev_firmware, CConfigurationModuleWidget::NEW);
+        }
+        else // данных в базе нет
+        {
+            m_conf_widget->setModuleNumber(m_conf_widget->moduleNumber(CConfigurationModuleWidget::CURRENT) + 1, CConfigurationModuleWidget::NEW);
+            m_conf_widget->setModuleNumberParty(m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::CURRENT), CConfigurationModuleWidget::NEW);
+            m_conf_widget->setModuleFirmwareVariant(m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::CURRENT), CConfigurationModuleWidget::NEW);
         }
 
         if(m_conf_widget->exec() == QDialog::Accepted)
         {
-            QString    cmd = "0x3A";
-            QByteArray sn  = formatSerialNumber();
+            sn.dev_num      = m_conf_widget->moduleNumber(CConfigurationModuleWidget::NEW);
+            sn.dev_party    = m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::NEW);
+            sn.dev_firmware = m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::NEW);
 
-            write(cmd, sn);
+            if(m_db_controller->findEqualData(sn))
+            {
+                QMessageBox::warning(this, tr("Запись серийного номера БД"), tr("Такой серийный номер уже существует"));
+                return;
+            }
+
+            QByteArray sn_data = formatSerialNumber();
+
+            write("0x3A", sn_data);
         }
     }
 }
@@ -916,23 +939,26 @@ void MainWindow::setupExtandOut()
 void MainWindow::timeoutCmdBindRead()
 {
     QString cmd_read = m_cmd_bind[m_cmd_save];
-    sendCmd(cmd_read); // читаем после записи
 
     if(m_cmd_save == "0x3A") // если это запись серийного номера, т.е. значит она прошла успешно, то заносим данные в базу данных
     {
         CDbController::serial_num_t sn;
 
-        sn.type         = ui->sbDeviceAddress->value();
-        sn.serial_num   = formatSerialNumber();
+        sn.dev_code     = ui->sbDeviceAddress->value();
+        sn.dev_num      = m_conf_widget->moduleNumber(CConfigurationModuleWidget::NEW);
+        sn.dev_party    = m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::NEW);
+        sn.dev_firmware = m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::NEW);
         sn.date         = QDate::currentDate().toString("yyyy-MM-dd");
         sn.time         = QTime::currentTime().toString("hh:mm:ss");
         sn.modification = m_conf_widget->moduleModification();
         sn.customer     = m_conf_widget->moduleCustomer();
 
-        m_db_controller->serialNumberWrite(sn);
+        if(!m_db_controller->serialNumberWrite(sn))
+            QMessageBox::warning(this, tr("Запись серийного номера БД"), tr("Не удалось записать серийный номер в БД!"));
     }
 
     m_cmd_save.clear();
+    sendCmd(cmd_read); // читаем после записи
 }
 //------------------------------
 void MainWindow::openDbJournal()

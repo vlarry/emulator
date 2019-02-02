@@ -32,10 +32,10 @@ CDbController::~CDbController()
         QSqlDatabase::removeDatabase("db");
     }
 }
-//-------------------------------------------------------------------
-CDbController::serial_num_t CDbController::serialNumberRead(int type)
+//-----------------------------------------------------------
+CDbController::serial_num_t CDbController::serialNumberRead()
 {
-    serial_num_t sn = { -1, "", "", "", "", "" };
+    serial_num_t sn = { -1, -1, -1, -1, "", "", "", "" };
 
     if(!m_db || !m_db->isOpen())
     {
@@ -46,11 +46,14 @@ CDbController::serial_num_t CDbController::serialNumberRead(int type)
     QSqlQuery query(*m_db);
 
     // выборка последней строки по типу, дате и времени
-    if(query.exec(QString("SELECT * FROM serial WHERE addr = %1 ORDER BY date DESC, time DESC LIMIT 1;").arg(type)))
+    if(query.exec(QString("SELECT * FROM serial ORDER BY date DESC, time DESC LIMIT 1;")))
     {
         if(query.next()) // если запись существует
         {
-            sn.serial_num = query.value("sn").toString();
+            sn.dev_code = query.value("dev_code").toInt();
+            sn.dev_num = query.value("dev_num").toInt();
+            sn.dev_party = query.value("dev_party").toInt();
+            sn.dev_firmware = query.value("dev_firmware").toInt();
             sn.date = query.value("date").toString();
             sn.time = query.value("time").toString();
             sn.modification = query.value("modification").toString();
@@ -63,21 +66,28 @@ CDbController::serial_num_t CDbController::serialNumberRead(int type)
     return sn;
 }
 //--------------------------------------------------------------------------
-void CDbController::serialNumberWrite(const CDbController::serial_num_t& sn)
+bool CDbController::serialNumberWrite(const CDbController::serial_num_t& sn)
 {
-    if(!findEqualData("sn", sn.serial_num)) // проверка на совпадение серийных номеров
-    {
-        // такого серийника в базе нет, значит пишем
-        QSqlQuery query(*m_db);
-        QString query_str = QString("INSERT INTO serial (add, sn, date, time, modification, customer) "
-                                    "VALUES (%1, \'%2\', \'%3\', \'4\', \'5\', \'%6\');").arg(sn.type).arg(sn.serial_num).arg(sn.date).arg(sn.time).
-                                    arg(sn.modification).arg(sn.customer);
+    QSqlQuery query(*m_db);
 
-        if(!query.exec(query_str))
-        {
-            m_last_error = query.lastError().text();
-        }
+    query.prepare("INSERT INTO serial (dev_code, dev_num, dev_party, dev_firmware, date, time, modification, customer) "
+                  "VALUES (:dev_code, :dev_num, :dev_party, :dev_firmware, :date, :time, :modification, :customer);");
+    query.bindValue(":dev_code", sn.dev_code);
+    query.bindValue(":dev_num", sn.dev_num);
+    query.bindValue(":dev_party", sn.dev_party);
+    query.bindValue(":dev_firmware", sn.dev_firmware);
+    query.bindValue(":date", sn.date);
+    query.bindValue(":time", sn.time);
+    query.bindValue(":modification", sn.modification);
+    query.bindValue(":customer", sn.customer);
+
+    if(!query.exec())
+    {
+        m_last_error = query.lastError().text();
+        return false;
     }
+
+    return true;
 }
 //-------------------------------------------
 QStringList CDbController::modificationList()
@@ -128,9 +138,10 @@ void CDbController::createDb()
 {
     QSqlQuery query(*m_db);
     QString query_str = "CREATE TABLE IF NOT EXISTS serial("
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "    // id записи
-                        "addr INTEGER NOT NULL, "                            // аппаратный адрес модуля (0 - МДВВ-01, 1 - МДВВ-02, 2 - МИК-01)
-                        "sn STRING UNIQ NOT NULL, "                          // серийный номер
+                        "dev_code INTEGER NOT NULL, "                        // код изделия (0х48 - МДВВ-01, 0х49 - МДВВ-02, 0х50 - МИК-01)
+                        "dev_num INTEGER NOT NULL, "                         // номер устройства (0 - 999)
+                        "dev_party INTEGER NOT NULL, "                         // номер в партии (0 - 99)
+                        "dev_firmware INTEGER NOT NULL, "                    // вариант прошивки (0 - 99)
                         "date STRING NOT NULL, "                             // дата записи серийного номера
                         "time STRING NOT NULL, "                             // время записи серийного номера
                         "modification STRING NOT NULL, "                     // модификация модуля
@@ -165,17 +176,18 @@ void CDbController::createDb()
         return;
     }
 }
-//--------------------------------------------------------------------------
-bool CDbController::findEqualData(const QString& field, const QString& data)
+//----------------------------------------------------------------------
+bool CDbController::findEqualData(const CDbController::serial_num_t& sn)
 {
+    if(!m_db || !m_db->isOpen())
+        return false;
+
     QSqlQuery query(*m_db);
 
-    if(query.exec(QString("SELECT %1 FROM serial WHERE %2 = \'%3\';").arg(field).arg(field).arg(data)))
+    if(query.exec(QString("SELECT * FROM serial WHERE dev_num = %1 AND dev_party = %2 AND dev_firmware = %3;").arg(sn.dev_num).arg(sn.dev_party).
+                                                                                                               arg(sn.dev_firmware)))
     {
-        if(query.next())
-        {
-            return !query.value(0).toString().isEmpty();
-        }
+        return query.next();
     }
 
     return false;
