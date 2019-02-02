@@ -42,6 +42,10 @@
         public slots:
             void appendText();
 
+        signals:
+            void newValueAppend(const QString, const QString); // сигнал испускаемый при добавлении новой модификации или заказчика
+                                                                 // формат сигнала (Имя таблицы, новое значение)
+
         protected:
             void showEvent(QShowEvent* event);
             void close();

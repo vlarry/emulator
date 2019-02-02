@@ -132,6 +132,7 @@
             void timeoutCmdBindRead();
             void openDbJournal();
             void closeDbJournal();
+            void writeDataToDb(const QString table_name, const QString data);
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

@@ -143,6 +143,7 @@ void MainWindow::initConnect()
     connect(ui->toolButtonInputHelp, &QToolButton::clicked, this, &MainWindow::discretInputHelp);
     connect(m_mik_interface, &CBZUInterface::ledStateSave, this, &MainWindow::setupExtandOut);
     connect(ui->actionDbJournal, &QAction::triggered, this, &MainWindow::openDbJournal);
+    connect(m_conf_widget, &CConfigurationModuleWidget::newValueAppend, this, &MainWindow::writeDataToDb);
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -979,6 +980,11 @@ void MainWindow::closeDbJournal()
         delete m_db_journal;
         m_db_journal = Q_NULLPTR;
     }
+}
+//--------------------------------------------------------------------------
+void MainWindow::writeDataToDb(const QString table_name, const QString data)
+{
+    m_db_controller->writeDataToTable(table_name, data);
 }
 //----------------------------------
 void MainWindow::refreshSerialPort()

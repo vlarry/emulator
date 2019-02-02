@@ -156,7 +156,7 @@ void CDbController::createDb()
 
     query_str = "CREATE TABLE IF NOT EXISTS modification("
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-                "variant STRING UNIQ NOT NULL);";
+                "data STRING UNIQ NOT NULL);";
 
     if(!query.exec(query_str))
     {
@@ -167,7 +167,7 @@ void CDbController::createDb()
 
     query_str = "CREATE TABLE IF NOT EXISTS customer("
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-                "name STRING);";
+                "data STRING UNIQ NOT NULL);";
 
     if(!query.exec(query_str))
     {
@@ -191,4 +191,18 @@ bool CDbController::findEqualData(const CDbController::serial_num_t& sn)
     }
 
     return false;
+}
+//--------------------------------------------------------------------------------
+void CDbController::writeDataToTable(const QString table_name, const QString data)
+{
+    if(!m_db || !m_db->isOpen())
+        return;
+
+    QString query_str = QString("INSERT INTO %1 (data) VALUES(\'%2\');").arg(table_name).arg(data);
+    QSqlQuery query(*m_db);
+
+    if(!query.exec(query_str))
+    {
+        m_last_error = m_db->lastError().text();
+    }
 }

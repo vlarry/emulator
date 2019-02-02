@@ -153,6 +153,10 @@ void CConfigurationModuleWidget::appendText()
             {
                 combobox->addItem(text);
                 combobox->setCurrentText(text);
+
+                QString table_name = (button == ui->toolButtonModificationAppend)?"modification":"customer";
+
+                emit newValueAppend(table_name, text);
             }
         }
     }

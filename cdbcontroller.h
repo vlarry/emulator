@@ -30,6 +30,9 @@
             QStringList customerList();
             bool findEqualData(const serial_num_t& sn);
 
+        public slots:
+            void writeDataToTable(const QString table_name, const QString data);
+
         private:
             void createDb();
 
