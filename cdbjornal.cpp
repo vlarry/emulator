@@ -20,6 +20,7 @@ CDbJornal::CDbJornal(QWidget* parent):
 
     ui->tableWidgetDbSerialNumber->resizeColumnsToContents();
     ui->tableWidgetDbSerialNumber->horizontalHeader()->setStretchLastSection(true);
+    ui->tableWidgetDbSerialNumber->setSortingEnabled(true);
 
     setWindowTitle(tr("Журнал БД"));
     setWindowFlags(Qt::Window | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
