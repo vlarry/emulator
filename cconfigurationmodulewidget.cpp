@@ -64,6 +64,11 @@ int CConfigurationModuleWidget::moduleFirmwareVariant(type_t type) const
 {
     return (type == CURRENT)?ui->lineEditModuleFirmwareDateCurrent->text().toInt():ui->lineEditModuleFirmwareVariantNew->text().toInt();
 }
+//---------------------------------------------------------------------------------------------------
+QString CConfigurationModuleWidget::moduleFirmwareDate(CConfigurationModuleWidget::type_t type) const
+{
+    return (type == CURRENT)?ui->lineEditModuleFirmwareDateCurrent->text():ui->lineEditModuleFirmwareDateNew->text();
+}
 //-------------------------------------------------------------
 QByteArray CConfigurationModuleWidget::moduleKeyCurrent() const
 {

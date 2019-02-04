@@ -3,6 +3,9 @@
     //----------------
     #include <QWidget>
     #include <QCloseEvent>
+    #include <QShowEvent>
+    #include <QDateTime>
+    #include "cdbcontroller.h"
     //----------
     namespace Ui
     {
@@ -14,7 +17,7 @@
         Q_OBJECT
 
         public:
-            explicit CDbJornal(QWidget* parent = Q_NULLPTR);
+            explicit CDbJornal(const CDbController* controller, QWidget* parent = Q_NULLPTR);
             ~CDbJornal();
 
         signals:
@@ -22,8 +25,10 @@
 
         protected:
             void closeEvent(QCloseEvent* event);
+            void showEvent(QShowEvent* event);
 
         private:
-            Ui::CDbJornal* ui;
+            Ui::CDbJornal*       ui;
+            const CDbController* m_db_controller;
     };
 #endif // CDBJORNAL_H

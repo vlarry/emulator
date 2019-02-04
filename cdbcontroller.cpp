@@ -35,7 +35,7 @@ CDbController::~CDbController()
 //-----------------------------------------------------------
 CDbController::serial_num_t CDbController::serialNumberRead()
 {
-    serial_num_t sn = { -1, -1, -1, -1, "", "", "", "" };
+    serial_num_t sn = { -1, -1, -1, -1, "", "", "", "", "" };
 
     if(!m_db || !m_db->isOpen())
     {
@@ -53,7 +53,8 @@ CDbController::serial_num_t CDbController::serialNumberRead()
             sn.dev_code = query.value("dev_code").toInt();
             sn.dev_num = query.value("dev_num").toInt();
             sn.dev_party = query.value("dev_party").toInt();
-            sn.dev_firmware = query.value("dev_firmware").toInt();
+            sn.dev_firmware_var = query.value("dev_firmware_var").toInt();
+            sn.dev_firmware_date = query.value("dev_firmware_date").toString();
             sn.date = query.value("date").toString();
             sn.time = query.value("time").toString();
             sn.modification = query.value("modification").toString();
@@ -70,12 +71,13 @@ bool CDbController::serialNumberWrite(const CDbController::serial_num_t& sn)
 {
     QSqlQuery query(*m_db);
 
-    query.prepare("INSERT INTO serial (dev_code, dev_num, dev_party, dev_firmware, date, time, modification, customer) "
-                  "VALUES (:dev_code, :dev_num, :dev_party, :dev_firmware, :date, :time, :modification, :customer);");
+    query.prepare("INSERT INTO serial (dev_code, dev_num, dev_party, dev_firmware_var, dev_firmware_date, date, time, modification, customer) "
+                  "VALUES (:dev_code, :dev_num, :dev_party, :dev_firmware_var, :dev_firmware_date, :date, :time, :modification, :customer);");
     query.bindValue(":dev_code", sn.dev_code);
     query.bindValue(":dev_num", sn.dev_num);
     query.bindValue(":dev_party", sn.dev_party);
-    query.bindValue(":dev_firmware", sn.dev_firmware);
+    query.bindValue(":dev_firmware_var", sn.dev_firmware_var);
+    query.bindValue(":dev_firmware_date", sn.dev_firmware_date);
     query.bindValue(":date", sn.date);
     query.bindValue(":time", sn.time);
     query.bindValue(":modification", sn.modification);
@@ -118,8 +120,9 @@ void CDbController::createDb()
     QString query_str = "CREATE TABLE IF NOT EXISTS serial("
                         "dev_code INTEGER NOT NULL, "                        // код изделия (0х48 - МДВВ-01, 0х49 - МДВВ-02, 0х50 - МИК-01)
                         "dev_num INTEGER NOT NULL, "                         // номер устройства (0 - 999)
-                        "dev_party INTEGER NOT NULL, "                         // номер в партии (0 - 99)
-                        "dev_firmware INTEGER NOT NULL, "                    // вариант прошивки (0 - 99)
+                        "dev_party INTEGER NOT NULL, "                       // номер в партии (0 - 99)
+                        "dev_firmware_var INTEGER NOT NULL, "                // вариант прошивки (0 - 99)
+                        "dev_firmware_date STRING NOT NULL, "                // дата прошивки
                         "date STRING NOT NULL, "                             // дата записи серийного номера
                         "time STRING NOT NULL, "                             // время записи серийного номера
                         "modification STRING NOT NULL, "                     // модификация модуля
@@ -162,8 +165,8 @@ bool CDbController::findEqualData(const CDbController::serial_num_t& sn)
 
     QSqlQuery query(*m_db);
 
-    if(query.exec(QString("SELECT * FROM serial WHERE dev_num = %1 AND dev_party = %2 AND dev_firmware = %3;").arg(sn.dev_num).arg(sn.dev_party).
-                                                                                                               arg(sn.dev_firmware)))
+    if(query.exec(QString("SELECT * FROM serial WHERE dev_num = %1 AND dev_party = %2 AND dev_firmware_var = %3;").arg(sn.dev_num).arg(sn.dev_party).
+                                                                                                                   arg(sn.dev_firmware_var)))
     {
         return query.next();
     }

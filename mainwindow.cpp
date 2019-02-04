@@ -643,6 +643,8 @@ void MainWindow::loadSettings()
 
         ui->cbBaudrate->setCurrentIndex(index);
     }
+
+    addrChanged(ui->sbDeviceAddress->value());
 }
 //-----------------------------
 void MainWindow::saveSettings()
@@ -817,7 +819,7 @@ void MainWindow::configurationWindow()
     if(!m_conf_widget->isHidden())
     {
         sendData("0x1E");
-        Sleep(10); // засыпаем на 10мс, чтобы данные были прочитаны и записаны
+        Sleep(100); // засыпаем на 10мс, чтобы данные были прочитаны и записаны
 
         CDbController::serial_num_t sn = m_db_controller->serialNumberRead();
 
@@ -828,7 +830,7 @@ void MainWindow::configurationWindow()
         {
             m_conf_widget->setModuleNumber(sn.dev_num + 1, CConfigurationModuleWidget::NEW);
             m_conf_widget->setModuleNumberParty(sn.dev_party, CConfigurationModuleWidget::NEW);
-            m_conf_widget->setModuleFirmwareVariant(sn.dev_firmware, CConfigurationModuleWidget::NEW);
+            m_conf_widget->setModuleFirmwareVariant(sn.dev_firmware_var, CConfigurationModuleWidget::NEW);
         }
         else // данных в базе нет
         {
@@ -841,11 +843,21 @@ void MainWindow::configurationWindow()
         {
             sn.dev_num      = m_conf_widget->moduleNumber(CConfigurationModuleWidget::NEW);
             sn.dev_party    = m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::NEW);
-            sn.dev_firmware = m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::NEW);
+            sn.dev_firmware_var = m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::NEW);
+
+            QByteArray key = m_conf_widget->moduleKeyCurrent();
+            QByteArray key_empty = QByteArray::fromHex(QString("00000000").toUtf8());
+
+            if(key == key_empty ||
+               m_conf_widget->moduleKeyCurrent().isEmpty())
+            {
+                QMessageBox::warning(this, tr("Запись серийного в модуль"), tr("Не валидный ключ разблокировки записи!"));
+                return;
+            }
 
             if(m_db_controller->findEqualData(sn))
             {
-                QMessageBox::warning(this, tr("Запись серийного номера БД"), tr("Такой серийный номер уже существует"));
+                QMessageBox::warning(this, tr("Запись серийного номера БД"), tr("Такой серийный номер уже существует!"));
                 return;
             }
 
@@ -945,14 +957,15 @@ void MainWindow::timeoutCmdBindRead()
     {
         CDbController::serial_num_t sn;
 
-        sn.dev_code     = ui->sbDeviceAddress->value();
-        sn.dev_num      = m_conf_widget->moduleNumber(CConfigurationModuleWidget::NEW);
-        sn.dev_party    = m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::NEW);
-        sn.dev_firmware = m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::NEW);
-        sn.date         = QDate::currentDate().toString("yyyy-MM-dd");
-        sn.time         = QTime::currentTime().toString("hh:mm:ss");
-        sn.modification = m_conf_widget->moduleModification();
-        sn.customer     = m_conf_widget->moduleCustomer();
+        sn.dev_code          = ui->sbDeviceAddress->value();
+        sn.dev_num           = m_conf_widget->moduleNumber(CConfigurationModuleWidget::NEW);
+        sn.dev_party         = m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::NEW);
+        sn.dev_firmware_var  = m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::NEW);
+        sn.dev_firmware_date = m_conf_widget->moduleFirmwareDate(CConfigurationModuleWidget::CURRENT);
+        sn.date              = QDate::currentDate().toString("yyyy-MM-dd");
+        sn.time              = QTime::currentTime().toString("hh:mm:ss");
+        sn.modification      = m_conf_widget->moduleModification();
+        sn.customer          = m_conf_widget->moduleCustomer();
 
         if(!m_db_controller->serialNumberWrite(sn))
             QMessageBox::warning(this, tr("Запись серийного номера БД"), tr("Не удалось записать серийный номер в БД!"));
@@ -966,7 +979,7 @@ void MainWindow::openDbJournal()
 {
     if(!m_db_journal)
     {
-        m_db_journal = new CDbJornal(this);
+        m_db_journal = new CDbJornal(m_db_controller, this);
         connect(m_db_journal, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
         m_db_journal->show();
     }
@@ -1071,7 +1084,12 @@ void MainWindow::ctrlSerialPort(bool state)
         m_port->setParity(QSerialPort::NoParity);
 
         if(static_cast<DEVICE_Type>(ui->sbDeviceAddress->value()) == MIK_01)
+        {
+            ui->actionInterfaceMIK01->setEnabled(true);
+            visiblityInterfaceMIK01(ui->actionInterfaceMIK01->isChecked());
+
             sendCmd("0x04");
+        }
     }
     else
     {

@@ -4,6 +4,7 @@
     #include <QSqlDatabase>
     #include <QSqlQuery>
     #include <QSqlError>
+    #include <QDateTime>
     #include <QDebug>
     //-----------------
     class CDbController
@@ -14,7 +15,8 @@
                 int     dev_code; // код изделия
                 int     dev_num; // номер устройства
                 int     dev_party; // номер партии
-                int     dev_firmware; // вариант прошивки
+                int     dev_firmware_var; // вариант прошивки
+                QString dev_firmware_date; // дата прошивки модуля
                 QString date;
                 QString time;
                 QString modification;

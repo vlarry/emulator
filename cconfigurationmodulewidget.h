@@ -28,6 +28,7 @@
             int        moduleNumber(type_t type) const;
             int        moduleNumberParty(type_t type) const;
             int        moduleFirmwareVariant(type_t type) const;
+            QString    moduleFirmwareDate(type_t type) const;
             QByteArray moduleKeyCurrent() const;
             QByteArray moduleKeyNew() const;
             QString    moduleModification() const;
