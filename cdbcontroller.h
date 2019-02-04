@@ -22,11 +22,14 @@
                 QString modification;
                 QString customer;
             };
+            //----------------------------------------------
+            typedef QVector<serial_num_t> serial_num_list_t;
 
         public:
             CDbController(const QString& path);
             ~CDbController();
             serial_num_t serialNumberRead();
+            serial_num_list_t serialNumberListRead();
             bool serialNumberWrite(const serial_num_t& sn);
             QStringList dataListFromTable(const QString &table);
             bool findEqualData(const serial_num_t& sn);

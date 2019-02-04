@@ -17,18 +17,17 @@
         Q_OBJECT
 
         public:
-            explicit CDbJornal(const CDbController* controller, QWidget* parent = Q_NULLPTR);
+            explicit CDbJornal(QWidget* parent = Q_NULLPTR);
             ~CDbJornal();
+            void setDataToTable(const CDbController::serial_num_list_t& list);
 
         signals:
             void closeJournal();
 
         protected:
             void closeEvent(QCloseEvent* event);
-            void showEvent(QShowEvent* event);
 
         private:
-            Ui::CDbJornal*       ui;
-            const CDbController* m_db_controller;
+            Ui::CDbJornal* ui;
     };
 #endif // CDBJORNAL_H

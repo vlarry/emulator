@@ -66,6 +66,43 @@ CDbController::serial_num_t CDbController::serialNumberRead()
 
     return sn;
 }
+//--------------------------------------------------------------------
+CDbController::serial_num_list_t CDbController::serialNumberListRead()
+{
+    serial_num_list_t list;
+
+    if(!m_db || !m_db->isOpen())
+    {
+        m_last_error = "Can't open a data base";
+        return list;
+    }
+
+    QSqlQuery query(*m_db);
+
+    if(query.exec(QString("SELECT * FROM serial;")))
+    {
+        while(query.next())
+        {
+            serial_num_t sn;
+
+            sn.dev_code = query.value("dev_code").toInt();
+            sn.dev_num = query.value("dev_num").toInt();
+            sn.dev_party = query.value("dev_party").toInt();
+            sn.dev_firmware_var = query.value("dev_firmware_var").toInt();
+            sn.dev_firmware_date = query.value("dev_firmware_date").toString();
+            sn.date = query.value("date").toString();
+            sn.time = query.value("time").toString();
+            sn.modification = query.value("modification").toString();
+            sn.customer = query.value("customer").toString();
+
+            list.append(sn);
+        }
+    }
+    else
+        m_last_error = m_db->lastError().text();
+
+    return list;
+}
 //--------------------------------------------------------------------------
 bool CDbController::serialNumberWrite(const CDbController::serial_num_t& sn)
 {

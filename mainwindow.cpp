@@ -961,7 +961,7 @@ void MainWindow::timeoutCmdBindRead()
         sn.dev_num           = m_conf_widget->moduleNumber(CConfigurationModuleWidget::NEW);
         sn.dev_party         = m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::NEW);
         sn.dev_firmware_var  = m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::NEW);
-        sn.dev_firmware_date = m_conf_widget->moduleFirmwareDate(CConfigurationModuleWidget::CURRENT);
+        sn.dev_firmware_date = QDate::fromString(m_conf_widget->moduleFirmwareDate(CConfigurationModuleWidget::CURRENT), "dd.MM.yyyy").toString("yyyy-MM-dd");
         sn.date              = QDate::currentDate().toString("yyyy-MM-dd");
         sn.time              = QTime::currentTime().toString("hh:mm:ss");
         sn.modification      = m_conf_widget->moduleModification();
@@ -979,8 +979,10 @@ void MainWindow::openDbJournal()
 {
     if(!m_db_journal)
     {
-        m_db_journal = new CDbJornal(m_db_controller, this);
+        m_db_journal = new CDbJornal(this);
         connect(m_db_journal, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
+        CDbController::serial_num_list_t list = m_db_controller->serialNumberListRead();
+        m_db_journal->setDataToTable(list);
         m_db_journal->show();
     }
 }
@@ -1087,7 +1089,6 @@ void MainWindow::ctrlSerialPort(bool state)
         {
             ui->actionInterfaceMIK01->setEnabled(true);
             visiblityInterfaceMIK01(ui->actionInterfaceMIK01->isChecked());
-
             sendCmd("0x04");
         }
     }
