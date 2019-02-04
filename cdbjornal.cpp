@@ -22,7 +22,7 @@ CDbJornal::CDbJornal(QWidget* parent):
     ui->tableWidgetDbSerialNumber->horizontalHeader()->setStretchLastSection(true);
 
     setWindowTitle(tr("Журнал БД"));
-    setWindowFlags(Qt::Window | Qt::WindowCloseButtonHint);
+    setWindowFlags(Qt::Window | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
 }
 //---------------------
 CDbJornal::~CDbJornal()

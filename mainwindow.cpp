@@ -969,6 +969,11 @@ void MainWindow::timeoutCmdBindRead()
 
         if(!m_db_controller->serialNumberWrite(sn))
             QMessageBox::warning(this, tr("Запись серийного номера БД"), tr("Не удалось записать серийный номер в БД!"));
+        else if(!m_db_journal->isHidden())
+        {
+            CDbController::serial_num_list_t list = m_db_controller->serialNumberListRead();
+            m_db_journal->setDataToTable(list);
+        }
     }
 
     m_cmd_save.clear();
