@@ -224,8 +224,8 @@ void MainWindow::initDbController(CDbController* controller)
 {
     if(controller)
     {
-        QStringList listModification = controller->modificationList();
-        QStringList listCustomer = controller->customerList();
+        QStringList listModification = controller->dataListFromTable("modification");
+        QStringList listCustomer = controller->dataListFromTable("customer");
 
         m_conf_widget->initLIst(listModification, listCustomer);
     }

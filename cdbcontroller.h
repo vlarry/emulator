@@ -26,8 +26,7 @@
             ~CDbController();
             serial_num_t serialNumberRead();
             bool serialNumberWrite(const serial_num_t& sn);
-            QStringList modificationList();
-            QStringList customerList();
+            QStringList dataListFromTable(const QString &table);
             bool findEqualData(const serial_num_t& sn);
 
         public slots:

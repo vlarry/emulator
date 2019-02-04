@@ -89,8 +89,8 @@ bool CDbController::serialNumberWrite(const CDbController::serial_num_t& sn)
 
     return true;
 }
-//-------------------------------------------
-QStringList CDbController::modificationList()
+//----------------------------------------------------------------
+QStringList CDbController::dataListFromTable(const QString& table)
 {
     QStringList list;
 
@@ -98,33 +98,11 @@ QStringList CDbController::modificationList()
     {
         QSqlQuery query(*m_db);
 
-        if(query.exec("SELECT variant FROM modification;"))
+        if(query.exec(QString("SELECT data FROM %1;").arg(table)))
         {
             while(query.next())
             {
-                list << query.value("variant").toString();
-            }
-        }
-        else
-            m_last_error = m_db->lastError().text();
-    }
-
-    return list;
-}
-//---------------------------------------
-QStringList CDbController::customerList()
-{
-    QStringList list;
-
-    if(m_db && m_db->isOpen())
-    {
-        QSqlQuery query(*m_db);
-
-        if(query.exec("SELECT name FROM customer;"))
-        {
-            while(query.next())
-            {
-                list << query.value("name").toString();
+                list << query.value("data").toString();
             }
         }
         else
