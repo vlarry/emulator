@@ -78,6 +78,7 @@
             QTimer                      m_cmd_read_timer; // таймер для чтения данных после записи
             CDbController*              m_db_controller;
             CDbJornal*                  m_db_journal;
+            bool                        m_is_use_device_address; // переменнаю управляющая подбором адреса модуля (false - автомат, true - ручной)
 
         private:
             void   initConnect();
@@ -132,6 +133,7 @@
             void openDbJournal();
             void closeDbJournal();
             void writeDataToDb(const QString table_name, const QString data);
+            void useDeviceAddress(bool state);
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

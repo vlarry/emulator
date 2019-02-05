@@ -19,7 +19,8 @@ MainWindow::MainWindow(QWidget* parent):
     m_input_help_widget(Q_NULLPTR),
     m_cmd_save(""),
     m_db_controller(Q_NULLPTR),
-    m_db_journal(Q_NULLPTR)
+    m_db_journal(Q_NULLPTR),
+    m_is_use_device_address(false)
 {
     ui->setupUi(this);
 
@@ -137,6 +138,7 @@ void MainWindow::initConnect()
     connect(m_mik_interface, &CBZUInterface::ledStateSave, this, &MainWindow::setupExtandOut);
     connect(ui->actionDbJournal, &QAction::triggered, this, &MainWindow::openDbJournal);
     connect(m_conf_widget, &CConfigurationModuleWidget::newValueAppend, this, &MainWindow::writeDataToDb);
+    connect(ui->checkBoxUseDeviceAddress, &QCheckBox::clicked, this, &MainWindow::useDeviceAddress);
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -738,6 +740,7 @@ void MainWindow::showEvent(QShowEvent* evt)
     ui->twPeriphery->setCurrentIndex(0);
     addrChanged(ui->sbDeviceAddress->value());
     ui->actionInterfaceMIK01->setEnabled(false);
+    useDeviceAddress(false);
 
     QMainWindow::showEvent(evt);
 }
@@ -996,6 +999,11 @@ void MainWindow::closeDbJournal()
 void MainWindow::writeDataToDb(const QString table_name, const QString data)
 {
     m_db_controller->writeDataToTable(table_name, data);
+}
+//-------------------------------------------
+void MainWindow::useDeviceAddress(bool state)
+{
+    ui->sbDeviceAddress->setEnabled(state);
 }
 //----------------------------------
 void MainWindow::refreshSerialPort()
@@ -1291,12 +1299,9 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
         }
 
         quint8 checksum = getChecksum(m_query, static_cast<quint8>(m_query.size())); // создать контрольную сумму
-
         m_query.append(QByteArray::fromHex(QByteArray::number(checksum, 16)));
 
-        QString desc = QCmd::descrition(m_cmd_last);
-
-        ui->pteConsole->appendPlainText(tr("КОМАНДА: ") + desc);
+        ui->pteConsole->appendPlainText(tr("КОМАНДА: ") + QCmd::descrition(m_cmd_last));
         ui->pteConsole->appendPlainText(tr("ОТПРАВКА ДАННЫХ: ") + m_query.toHex().toUpper());
         m_port->setParity(QSerialPort::MarkParity); // enable 9 bit
 
