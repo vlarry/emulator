@@ -30,6 +30,12 @@
     {
         class MainWindow;
     }
+    //------------------
+    struct AutoAddress_t
+    {
+        bool state;
+        quint8 currentAddress;
+    };
     //-----------
     typedef union
     {
@@ -78,7 +84,8 @@
             QTimer                      m_cmd_read_timer; // таймер для чтения данных после записи
             CDbController*              m_db_controller;
             CDbJornal*                  m_db_journal;
-            bool                        m_is_use_device_address; // переменнаю управляющая подбором адреса модуля (false - автомат, true - ручной)
+            AutoAddress_t               m_is_connected; // переменная управляющая разрешением передачи (для автоматического подбора адреса устройства)
+
 
         private:
             void   initConnect();
@@ -134,6 +141,8 @@
             void closeDbJournal();
             void writeDataToDb(const QString table_name, const QString data);
             void useDeviceAddress(bool state);
+            void ctrlInterface(bool state);
+            void autoAddressSelect();
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

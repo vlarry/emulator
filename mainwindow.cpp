@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget* parent):
     m_cmd_save(""),
     m_db_controller(Q_NULLPTR),
     m_db_journal(Q_NULLPTR),
-    m_is_use_device_address(false)
+    m_is_connected( { false, 0 } )
 {
     ui->setupUi(this);
 
@@ -1004,6 +1004,92 @@ void MainWindow::writeDataToDb(const QString table_name, const QString data)
 void MainWindow::useDeviceAddress(bool state)
 {
     ui->sbDeviceAddress->setEnabled(state);
+
+    if(state)
+        m_is_connected.currentAddress = static_cast<quint8>(ui->sbDeviceAddress->value());
+}
+/*!
+ * \brief MainWindow::ctrlInterface
+ * \param state Состояние соединения
+ *
+ * Управление блокировкой/разблокировкой интерфейса при соединении с утройством (используется для автоматического подбора скорости)
+ */
+void MainWindow::ctrlInterface(bool state)
+{
+    m_is_connected.state = state;
+
+    ui->pbCtrlPort->setChecked(state);
+
+    if(ui->cboxRepeatInputs->isChecked())
+        autoRepeatInputs(state);
+    if(ui->cboxRepeatAIN->isChecked())
+        autoRepeatAIN(state);
+
+    if(state)
+    {
+        ui->pbCtrlPort->setText(tr("Закрыть"));
+
+        ui->groupDevices->setEnabled(true);
+        ui->gboxAutorepeatInput->setEnabled(true);
+        ui->twPeriphery->setEnabled(true);
+
+        showMessage(ui->cbPortNames->currentText() + " " + tr("открыт"));
+
+        fileAinOpen();
+
+        if(static_cast<DEVICE_Type>(ui->sbDeviceAddress->value()) == MIK_01)
+        {
+            ui->actionInterfaceMIK01->setEnabled(true);
+            visiblityInterfaceMIK01(ui->actionInterfaceMIK01->isChecked());
+            sendCmd("0x04");
+        }
+    }
+    else
+    {
+        m_port->close();
+        ui->pbCtrlPort->setText(tr("Открыть"));
+
+        ui->groupDevices->setDisabled(true);
+        ui->gboxAutorepeatInput->setDisabled(true);
+        ui->twPeriphery->setDisabled(true);
+
+        ui->cboxRepeatInputs->setChecked(false);
+        ui->cboxRepeatAIN->setChecked(false);
+
+        m_timerAutoRepeatInput->stop();
+        m_timerAutoRepeatAIN->stop();
+
+        m_file_ain->close();
+
+        showMessage(ui->cbPortNames->currentText() + " " + tr("закрыт"));
+
+        if(!m_command->isHidden())
+            m_command->hide();
+
+        m_mik_interface->ledReset();
+    }
+}
+//----------------------------------
+void MainWindow::autoAddressSelect()
+{
+    if(m_is_connected.state)
+        return;
+
+    if(m_is_connected.currentAddress >= 3) // если адрес больше 2, т.е. подобрать адрес не удалось
+    {
+        m_is_connected = AutoAddress_t({ false, 0 }); // производим сброс соединения
+        ctrlInterface(false);
+
+        QMessageBox::warning(this, tr("Автоподбор адреса"), tr("Не удалось автоматически подобрать адрес устройства\n"
+                                                               "Попробуйте еще раз или переключитесь на ручной режим!"));
+        return;
+    }
+
+    QTimer::singleShot(20, this, &MainWindow::autoAddressSelect);
+    ui->sbDeviceAddress->setValue(m_is_connected.currentAddress);
+    m_is_connected.currentAddress++;
+    m_query.clear();
+    sendCmd("0x1E");
 }
 //----------------------------------
 void MainWindow::refreshSerialPort()
@@ -1072,61 +1158,25 @@ void MainWindow::ctrlSerialPort(bool state)
             return;
         }
 
-        ui->pbCtrlPort->setText(tr("Закрыть"));
-
-        ui->groupDevices->setEnabled(true);
-        ui->gboxAutorepeatInput->setEnabled(true);
-        ui->twPeriphery->setEnabled(true);
-
-        showMessage(ui->cbPortNames->currentText() + " " + tr("открыт"));
-
-        fileAinOpen();
-
         m_port->setBaudRate(ui->cbBaudrate->currentText().toInt());
         m_port->setFlowControl(QSerialPort::NoFlowControl);
         m_port->setDataBits(QSerialPort::Data8);
         m_port->setStopBits(QSerialPort::OneStop);
         m_port->setParity(QSerialPort::NoParity);
 
-        if(static_cast<DEVICE_Type>(ui->sbDeviceAddress->value()) == MIK_01)
+        if(ui->checkBoxUseDeviceAddress->isChecked()) // если ручной подбор скорости, то разблокируем интерфейс
         {
-            ui->actionInterfaceMIK01->setEnabled(true);
-            visiblityInterfaceMIK01(ui->actionInterfaceMIK01->isChecked());
-            sendCmd("0x04");
+            ctrlInterface(true);
+        }
+        else // при автоматическом подборе - запрашиваем адрес с 0 по 2
+        {
+            autoAddressSelect();
         }
     }
     else
     {
-        m_port->close();
-
-        ui->pbCtrlPort->setText(tr("Открыть"));
-
-        ui->groupDevices->setDisabled(true);
-        ui->gboxAutorepeatInput->setDisabled(true);
-        ui->twPeriphery->setDisabled(true);
-
-        ui->cboxRepeatInputs->setChecked(false);
-        ui->cboxRepeatAIN->setChecked(false);
-
-        m_timerAutoRepeatInput->stop();
-        m_timerAutoRepeatAIN->stop();
-
-        m_file_ain->close();
-
-        showMessage(ui->cbPortNames->currentText() + " " + tr("закрыт"));
-
-        if(!m_command->isHidden())
-            m_command->hide();
-
-        m_mik_interface->ledReset();
+        ctrlInterface(false);
     }
-
-    ui->pbCtrlPort->setChecked(state);
-
-    if(ui->cboxRepeatInputs->isChecked())
-        autoRepeatInputs(state);
-    if(ui->cboxRepeatAIN->isChecked())
-        autoRepeatAIN(state);
 }
 //-------------------------
 void MainWindow::readData()
@@ -1152,6 +1202,14 @@ void MainWindow::readData()
             ui->pteConsole->appendPlainText(tr("ЧТЕНИЕ: ОШИБКА CRC\n%1").arg("*****"));
 
         ui->pteConsole->verticalScrollBar()->setValue(ui->pteConsole->verticalScrollBar()->maximum());
+
+        if(!m_is_connected.state && !ui->checkBoxUseDeviceAddress->isChecked()) // если соединение не активно и подбор адреса автоматический
+        {
+            if(m_cmd_last == "0x1E") // если команда "Чтение ID", значит адрес подобран
+                ctrlInterface(true);
+            else
+                autoAddressSelect(); // иначе перебираем дальше
+        }
 
         m_query.clear();
         m_query_count = 0;
@@ -1204,7 +1262,7 @@ void MainWindow::sendData(const QString& data)
     if(!m_port->isOpen())
         return;
 
-    if(!is_blockSend()) // если не блокирована передача
+    if(!is_blockSend() || !m_is_connected.state) // если не блокирована передача или соединение не подтверждено
     {
         if(!data.isEmpty())
         {
@@ -1254,7 +1312,7 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
 
         quint8 cmd = static_cast<quint8>(QString(m_cmd_last).remove(QRegExp(tr("0x"))).toInt(Q_NULLPTR, 16));
 
-        cmd |= (static_cast<quint8>(ui->sbDeviceAddress->value())) << 6;
+        cmd |= m_is_connected.currentAddress << 6;
 
         m_query.append(QByteArray::fromHex(QByteArray::number(cmd, 16)));
 
