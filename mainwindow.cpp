@@ -1077,7 +1077,7 @@ void MainWindow::ctrlSerialPort(bool state)
 
         ui->groupDevices->setEnabled(true);
         ui->pbCmdSend->setEnabled(true);
-        ui->gboxAutorepeat->setEnabled(true);
+        ui->gboxAutorepeatInput->setEnabled(true);
         ui->twPeriphery->setEnabled(true);
 
         showMessage(ui->cbPortNames->currentText() + " " + tr("открыт"));
@@ -1105,7 +1105,7 @@ void MainWindow::ctrlSerialPort(bool state)
 
         ui->groupDevices->setDisabled(true);
         ui->pbCmdSend->setDisabled(true);
-        ui->gboxAutorepeat->setDisabled(true);
+        ui->gboxAutorepeatInput->setDisabled(true);
         ui->twPeriphery->setDisabled(true);
 
         ui->cboxRepeatInputs->setChecked(false);
