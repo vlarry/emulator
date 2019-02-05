@@ -79,6 +79,12 @@ MainWindow::MainWindow(QWidget* parent):
     m_cmd_bind["0x13"] = "0x01";
     m_cmd_bind["0x14"] = "0x01";
     m_cmd_bind["0x15"] = "0x01";
+
+    // установка свойств кнопок "Избранные команды"
+    ui->pushButtonIDRead->setProperty("COMMAND", "0x1E");
+    ui->pushButtonErrorRead->setProperty("COMMAND", "0x1D");
+    ui->pushButtonSerialNumberWrite->setProperty("COMMAND", "0x3A");
+    ui->pushButtonInputSetWrite->setProperty("COMMAND", "0x3E"); // также обрабатывает команду 0x3F
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -139,6 +145,11 @@ void MainWindow::initConnect()
     connect(ui->actionDbJournal, &QAction::triggered, this, &MainWindow::openDbJournal);
     connect(m_conf_widget, &CConfigurationModuleWidget::newValueAppend, this, &MainWindow::writeDataToDb);
     connect(ui->checkBoxUseDeviceAddress, &QCheckBox::clicked, this, &MainWindow::useDeviceAddress);
+
+    connect(ui->pushButtonIDRead, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
+    connect(ui->pushButtonErrorRead, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
+    connect(ui->pushButtonSerialNumberWrite, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
+    connect(ui->pushButtonInputSetWrite, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -1068,6 +1079,8 @@ void MainWindow::ctrlInterface(bool state)
 
         m_mik_interface->ledReset();
     }
+
+    ui->groupBoxCmdFavorit->setEnabled(true);
 }
 //----------------------------------
 void MainWindow::autoAddressSelect()
@@ -1090,6 +1103,18 @@ void MainWindow::autoAddressSelect()
     m_is_connected.currentAddress++;
     m_query.clear();
     sendCmd("0x1E");
+}
+//-----------------------------------
+void MainWindow::processCmdFavorite()
+{
+    QPushButton* button = qobject_cast<QPushButton*>(sender());
+
+    if(button)
+    {
+        QString cmd = button->property("COMMAND").toString();
+
+        sendCmd(cmd);
+    }
 }
 //----------------------------------
 void MainWindow::refreshSerialPort()

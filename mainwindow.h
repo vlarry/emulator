@@ -143,6 +143,7 @@
             void useDeviceAddress(bool state);
             void ctrlInterface(bool state);
             void autoAddressSelect();
+            void processCmdFavorite();
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)
