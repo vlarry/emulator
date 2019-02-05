@@ -101,9 +101,6 @@ void MainWindow::initConnect()
     connect(ui->pbCtrlPort, SIGNAL(clicked(bool)), this, SLOT(ctrlSerialPort(bool)));
     connect(m_port, SIGNAL(readyRead()), this, SLOT(readData()));
     connect(m_port, SIGNAL(bytesWritten(qint64)), this, SLOT(BytesWriten(qint64)));
-    connect(ui->pbCmdSend, SIGNAL(clicked()), this, SLOT(sendCmd()));
-    connect(ui->cbCmdList, SIGNAL(changeDescription(QString)), this, SLOT(cmdDescription(QString)));
-    connect(ui->cbCmdList, SIGNAL(currentIndexChanged(int)), ui->cbCmdList, SLOT(slotActivated(int)));
     connect(ui->sbDeviceAddress, SIGNAL(valueChanged(int)), SLOT(addrChanged(int)));
 
     connect(m_output_dev.at(0), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
@@ -118,9 +115,6 @@ void MainWindow::initConnect()
     connect(m_output_dev.at(9), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
     connect(m_output_dev.at(10), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
     connect(m_output_dev.at(11), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
-
-    connect(ui->cbCmdList, SIGNAL(currentTextChanged(const QString&)), this, SLOT(initFilter(const QString&)));
-    connect(ui->cbCmdList, SIGNAL(currentIndexChanged(int)), m_command, SLOT(setCurrentIndex(int)));
 
     connect(ui->cboxRepeatInputs, SIGNAL(clicked(bool)), this, SLOT(autoRepeatInputs(bool)));
     connect(ui->cboxRepeatAIN, SIGNAL(clicked(bool)), this, SLOT(autoRepeatAIN(bool)));
@@ -139,7 +133,6 @@ void MainWindow::initConnect()
 
     connect(ui->pushButtonInputSet, &QPushButton::clicked, this, &MainWindow::setupDiscretInput);
     connect(m_set_intput_widget, &CSetInput::apply, this, &MainWindow::discretInputProcess);
-    connect(m_command, &QCommand::clickCmdIndex, ui->cbCmdList, &QComboBox::setCurrentIndex);
     connect(ui->toolButtonInputHelp, &QToolButton::clicked, this, &MainWindow::discretInputHelp);
     connect(m_mik_interface, &CBZUInterface::ledStateSave, this, &MainWindow::setupExtandOut);
     connect(ui->actionDbJournal, &QAction::triggered, this, &MainWindow::openDbJournal);
@@ -742,9 +735,7 @@ void MainWindow::showEvent(QShowEvent* evt)
     loadSettings();
     refreshSerialPort();
 
-    ui->cbCmdList->slotActivated(0);
     ui->twPeriphery->setCurrentIndex(0);
-    initFilter(ui->cbCmdList->currentText());
     addrChanged(ui->sbDeviceAddress->value());
     ui->actionInterfaceMIK01->setEnabled(false);
 
@@ -1076,7 +1067,6 @@ void MainWindow::ctrlSerialPort(bool state)
         ui->pbCtrlPort->setText(tr("Закрыть"));
 
         ui->groupDevices->setEnabled(true);
-        ui->pbCmdSend->setEnabled(true);
         ui->gboxAutorepeatInput->setEnabled(true);
         ui->twPeriphery->setEnabled(true);
 
@@ -1104,7 +1094,6 @@ void MainWindow::ctrlSerialPort(bool state)
         ui->pbCtrlPort->setText(tr("Открыть"));
 
         ui->groupDevices->setDisabled(true);
-        ui->pbCmdSend->setDisabled(true);
         ui->gboxAutorepeatInput->setDisabled(true);
         ui->twPeriphery->setDisabled(true);
 
@@ -1138,7 +1127,7 @@ void MainWindow::readData()
 
     m_responce.append(ba);
 
-    quint8 cmd_size = ui->cbCmdList->size(m_cmd_last);
+    quint8 cmd_size = QCmd::size(m_cmd_last);
     quint8 responce_size = static_cast<quint8>(m_responce.size());
 
     if(responce_size == cmd_size)
@@ -1178,10 +1167,7 @@ void MainWindow::sendCmd(const QString& cmd_str)
     if(!m_port->isOpen())
         return;
 
-    QString cmd = ui->cbCmdList->currentText();
-
-    if(!cmd_str.isEmpty())
-        cmd = cmd_str;
+    QString cmd = cmd_str;
 
     if(cmd.toUpper() == "0X05")
     {
@@ -1308,8 +1294,9 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
 
         m_query.append(QByteArray::fromHex(QByteArray::number(checksum, 16)));
 
-        int index = ui->cbCmdList->findText(m_cmd_last);
-        ui->pteConsole->appendPlainText(tr("КОМАНДА: ") + ui->cbCmdList->description(index));
+        QString desc = QCmd::descrition(m_cmd_last);
+
+        ui->pteConsole->appendPlainText(tr("КОМАНДА: ") + desc);
         ui->pteConsole->appendPlainText(tr("ОТПРАВКА ДАННЫХ: ") + m_query.toHex().toUpper());
         m_port->setParity(QSerialPort::MarkParity); // enable 9 bit
 
@@ -1340,12 +1327,6 @@ void MainWindow::BytesWriten(qint64 byte)
     }
     else
         write();
-}
-//---------------------------------------------------------
-void MainWindow::cmdDescription(const QString& description)
-{
-    ui->labelCmdDescription->setToolTip(description);
-    ui->labelCmdDescription->setText(description);
 }
 //------------------------------------
 void MainWindow::addrChanged(int addr)

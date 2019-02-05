@@ -111,7 +111,6 @@
             void sendData(const QString& data = "");
             void write(const QString& cmd_str = "", const QByteArray& data = QByteArray());
             void BytesWriten(qint64 byte);
-            void cmdDescription(const QString& description);
             void addrChanged(int addr);
             void outputStateChanged(quint8 id, bool state);
             void initFilter(const QString& text);

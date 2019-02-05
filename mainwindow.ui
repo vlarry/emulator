@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1265</width>
-    <height>876</height>
+    <height>818</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -192,7 +192,7 @@
       <property name="title">
        <string>Устройства</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_38">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="QGroupBox" name="groupBox_4">
          <property name="sizePolicy">
@@ -204,93 +204,37 @@
          <property name="title">
           <string/>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_12">
-          <property name="leftMargin">
-           <number>7</number>
-          </property>
-          <property name="topMargin">
-           <number>7</number>
-          </property>
-          <property name="rightMargin">
-           <number>7</number>
-          </property>
-          <property name="bottomMargin">
-           <number>7</number>
-          </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_4">
-            <item>
-             <layout class="QGridLayout" name="gridLayout">
-              <item row="2" column="1">
-               <widget class="QPushButton" name="pbCmdSend">
-                <property name="toolTip">
-                 <string>Command send</string>
-                </property>
-                <property name="text">
-                 <string>Отправить</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QSpinBox" name="sbDeviceAddress">
-                <property name="toolTip">
-                 <string>Device address</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-                <property name="maximum">
-                 <number>3</number>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QCmd" name="cbCmdList">
-                <property name="toolTip">
-                 <string>Command list</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="lblDeviceAddress">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>Адрес</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="lblCommand">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>Команда</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="2">
-               <widget class="QLabel" name="labelCmdDescription">
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-             </layout>
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblDeviceAddress">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Адрес</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QSpinBox" name="sbDeviceAddress">
+              <property name="toolTip">
+               <string>Device address</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="maximum">
+               <number>3</number>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -308,48 +252,27 @@
            </spacer>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_32">
-            <item>
-             <spacer name="verticalSpacer_5">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>18</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_10">
-              <item>
-               <widget class="QLabel" name="label_9">
-                <property name="text">
-                 <string>Очередь сообщений</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="lineEditMessageQueue">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-                <property name="readOnly">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Очередь сообщений</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEditMessageQueue">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -4589,11 +4512,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
-  <customwidget>
-   <class>QCmd</class>
-   <extends>QComboBox</extends>
-   <header>qcmd.h</header>
-  </customwidget>
   <customwidget>
    <class>CIODevice</class>
    <extends>QToolButton</extends>
