@@ -1250,11 +1250,11 @@ void MainWindow::sendCmd(const QString& cmd_str)
 
     QString cmd = cmd_str;
 
-    if(cmd.toUpper() == "0x05")
+    if(cmd == "0x05")
     {
         setupExtandOut(); // запись регистра расширения дискретных каналов выходов
     }
-    else if(cmd.toUpper() == "0x3A") // если команда "Запись серийного номера, то открываем дополнительное окно (команду не отправляем)
+    else if(cmd == "0x3A") // если команда "Запись серийного номера, то открываем дополнительное окно (команду не отправляем)
     {
         if(m_conf_widget->isHidden())
         {
