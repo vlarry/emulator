@@ -523,7 +523,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
 
             tdata = static_cast<quint8>(data.at(7));
             tdata = (((tdata >> 4)&0x0F)*10 + (tdata&0x0F));
-            s = QString::number(tdata, 10) + ".";
+            s = QString((tdata < 10)?"0":"") + QString::number(tdata, 10) + ".";
 
             if(data.at(6) < 10)
                 s += "0";
@@ -778,7 +778,7 @@ void MainWindow::blockSend()
 {
     m_block_send = true;
 
-    m_timerTimeoutQuery->start(100); // таймаут отправки 100 мс
+    m_timerTimeoutQuery->start(200); // таймаут отправки 100 мс
 }
 //----------------------------
 void MainWindow::unblockSend()
@@ -1098,7 +1098,7 @@ void MainWindow::autoAddressSelect()
         return;
     }
 
-    QTimer::singleShot(20, this, &MainWindow::autoAddressSelect);
+    QTimer::singleShot(100, this, &MainWindow::autoAddressSelect);
     ui->sbDeviceAddress->setValue(m_is_connected.currentAddress);
     m_is_connected.currentAddress++;
     m_query.clear();
@@ -1215,6 +1215,8 @@ void MainWindow::readData()
 
     if(responce_size == cmd_size)
     {
+        unblockSend();
+
         quint8 checksum_calc = getChecksum(m_responce, static_cast<quint8>(m_responce.size()) - 1);
         quint8 checksum_read = static_cast<quint8>(m_responce.at(static_cast<quint8>(m_responce.size()) - 1));
 
@@ -1231,7 +1233,10 @@ void MainWindow::readData()
         if(!m_is_connected.state && !ui->checkBoxUseDeviceAddress->isChecked()) // если соединение не активно и подбор адреса автоматический
         {
             if(m_cmd_last == "0x1E") // если команда "Чтение ID", значит адрес подобран
+            {
                 ctrlInterface(true);
+                m_is_connected.currentAddress = 0;
+            }
             else
                 autoAddressSelect(); // иначе перебираем дальше
         }
@@ -1239,7 +1244,7 @@ void MainWindow::readData()
         m_query.clear();
         m_query_count = 0;
         m_responce.clear();
-        sendData(); // подтверждаем принятие данных отправкой пустого сообщения
+        sendData(); // вызываем пустую отправку для проверки очереди сообщений
 
         if(!m_cmd_save.isEmpty())
         {
@@ -1250,6 +1255,7 @@ void MainWindow::readData()
     {
         m_responce.clear();
         m_cmd_save.clear();
+        unblockSend();
     }
 }
 //----------------------------------------------
@@ -1337,7 +1343,7 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
 
         quint8 cmd = static_cast<quint8>(QString(m_cmd_last).remove(QRegExp(tr("0x"))).toInt(Q_NULLPTR, 16));
 
-        cmd |= m_is_connected.currentAddress << 6;
+        cmd |= ui->sbDeviceAddress->value() << 6;
 
         m_query.append(QByteArray::fromHex(QByteArray::number(cmd, 16)));
 
