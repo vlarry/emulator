@@ -16,14 +16,17 @@
         public:
             explicit CSetInput(QWidget* parent = Q_NULLPTR);
             ~CSetInput();
-            QByteArray intputSettings(int type);
+            QByteArray inputIndividualSettings();
+            QByteArray inputGeneralSetting();
+            bool isInputSetIndividual() const;
+            bool isInputSetGeneral() const;
 
         public slots:
-            void open(int type);
             void typeInput(const QString& text);
+            void groupEnabled(bool state);
 
         signals:
-            void apply();
+            void setWrite();
 
         private:
             Ui::CSetInput*      ui;

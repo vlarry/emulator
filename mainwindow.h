@@ -121,7 +121,6 @@
             void BytesWriten(qint64 byte);
             void addrChanged(int addr);
             void outputStateChanged(quint8 id, bool state);
-            void initFilter(const QString& text);
             void autoRepeatInputs(bool state);
             void autoRepeatAIN(bool state);
             void autoRepeatTimInputs();
@@ -132,8 +131,6 @@
             void visiblityCommand(bool visible);
             void configurationWindow();
             void visiblitySerialNumber(bool state = false);
-            void setupDiscretInput();
-            void discretInputProcess();
             void discretInputHelp();
             void setupExtandOut();
             void timeoutCmdBindRead();
@@ -144,6 +141,7 @@
             void ctrlInterface(bool state);
             void autoAddressSelect();
             void processCmdFavorite();
+            void processDiscretInputSet();
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

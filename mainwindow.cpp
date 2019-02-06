@@ -134,13 +134,9 @@ void MainWindow::initConnect()
     connect(ui->actionCommand, &QAction::triggered, this, &MainWindow::visiblityCommand);
     connect(ui->actionInterfaceMIK01, &QAction::triggered, this, &MainWindow::visiblityInterfaceMIK01);
     connect(m_command, &QCommand::doubleClickCmd, this, &MainWindow::sendCmd);
-    connect(m_command, &QCommand::clickCmd, this, &MainWindow::initFilter);
     connect(m_command, &QCommand::closeCommand, this, &MainWindow::visiblityCommand);
     connect(m_mik_interface, &CBZUInterface::closed, this, &MainWindow::visiblityInterfaceMIK01);
 
-    connect(ui->pushButtonInputSet, &QPushButton::clicked, this, &MainWindow::setupDiscretInput);
-    connect(m_set_intput_widget, &CSetInput::apply, this, &MainWindow::discretInputProcess);
-    connect(ui->toolButtonInputHelp, &QToolButton::clicked, this, &MainWindow::discretInputHelp);
     connect(m_mik_interface, &CBZUInterface::ledStateSave, this, &MainWindow::setupExtandOut);
     connect(ui->actionDbJournal, &QAction::triggered, this, &MainWindow::openDbJournal);
     connect(m_conf_widget, &CConfigurationModuleWidget::newValueAppend, this, &MainWindow::writeDataToDb);
@@ -150,6 +146,7 @@ void MainWindow::initConnect()
     connect(ui->pushButtonErrorRead, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
     connect(ui->pushButtonSerialNumberWrite, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
     connect(ui->pushButtonInputSetWrite, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
+    connect(m_set_intput_widget, &CSetInput::setWrite, this, &MainWindow::processDiscretInputSet);
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -885,38 +882,6 @@ void MainWindow::visiblitySerialNumber(bool state)
         configurationWindow();
     }
 }
-/*!
- * \brief MainWindow::setupDiscretInput
- *
- * Вызов окна настройки дискретных входов
- */
-void MainWindow::setupDiscretInput()
-{
-    int type = 1;
-
-    if(ui->radioButtonInputSingle->isChecked())
-        type = 0;
-
-    if(m_set_intput_widget->isHidden())
-        m_set_intput_widget->open(type);
-}
-/*!
- * \brief MainWindow::discretInputProcess
- *
- * Формирование запроса на запись настроек дискретных входов
- */
-void MainWindow::discretInputProcess()
-{
-    int type = 1;
-
-    if(ui->radioButtonInputSingle->isChecked())
-    {
-        type = 0;
-    }
-
-    QByteArray data = m_set_intput_widget->intputSettings(type);
-    write("0x3F", data);
-}
 //---------------------------------
 void MainWindow::discretInputHelp()
 {
@@ -1120,6 +1085,21 @@ void MainWindow::processCmdFavorite()
         sendCmd(cmd);
     }
 }
+//---------------------------------------
+void MainWindow::processDiscretInputSet()
+{
+    QByteArray setGeneral = m_set_intput_widget->inputGeneralSetting();
+    QByteArray setIndividual = m_set_intput_widget->inputIndividualSettings();
+
+    if(!setGeneral.isEmpty())
+    {
+        write("0x3E", setGeneral);
+        Sleep(100);
+    }
+
+    if(!setIndividual.isEmpty())
+        write("0x3F", setIndividual);
+}
 //----------------------------------
 void MainWindow::refreshSerialPort()
 {
@@ -1270,11 +1250,11 @@ void MainWindow::sendCmd(const QString& cmd_str)
 
     QString cmd = cmd_str;
 
-    if(cmd.toUpper() == "0X05")
+    if(cmd.toUpper() == "0x05")
     {
         setupExtandOut(); // запись регистра расширения дискретных каналов выходов
     }
-    else if(cmd.toUpper() == "0X3A") // если команда "Запись серийного номера, то открываем дополнительное окно (команду не отправляем)
+    else if(cmd.toUpper() == "0x3A") // если команда "Запись серийного номера, то открываем дополнительное окно (команду не отправляем)
     {
         if(m_conf_widget->isHidden())
         {
@@ -1283,9 +1263,9 @@ void MainWindow::sendCmd(const QString& cmd_str)
         }
         return;
     }
-    else if(cmd.toUpper() == "0X3F") // если команда "Настройка входа", то открываем дополнительное окно (команду не отправляем)
+    else if(cmd == "0x3E" || cmd == "0x3F") // если команда "Настройки фильтра" или "Настройка входов", то открываем дополнительное окно (команду не отправляем)
     {
-        setupDiscretInput();
+        m_set_intput_widget->show();
         return;
     }
 
@@ -1370,20 +1350,6 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
             if(channel_id != -1)
             {
                 m_output_dev.at(channel_id)->set_state(channel_state);
-            }
-
-            QString str;
-
-            if(m_cmd_last == tr("0x3E"))
-            {
-                str.setNum(ui->sbPeriods->value(), 16);
-                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // количество периодов
-
-                str.setNum(ui->sbDiscret->value(), 16);
-                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // дискретность
-
-                str.setNum(ui->sbSignal->value(), 16);
-                m_query.append(QByteArray::fromHex(str.toLocal8Bit().data())); // длительность сигнала
             }
         }
         else
@@ -1518,30 +1484,6 @@ void MainWindow::outputStateChanged(quint8 id, bool state)
         else
             write("0x05");
     }
-}
-//----------------------------------------------
-void MainWindow::initFilter(const QString& text)
-{
-    if(text == "0x3D")
-    {
-        ui->gboxInputSettings->setEnabled(true);
-        ui->gboxInput->setDisabled(true);
-        ui->gboxInputSettingsFilter->setDisabled(true);
-    }
-    else if(text == "0x3E")
-    {
-        ui->gboxInputSettings->setEnabled(true);
-        ui->gboxInput->setDisabled(true);
-        ui->gboxInputSettingsFilter->setEnabled(true);
-    }
-    else if(text == "0x3F")
-    {
-        ui->gboxInputSettings->setEnabled(true);
-        ui->gboxInput->setEnabled(true);
-        ui->gboxInputSettingsFilter->setDisabled(true);
-    }
-    else
-        ui->gboxInputSettings->setDisabled(true);
 }
 //-------------------------------------------
 void MainWindow::autoRepeatInputs(bool state)
