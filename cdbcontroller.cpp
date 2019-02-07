@@ -35,7 +35,7 @@ CDbController::~CDbController()
 //-----------------------------------------------------------
 CDbController::serial_num_t CDbController::serialNumberRead()
 {
-    serial_num_t sn = { -1, -1, -1, -1, "", "", "", "", "" };
+    serial_num_t sn = { -1, -1, -1, -1, "", "", "", "", "", "" };
 
     if(!m_db || !m_db->isOpen())
     {
@@ -58,6 +58,7 @@ CDbController::serial_num_t CDbController::serialNumberRead()
             sn.date = query.value("date").toString();
             sn.time = query.value("time").toString();
             sn.modification = query.value("modification").toString();
+            sn.revision = query.value("revision").toString();
             sn.customer = query.value("customer").toString();
         }
     }
@@ -93,6 +94,7 @@ CDbController::serial_num_list_t CDbController::serialNumberListRead()
             sn.date = query.value("date").toString();
             sn.time = query.value("time").toString();
             sn.modification = query.value("modification").toString();
+            sn.revision = query.value("revision").toString();
             sn.customer = query.value("customer").toString();
 
             list.append(sn);
@@ -108,16 +110,17 @@ bool CDbController::serialNumberWrite(const CDbController::serial_num_t& sn)
 {
     QSqlQuery query(*m_db);
 
-    query.prepare("INSERT INTO serial (dev_code, dev_num, dev_party, dev_firmware_var, dev_firmware_date, date, time, modification, customer) "
-                  "VALUES (:dev_code, :dev_num, :dev_party, :dev_firmware_var, :dev_firmware_date, :date, :time, :modification, :customer);");
+    query.prepare("INSERT INTO serial (date, time, dev_code, dev_num, dev_party, dev_firmware_var, dev_firmware_date, modification, revision, customer) "
+                  "VALUES (:date, :time, :dev_code, :dev_num, :dev_party, :dev_firmware_var, :dev_firmware_date, :modification, :revision, :customer);");
+    query.bindValue(":date", sn.date);
+    query.bindValue(":time", sn.time);
     query.bindValue(":dev_code", sn.dev_code);
     query.bindValue(":dev_num", sn.dev_num);
     query.bindValue(":dev_party", sn.dev_party);
     query.bindValue(":dev_firmware_var", sn.dev_firmware_var);
     query.bindValue(":dev_firmware_date", sn.dev_firmware_date);
-    query.bindValue(":date", sn.date);
-    query.bindValue(":time", sn.time);
     query.bindValue(":modification", sn.modification);
+    query.bindValue(":revision", sn.revision);
     query.bindValue(":customer", sn.customer);
 
     if(!query.exec())
@@ -155,14 +158,15 @@ void CDbController::createDb()
 {
     QSqlQuery query(*m_db);
     QString query_str = "CREATE TABLE IF NOT EXISTS serial("
+                        "date STRING NOT NULL, "                             // дата записи серийного номера
+                        "time STRING NOT NULL, "                             // время записи серийного номера
                         "dev_code INTEGER NOT NULL, "                        // код изделия (0х48 - МДВВ-01, 0х49 - МДВВ-02, 0х50 - МИК-01)
                         "dev_num INTEGER NOT NULL, "                         // номер устройства (0 - 999)
                         "dev_party INTEGER NOT NULL, "                       // номер в партии (0 - 99)
                         "dev_firmware_var INTEGER NOT NULL, "                // вариант прошивки (0 - 99)
                         "dev_firmware_date STRING NOT NULL, "                // дата прошивки
-                        "date STRING NOT NULL, "                             // дата записи серийного номера
-                        "time STRING NOT NULL, "                             // время записи серийного номера
                         "modification STRING NOT NULL, "                     // модификация модуля
+                        "revision STRING NOT NULL, "                         // ревизия платы (формат: ver.1.0 MM.yy)
                         "customer STRING);";                                 // заказчик
 
     if(!query.exec(query_str))
@@ -184,6 +188,17 @@ void CDbController::createDb()
     }
 
     query_str = "CREATE TABLE IF NOT EXISTS customer("
+                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+                "data STRING UNIQ NOT NULL);";
+
+    if(!query.exec(query_str))
+    {
+        m_last_error = query.lastError().text();
+        qDebug() << QString("Error: %1").arg(m_last_error);
+        return;
+    }
+
+    query_str = "CREATE TABLE IF NOT EXISTS revision("
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
                 "data STRING UNIQ NOT NULL);";
 

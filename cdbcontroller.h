@@ -19,8 +19,9 @@
                 QString dev_firmware_date; // дата прошивки модуля
                 QString date;
                 QString time;
-                QString modification;
-                QString customer;
+                QString modification; // модификация модуля
+                QString revision; // ревизия платы
+                QString customer; // заказчик
             };
             //----------------------------------------------
             typedef QVector<serial_num_t> serial_num_list_t;

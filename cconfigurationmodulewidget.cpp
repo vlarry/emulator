@@ -38,6 +38,7 @@ CConfigurationModuleWidget::CConfigurationModuleWidget(QWidget* parent):
     connect(ui->checkBoxNewKey, &QCheckBox::clicked, this, &CConfigurationModuleWidget::newKeyStateChanged);
     connect(ui->toolButtonModificationAppend, &QToolButton::clicked, this, &CConfigurationModuleWidget::appendText);
     connect(ui->toolButtonCustomerAppend, &QToolButton::clicked, this, &CConfigurationModuleWidget::appendText);
+    connect(ui->toolButtonRevisionAppend, &QToolButton::clicked, this, &CConfigurationModuleWidget::appendText);
 }
 //-------------------------------------------------------
 CConfigurationModuleWidget::~CConfigurationModuleWidget()
@@ -144,7 +145,8 @@ void CConfigurationModuleWidget::initLIst(const QStringList& modification, const
 void CConfigurationModuleWidget::appendText()
 {
     QToolButton* button = qobject_cast<QToolButton*>(sender());
-    QString title = (button == ui->toolButtonModificationAppend)?tr("Новая модификация"):tr("Новый заказчик");
+    QString title = (button == ui->toolButtonModificationAppend)?tr("Новая модификация"):(button == ui->toolButtonRevisionAppend)?tr("Новая ревизия"):
+                                                                 tr("Новый заказчик");
     QComboBox* combobox = (button == ui->toolButtonModificationAppend)?ui->comboBoxModuleModificationNew:ui->comboBoxModuleCustomerNew;
     CAppendInfoDialog* dialog = new CAppendInfoDialog(title, this);
 
@@ -159,8 +161,8 @@ void CConfigurationModuleWidget::appendText()
                 combobox->addItem(text);
                 combobox->setCurrentText(text);
 
-                QString table_name = (button == ui->toolButtonModificationAppend)?"modification":"customer";
-
+                QString table_name = (button == ui->toolButtonModificationAppend)?"modification":(button == ui->toolButtonRevisionAppend)?"revision":
+                                                                                  "customer";
                 emit newValueAppend(table_name, text);
             }
         }
