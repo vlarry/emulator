@@ -85,6 +85,7 @@ MainWindow::MainWindow(QWidget* parent):
     ui->pushButtonErrorRead->setProperty("COMMAND", "0x1D");
     ui->pushButtonSerialNumberWrite->setProperty("COMMAND", "0x3A");
     ui->pushButtonInputSetWrite->setProperty("COMMAND", "0x3E"); // также обрабатывает команду 0x3F
+    ui->pushButtonDSDINRead->setProperty("COMMAND", "0x1F");
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -146,6 +147,7 @@ void MainWindow::initConnect()
     connect(ui->pushButtonErrorRead, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
     connect(ui->pushButtonSerialNumberWrite, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
     connect(ui->pushButtonInputSetWrite, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
+    connect(ui->pushButtonDSDINRead, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
     connect(m_set_intput_widget, &CSetInput::setWrite, this, &MainWindow::processDiscretInputSet);
 }
 //-------------------------------

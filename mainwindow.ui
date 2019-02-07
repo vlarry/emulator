@@ -193,6 +193,20 @@
         <layout class="QHBoxLayout" name="horizontalLayout_12">
          <item>
           <layout class="QGridLayout" name="gridLayout">
+           <item row="1" column="1">
+            <widget class="QPushButton" name="pushButtonInputSetWrite">
+             <property name="text">
+              <string>Запись настроек входов</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPushButton" name="pushButtonSerialNumberWrite">
+             <property name="text">
+              <string>Запись серийного номера</string>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="0">
             <widget class="QPushButton" name="pushButtonIDRead">
              <property name="text">
@@ -207,17 +221,10 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QPushButton" name="pushButtonSerialNumberWrite">
+           <item row="0" column="2">
+            <widget class="QPushButton" name="pushButtonDSDINRead">
              <property name="text">
-              <string>Запись серийного номера</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QPushButton" name="pushButtonInputSetWrite">
-             <property name="text">
-              <string>Запись настроек входов</string>
+              <string>Чтение времени DSDIN </string>
              </property>
             </widget>
            </item>

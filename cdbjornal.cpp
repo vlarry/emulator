@@ -24,6 +24,7 @@ CDbJornal::CDbJornal(QWidget* parent):
 
     setWindowTitle(tr("Журнал БД"));
     setWindowFlags(Qt::Window | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
+    showMaximized();
 }
 //---------------------
 CDbJornal::~CDbJornal()
