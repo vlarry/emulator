@@ -962,6 +962,7 @@ void MainWindow::openDbJournal()
     {
         m_db_journal = new CDbJornal(this);
         connect(m_db_journal, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
+        connect(m_db_journal, &CDbJornal::deleteJournalRow, this, &MainWindow::removeSerialNumber);
         CDbController::serial_num_list_t list = m_db_controller->serialNumberListRead();
         m_db_journal->setDataToTable(list);
         m_db_journal->show();
@@ -973,6 +974,7 @@ void MainWindow::closeDbJournal()
     if(m_db_journal)
     {
         disconnect(m_db_journal, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
+        disconnect(m_db_journal, &CDbJornal::deleteJournalRow, this, &MainWindow::removeSerialNumber);
         delete m_db_journal;
         m_db_journal = Q_NULLPTR;
     }
@@ -1101,6 +1103,11 @@ void MainWindow::processDiscretInputSet()
 
     if(!setIndividual.isEmpty())
         write("0x3F", setIndividual);
+}
+//-----------------------------------------
+void MainWindow::removeSerialNumber(int id)
+{
+    m_db_controller->deleteDataFromTable("serial", id);
 }
 //----------------------------------
 void MainWindow::refreshSerialPort()

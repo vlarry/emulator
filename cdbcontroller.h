@@ -12,6 +12,7 @@
         public:
             struct serial_num_t
             {
+                int     id; // id записи в БД
                 int     dev_code; // код изделия
                 int     dev_num; // номер устройства
                 int     dev_party; // номер партии
@@ -37,6 +38,7 @@
 
         public slots:
             void writeDataToTable(const QString table_name, const QString data);
+            void deleteDataFromTable(const QString& table_name, int id);
 
         private:
             void createDb();

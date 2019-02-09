@@ -6,6 +6,11 @@
     #include <QShowEvent>
     #include <QDateTime>
     #include <QLineEdit>
+    #include <QKeyEvent>
+    #include <QDebug>
+    #include <QMessageBox>
+    #include <QModelIndexList>
+    #include <QPushButton>
     #include "cdbcontroller.h"
     #include "cdbjournalitem.h"
     //----------
@@ -28,9 +33,11 @@
 
         signals:
             void closeJournal();
+            void deleteJournalRow(int);
 
         protected:
             void closeEvent(QCloseEvent* event);
+            void keyPressEvent(QKeyEvent* event);
 
         private:
             Ui::CDbJornal* ui;

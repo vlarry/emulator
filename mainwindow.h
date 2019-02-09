@@ -142,6 +142,7 @@
             void autoAddressSelect();
             void processCmdFavorite();
             void processDiscretInputSet();
+            void removeSerialNumber(int id);
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

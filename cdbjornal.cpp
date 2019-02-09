@@ -42,6 +42,7 @@ void CDbJornal::setDataToTable(const CDbController::serial_num_list_t& list)
     {
         CDbJournalItem* itemSaveDate = new CDbJournalItem(QDate::fromString(sn.date, "yyyy-MM-dd").toString("dd.MM.yyyy"));
         itemSaveDate->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        itemSaveDate->setData(Qt::UserRole, sn.id);
         ui->tableWidgetDbSerialNumber->setItem(row, 0, itemSaveDate);
 
         CDbJournalItem* itemSaveTime = new CDbJournalItem(sn.time);
@@ -116,4 +117,49 @@ void CDbJornal::closeEvent(QCloseEvent* event)
     ui->tableWidgetDbSerialNumber->clear();
     QWidget::closeEvent(event);
     emit closeJournal();
+}
+//---------------------------------------------
+void CDbJornal::keyPressEvent(QKeyEvent* event)
+{
+    if(event->key() == Qt::Key_Delete)
+    {
+        if(ui->tableWidgetDbSerialNumber->rowCount() == 0)
+        {
+            QMessageBox::warning(this, tr("Удаление серийных номеров"), tr("Список серийных номеров пуст!"));
+            return;
+        }
+
+        QModelIndexList rowList = ui->tableWidgetDbSerialNumber->selectionModel()->selectedRows();
+
+        if(rowList.isEmpty())
+        {
+            QMessageBox::warning(this, tr("Удаление серийных номеров"), tr("Вы не выбрали ни одного серийного номера!\nПопробуйте ещё раз."));
+            return;
+        }
+
+        QString text = (rowList.count() == 1)?tr("выбранный серийный номер"):tr("выбранные серийные номера");
+
+        QMessageBox messageBox;
+        messageBox.setWindowTitle(tr("Удаление серийных номеров"));
+        messageBox.setText(tr("Вы действительно хотите удалить %1?").arg(text));
+        QPushButton* buttonDelete = messageBox.addButton(tr("Удалить"), QMessageBox::ActionRole);
+        messageBox.setStandardButtons(QMessageBox::Cancel);
+        messageBox.setButtonText(QMessageBox::Cancel, tr("Отмена"));
+        messageBox.setIcon(QMessageBox::Question);
+        messageBox.exec();
+
+        if(messageBox.clickedButton() == buttonDelete)
+        {
+            qDebug() << rowList;
+            for(QModelIndex index: rowList)
+            {
+                QTableWidgetItem* item = ui->tableWidgetDbSerialNumber->item(index.row(), 0);
+
+                if(item)
+                    emit deleteJournalRow(item->data(Qt::UserRole).toInt());
+
+                ui->tableWidgetDbSerialNumber->removeRow(index.row());
+            }
+        }
+    }
 }

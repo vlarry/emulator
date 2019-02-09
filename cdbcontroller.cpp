@@ -35,7 +35,7 @@ CDbController::~CDbController()
 //-----------------------------------------------------------
 CDbController::serial_num_t CDbController::serialNumberRead()
 {
-    serial_num_t sn = { -1, -1, -1, -1, "", "", "", "", "", "" };
+    serial_num_t sn = { -1, -1, -1, -1, -1, "", "", "", "", "", "" };
 
     if(!m_db || !m_db->isOpen())
     {
@@ -86,6 +86,7 @@ CDbController::serial_num_list_t CDbController::serialNumberListRead()
         {
             serial_num_t sn;
 
+            sn.id = query.value("id").toInt();
             sn.dev_code = query.value("dev_code").toInt();
             sn.dev_num = query.value("dev_num").toInt();
             sn.dev_party = query.value("dev_party").toInt();
@@ -158,6 +159,7 @@ void CDbController::createDb()
 {
     QSqlQuery query(*m_db);
     QString query_str = "CREATE TABLE IF NOT EXISTS serial("
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "    // id записи
                         "date STRING NOT NULL, "                             // дата записи серийного номера
                         "time STRING NOT NULL, "                             // время записи серийного номера
                         "dev_code INTEGER NOT NULL, "                        // код изделия (0х48 - МДВВ-01, 0х49 - МДВВ-02, 0х50 - МИК-01)
@@ -238,4 +240,18 @@ void CDbController::writeDataToTable(const QString table_name, const QString dat
     {
         m_last_error = m_db->lastError().text();
     }
+}
+//------------------------------------------------------------------------
+void CDbController::deleteDataFromTable(const QString& table_name, int id)
+{
+    qDebug() << table_name << ": " << id;
+    QSqlQuery query(*m_db);
+    QString query_str = QString("DELETE FROM %1 WHERE id=%2").arg(table_name).arg(id);
+
+    if(query.exec(query_str))
+    {
+        qDebug() << "Запись успешно удалена";
+    }
+    else
+        qDebug() << "Не удалось удалить запись из БД.";
 }
