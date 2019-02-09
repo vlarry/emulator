@@ -7,17 +7,13 @@ CDbJornal::CDbJornal(QWidget* parent):
 {
     ui->setupUi(this);
 
+    QStringList headerList = QStringList() << tr("Дата записи в БД") << tr("Время записи в БД") << tr("Модуль") << tr("Порядковый номер") <<
+                                              tr("Номер в партии") << tr("Вариант прошивки") << tr("Дата прошивки") << tr("Модификация") <<
+                                              tr("Ревизия модуля") << tr("Заказчик");
+
     ui->tableWidgetDbSerialNumber->setColumnCount(10);
-    ui->tableWidgetDbSerialNumber->setHorizontalHeaderItem(0, new QTableWidgetItem(tr("Дата записи в БД")));
-    ui->tableWidgetDbSerialNumber->setHorizontalHeaderItem(1, new QTableWidgetItem(tr("Время записи в БД")));
-    ui->tableWidgetDbSerialNumber->setHorizontalHeaderItem(2, new QTableWidgetItem(tr("Модуль")));
-    ui->tableWidgetDbSerialNumber->setHorizontalHeaderItem(3, new QTableWidgetItem(tr("Порядковый номер")));
-    ui->tableWidgetDbSerialNumber->setHorizontalHeaderItem(4, new QTableWidgetItem(tr("Номер в партии")));
-    ui->tableWidgetDbSerialNumber->setHorizontalHeaderItem(5, new QTableWidgetItem(tr("Вариант прошивки")));
-    ui->tableWidgetDbSerialNumber->setHorizontalHeaderItem(6, new QTableWidgetItem(tr("Дата прошивки")));
-    ui->tableWidgetDbSerialNumber->setHorizontalHeaderItem(7, new QTableWidgetItem(tr("Модификация")));
-    ui->tableWidgetDbSerialNumber->setHorizontalHeaderItem(8, new QTableWidgetItem(tr("Ревизия модуля")));
-    ui->tableWidgetDbSerialNumber->setHorizontalHeaderItem(9, new QTableWidgetItem(tr("Заказчик")));
+    ui->tableWidgetDbSerialNumber->setHorizontalHeaderLabels(headerList);
+    ui->comboBoxColumnFilter->addItems(headerList);
 
     ui->tableWidgetDbSerialNumber->resizeColumnsToContents();
     ui->tableWidgetDbSerialNumber->horizontalHeader()->setStretchLastSection(true);
@@ -26,6 +22,8 @@ CDbJornal::CDbJornal(QWidget* parent):
     setWindowTitle(tr("Журнал БД"));
     setWindowFlags(Qt::Window | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
     showMaximized();
+
+    connect(ui->lineEditFilter, &QLineEdit::textChanged, this, &CDbJornal::filterSlot);
 }
 //---------------------
 CDbJornal::~CDbJornal()
@@ -91,6 +89,26 @@ void CDbJornal::setDataToTable(const CDbController::serial_num_list_t& list)
     }
 
     ui->tableWidgetDbSerialNumber->resizeColumnsToContents();
+}
+//---------------------------------------------
+void CDbJornal::filterSlot(const QString& text)
+{
+    int column = ui->comboBoxColumnFilter->currentIndex();
+
+    for(int row = 0; row < ui->tableWidgetDbSerialNumber->rowCount(); row++)
+    {
+        QTableWidgetItem* item = ui->tableWidgetDbSerialNumber->item(row, column);
+
+        if(item)
+        {
+            QString data = item->text();
+
+            if(data.contains(text))
+                ui->tableWidgetDbSerialNumber->showRow(row);
+            else
+                ui->tableWidgetDbSerialNumber->hideRow(row);
+        }
+    }
 }
 //--------------------------------------------
 void CDbJornal::closeEvent(QCloseEvent* event)

@@ -5,6 +5,7 @@
     #include <QCloseEvent>
     #include <QShowEvent>
     #include <QDateTime>
+    #include <QLineEdit>
     #include "cdbcontroller.h"
     //----------
     namespace Ui
@@ -20,6 +21,9 @@
             explicit CDbJornal(QWidget* parent = Q_NULLPTR);
             ~CDbJornal();
             void setDataToTable(const CDbController::serial_num_list_t& list);
+
+        public slots:
+            void filterSlot(const QString& text);
 
         signals:
             void closeJournal();
