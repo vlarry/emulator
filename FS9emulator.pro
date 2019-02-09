@@ -36,7 +36,8 @@ SOURCES += main.cpp\
     qled.cpp \
     cdbcontroller.cpp \
     cdbjornal.cpp \
-    cappendinfodialog.cpp
+    cappendinfodialog.cpp \
+    cdbjournalitem.cpp
 
 HEADERS  += mainwindow.h \
     qcmd.h \
@@ -50,7 +51,8 @@ HEADERS  += mainwindow.h \
     qled.h \
     cdbcontroller.h \
     cdbjornal.h \
-    cappendinfodialog.h
+    cappendinfodialog.h \
+    cdbjournalitem.h
 
 FORMS    += mainwindow.ui \
     command.ui \

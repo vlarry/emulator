@@ -40,43 +40,43 @@ void CDbJornal::setDataToTable(const CDbController::serial_num_list_t& list)
 
     for(const CDbController::serial_num_t& sn: list)
     {
-        QTableWidgetItem* itemSaveDate = new QTableWidgetItem(QDate::fromString(sn.date, "yyyy-MM-dd").toString("dd.MM.yyyy"));
+        CDbJournalItem* itemSaveDate = new CDbJournalItem(QDate::fromString(sn.date, "yyyy-MM-dd").toString("dd.MM.yyyy"));
         itemSaveDate->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         ui->tableWidgetDbSerialNumber->setItem(row, 0, itemSaveDate);
 
-        QTableWidgetItem* itemSaveTime = new QTableWidgetItem(sn.time);
+        CDbJournalItem* itemSaveTime = new CDbJournalItem(sn.time);
         itemSaveTime->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         ui->tableWidgetDbSerialNumber->setItem(row, 1, itemSaveTime);
 
-        QTableWidgetItem* itemModule = new QTableWidgetItem((sn.dev_code == 0)?tr("МДВВ-01"):(sn.dev_code == 1)?tr("МДВВ-02"):tr("МИК-01"));
+        CDbJournalItem* itemModule = new CDbJournalItem((sn.dev_code == 0)?tr("МДВВ-01"):(sn.dev_code == 1)?tr("МДВВ-02"):tr("МИК-01"));
         itemModule->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         ui->tableWidgetDbSerialNumber->setItem(row, 2, itemModule);
 
-        QTableWidgetItem* itemNumber = new QTableWidgetItem(QString::number(sn.dev_num));
+        CDbJournalItem* itemNumber = new CDbJournalItem(QString::number(sn.dev_num));
         itemNumber->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         ui->tableWidgetDbSerialNumber->setItem(row, 3, itemNumber);
 
-        QTableWidgetItem* itemNumberParty = new QTableWidgetItem(QString::number(sn.dev_party));
+        CDbJournalItem* itemNumberParty = new CDbJournalItem(QString::number(sn.dev_party));
         itemNumberParty->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         ui->tableWidgetDbSerialNumber->setItem(row, 4, itemNumberParty);
 
-        QTableWidgetItem* itemFirmwareVariant = new QTableWidgetItem(QString::number(sn.dev_firmware_var));
+        CDbJournalItem* itemFirmwareVariant = new CDbJournalItem(QString::number(sn.dev_firmware_var));
         itemFirmwareVariant->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         ui->tableWidgetDbSerialNumber->setItem(row, 5, itemFirmwareVariant);
 
-        QTableWidgetItem* itemFirmwareDate = new QTableWidgetItem(QDate::fromString(sn.dev_firmware_date, "yyyy-MM-dd").toString("dd.MM.yyyy"));
+        CDbJournalItem* itemFirmwareDate = new CDbJournalItem(QDate::fromString(sn.dev_firmware_date, "yyyy-MM-dd").toString("dd.MM.yyyy"));
         itemFirmwareDate->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         ui->tableWidgetDbSerialNumber->setItem(row, 6, itemFirmwareDate);
 
-        QTableWidgetItem* itemModification = new QTableWidgetItem(sn.modification);
+        CDbJournalItem* itemModification = new CDbJournalItem(sn.modification);
         itemModification->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         ui->tableWidgetDbSerialNumber->setItem(row, 7, itemModification);
 
-        QTableWidgetItem* itemRevision = new QTableWidgetItem(sn.revision);
+        CDbJournalItem* itemRevision = new CDbJournalItem(sn.revision);
         itemModification->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         ui->tableWidgetDbSerialNumber->setItem(row, 8, itemRevision);
 
-        QTableWidgetItem* itemCustomer = new QTableWidgetItem(sn.customer);
+        CDbJournalItem* itemCustomer = new CDbJournalItem(sn.customer);
         itemCustomer->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         ui->tableWidgetDbSerialNumber->setItem(row, 9, itemCustomer);
 

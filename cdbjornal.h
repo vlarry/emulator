@@ -7,6 +7,7 @@
     #include <QDateTime>
     #include <QLineEdit>
     #include "cdbcontroller.h"
+    #include "cdbjournalitem.h"
     //----------
     namespace Ui
     {
