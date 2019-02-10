@@ -150,7 +150,8 @@ void CDbJornal::keyPressEvent(QKeyEvent* event)
 
         if(messageBox.clickedButton() == buttonDelete)
         {
-            qDebug() << rowList;
+            std::sort(rowList.begin(), rowList.end(), [](QModelIndex& var1, QModelIndex& var2) { return var1.row() > var2.row(); } );
+
             for(QModelIndex index: rowList)
             {
                 QTableWidgetItem* item = ui->tableWidgetDbSerialNumber->item(index.row(), 0);

@@ -244,7 +244,6 @@ void CDbController::writeDataToTable(const QString table_name, const QString dat
 //------------------------------------------------------------------------
 void CDbController::deleteDataFromTable(const QString& table_name, int id)
 {
-    qDebug() << table_name << ": " << id;
     QSqlQuery query(*m_db);
     QString query_str = QString("DELETE FROM %1 WHERE id=%2").arg(table_name).arg(id);
 
