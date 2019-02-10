@@ -58,8 +58,6 @@ CBZUInterface::CBZUInterface(QWidget* parent):
     m_led.append(ui->led_11);
     m_led.append(ui->led_12);
 
-    setWindowTitle(tr("Интерфейс МИК-01"));
-    setWindowFlags(Qt::Window | Qt::WindowCloseButtonHint);
     setFixedSize(this->width(), this->height());
 
     connect(ui->pushButtonSaveLed, &QPushButton::clicked, this, &CBZUInterface::ledStateSave);

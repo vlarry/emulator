@@ -73,7 +73,6 @@
             QFile*                      m_file_ain;
             bool                        m_block_send;
             QString                     m_port_name; // имя порта по умолчанию
-            CBZUInterface*              m_mik_interface;
             QCommand*                   m_command;
             CConfigurationModuleWidget* m_conf_widget;
             CSetInput*                  m_set_intput_widget;
@@ -127,7 +126,6 @@
             void autoRepeatTimAIN();
             void timeoutTim();
             void visiblityTerminal(bool visible);
-            void visiblityInterfaceMIK01(bool visible);
             void visiblityCommand(bool visible);
             void configurationWindow();
             void visiblitySerialNumber(bool state = false);

@@ -13,7 +13,6 @@ MainWindow::MainWindow(QWidget* parent):
     m_timerRefreshPort(Q_NULLPTR),
     m_file_ain(Q_NULLPTR),
     m_block_send(false),
-    m_mik_interface(Q_NULLPTR),
     m_command(Q_NULLPTR),
     m_set_intput_widget(Q_NULLPTR),
     m_input_help_widget(Q_NULLPTR),
@@ -58,7 +57,6 @@ MainWindow::MainWindow(QWidget* parent):
     ui->lineEditMessageQueue->setText("0");
     ui->actionTerminal->setChecked(true);
     ui->actionCommand->setChecked(false);
-    ui->actionInterfaceMIK01->setChecked(false);
 
     // Заполение списка связанных команд
     m_cmd_bind["0x05"] = "0x04";
@@ -133,12 +131,9 @@ void MainWindow::initConnect()
     connect(ui->dwTerminal, SIGNAL(visibilityChanged(bool)), this, SLOT(visiblityTerminal(bool)));
     connect(ui->actionTerminal, &QAction::triggered, this, &MainWindow::visiblityTerminal);
     connect(ui->actionCommand, &QAction::triggered, this, &MainWindow::visiblityCommand);
-    connect(ui->actionInterfaceMIK01, &QAction::triggered, this, &MainWindow::visiblityInterfaceMIK01);
     connect(m_command, &QCommand::doubleClickCmd, this, &MainWindow::sendCmd);
     connect(m_command, &QCommand::closeCommand, this, &MainWindow::visiblityCommand);
-    connect(m_mik_interface, &CBZUInterface::closed, this, &MainWindow::visiblityInterfaceMIK01);
 
-    connect(m_mik_interface, &CBZUInterface::ledStateSave, this, &MainWindow::setupExtandOut);
     connect(ui->actionDbJournal, &QAction::triggered, this, &MainWindow::openDbJournal);
     connect(m_conf_widget, &CConfigurationModuleWidget::newValueAppend, this, &MainWindow::writeDataToDb);
     connect(ui->checkBoxUseDeviceAddress, &QCheckBox::clicked, this, &MainWindow::useDeviceAddress);
@@ -407,7 +402,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
         case 0x03: // чтение регистра расширения дискретных каналов входов
             if(ui->sbDeviceAddress->value() == MIK_01)
             {
-                m_mik_interface->setKeyboardState(data);
+                ui->widgetInterfaceMIK_1->setKeyboardState(data);
             }
         break;
 
@@ -435,7 +430,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             }
             else if(ui->sbDeviceAddress->value() == MIK_01)
             {
-                m_mik_interface->setLedState(data);
+                ui->widgetInterfaceMIK_1->setLedState(data);
             }
         break;
 
@@ -616,10 +611,8 @@ void MainWindow::loadSettings()
         ui->sbDeviceAddress->setValue(m_settings->value("address", 0).toInt());
         ui->actionTerminal->setChecked(m_settings->value("terminal", true).toBool());
         ui->actionCommand->setChecked(m_settings->value("command_visiblity", false).toBool());
-        ui->actionInterfaceMIK01->setChecked(m_settings->value("mik01_visiblity", true).toBool());
         visiblityTerminal(ui->actionTerminal->isChecked());
         visiblityCommand(ui->actionCommand->isChecked());
-        m_mik_interface->restoreGeometry(m_settings->value("mik01_widget").toByteArray());
         m_command->restoreGeometry(m_settings->value("command_widget").toByteArray());
     m_settings->endGroup();
 
@@ -663,9 +656,6 @@ void MainWindow::saveSettings()
         m_settings->setValue("address", ui->sbDeviceAddress->value());
         m_settings->setValue("terminal", ui->actionTerminal->isChecked());
         m_settings->setValue("command_visiblity", ui->actionCommand->isChecked());
-        m_settings->setValue("mik01_visiblity", ui->actionInterfaceMIK01->isChecked());
-        if(ui->actionInterfaceMIK01->isChecked())
-            m_settings->setValue("mik01_widget", m_mik_interface->saveGeometry());
         if(ui->actionCommand->isChecked())
             m_settings->setValue("command_widget", m_command->saveGeometry());
     m_settings->endGroup();
@@ -726,19 +716,6 @@ void MainWindow::showEvent(QShowEvent* evt)
         m_command->hide();
     }
 
-    if(m_mik_interface == Q_NULLPTR)
-    {
-        m_mik_interface = new CBZUInterface(this);
-        if(ui->actionInterfaceMIK01->isChecked())
-        {
-            m_mik_interface->show();
-        }
-        else
-        {
-            m_mik_interface->hide();
-        }
-    }
-
     initSerialPort();
     initIO();
     initConnect();
@@ -749,7 +726,6 @@ void MainWindow::showEvent(QShowEvent* evt)
 
     ui->twPeriphery->setCurrentIndex(0);
     addrChanged(ui->sbDeviceAddress->value());
-    ui->actionInterfaceMIK01->setEnabled(false);
     useDeviceAddress(false);
 
     QMainWindow::showEvent(evt);
@@ -916,7 +892,7 @@ void MainWindow::setupExtandOut()
     }
     else if(ui->sbDeviceAddress->value() == MIK_01)
     {
-        QByteArray data = m_mik_interface->ledStates();
+        QByteArray data = ui->widgetInterfaceMIK_1->ledStates();
         write("0x05", data);
     }
 }
@@ -1020,13 +996,6 @@ void MainWindow::ctrlInterface(bool state)
         showMessage(ui->cbPortNames->currentText() + " " + tr("открыт"));
 
         fileAinOpen();
-
-        if(static_cast<DEVICE_Type>(ui->sbDeviceAddress->value()) == MIK_01)
-        {
-            ui->actionInterfaceMIK01->setEnabled(true);
-            visiblityInterfaceMIK01(ui->actionInterfaceMIK01->isChecked());
-            sendCmd("0x04");
-        }
     }
     else
     {
@@ -1050,7 +1019,7 @@ void MainWindow::ctrlInterface(bool state)
         if(!m_command->isHidden())
             m_command->hide();
 
-        m_mik_interface->ledReset();
+        ui->widgetInterfaceMIK_1->ledReset();
     }
 
     ui->groupBoxCmdFavorit->setEnabled(true);
@@ -1406,48 +1375,72 @@ void MainWindow::addrChanged(int addr)
 {
     quint8 out_count = 0;
 
-    ui->actionInterfaceMIK01->setEnabled(false); // Вызов клавиатуры МИК-01 становится видимым при выборе адреса 0х02
     ui->groupBoxDSDIN->hide();
-
-    if(m_mik_interface != Q_NULLPTR)
-    {
-        if(!m_mik_interface->isHidden())
-            m_mik_interface->hide();
-    }
 
     if(addr == MDVV_01)
     {
         ui->groupDevices->setTitle(tr("Устройство МДВВ-01"));
-        ui->lblAIN1->setText(tr("Напряжение"));
-        ui->lblAIN2->setText(tr("Ток"));
-        ui->lblAIN3->setText(tr("Температура"));
+        ui->groupBoxAIN_1->setTitle(tr("Напряжение"));
+        ui->groupBoxAIN_2->setTitle(tr("Ток"));
+        ui->groupBoxAIN_3->setTitle(tr("Температура"));
+        ui->groupBoxInputMDVV_1_1_4->setTitle(tr("Искробезопасные входы"));
+        ui->groupBoxInputMDVV_1_5->setTitle(tr("С запом."));
+        ui->groupBoxInput_6_10->setTitle(tr("Обычные"));
+        ui->groupBoxInputChannel_1->setTitle("Канал 1");
+        ui->groupBoxInputChannel_2->setTitle("Канал 2");
+        ui->groupBoxInputChannel_3->setTitle("Канал 3");
+        ui->groupBoxInputChannel_4->setTitle("Канал 4");
+        ui->groupBoxInputChannel_5->setTitle("Канал 5");
+        ui->groupBoxInputChannel_6->setTitle("Канал 6");
+        ui->groupBoxInputChannel_7->setTitle("Канал 7");
+        ui->groupBoxInputChannel_8->setTitle("Канал 8");
+        ui->groupBoxInputChannel_9->setTitle("Канал 9");
+        ui->groupBoxInputChannel_10->setTitle("Канал 10");
+        ui->groupBoxInputChannel_11->setTitle("DI 21");
+        ui->groupBoxInputChannel_12->setTitle("DI 22");
+        ui->groupBoxMDVV_1_11_12->show();
         ui->groupBoxInputs->setEnabled(true);
         ui->groupBoxOutputs->setEnabled(true);
         ui->groupBoxDSDIN->show();
 
         out_count = 6;
+
+        ui->stackedWidgetPeriphery->setCurrentIndex(0);
     }
     else if(addr == MDVV_02)
     {
         ui->groupDevices->setTitle(tr("Устройство МДВВ-02"));
-        ui->lblAIN1->setText(tr("Температура"));
-        ui->lblAIN2->setText(tr("Температура"));
-        ui->lblAIN3->setText(tr("Температура"));
+        ui->groupBoxAIN_1->setTitle(tr("Температура"));
+        ui->groupBoxAIN_2->setTitle(tr("Температура"));
+        ui->groupBoxAIN_3->setTitle(tr("Температура"));
+        ui->groupBoxInputMDVV_1_1_4->setTitle("");
+        ui->groupBoxInputMDVV_1_5->setTitle("");
+        ui->groupBoxInput_6_10->setTitle("");
+        ui->groupBoxInputChannel_1->setTitle("Канал 11");
+        ui->groupBoxInputChannel_2->setTitle("Канал 12");
+        ui->groupBoxInputChannel_3->setTitle("Канал 13");
+        ui->groupBoxInputChannel_4->setTitle("Канал 14");
+        ui->groupBoxInputChannel_5->setTitle("Канал 15");
+        ui->groupBoxInputChannel_6->setTitle("Канал 16");
+        ui->groupBoxInputChannel_7->setTitle("Канал 17");
+        ui->groupBoxInputChannel_8->setTitle("Канал 18");
+        ui->groupBoxInputChannel_9->setTitle("Канал 19");
+        ui->groupBoxInputChannel_10->setTitle("Канал 20");
+        ui->groupBoxMDVV_1_11_12->hide();
         ui->groupBoxInputs->setEnabled(true);
         ui->groupBoxOutputs->setEnabled(true);
 
         out_count = 7;
+
+        ui->stackedWidgetPeriphery->setCurrentIndex(0);
     }
     else if(addr == MIK_01)
     {
         ui->groupDevices->setTitle(tr("Устройство МИК-01"));
-        ui->actionInterfaceMIK01->setEnabled(true);
-        ui->groupBoxInputs->setDisabled(true);
-        ui->groupBoxOutputs->setDisabled(true);
-
-        visiblityInterfaceMIK01(ui->actionInterfaceMIK01->isChecked());
 
         out_count = 12;
+
+        ui->stackedWidgetPeriphery->setCurrentIndex(1);
     }
     else
     {
@@ -1469,9 +1462,10 @@ void MainWindow::addrChanged(int addr)
     for(quint8 i = 0; i < 12; ++i)
     {
         if(i < out_count)
+        {
             m_output_dev.at(i)->setEnabled(true);
-        else
-            m_output_dev.at(i)->setDisabled(true);
+            m_output_dev.at(i)->show();
+        }
     }
 }
 //--------------------------------------------------------
@@ -1551,24 +1545,6 @@ void MainWindow::timeoutTim()
 void MainWindow::visiblityTerminal(bool visible)
 {
     ui->dwTerminal->setVisible(visible);
-}
-//----------------------------------------------------
-void MainWindow::visiblityInterfaceMIK01(bool visible)
-{
-    ui->actionInterfaceMIK01->setChecked(visible);
-
-    if(visible)
-    {
-        m_mik_interface->show();
-        if(m_port->isOpen())
-        {
-            sendCmd("0x04");
-        }
-    }
-    else
-    {
-        m_mik_interface->hide();
-    }
 }
 //---------------------------------------------
 void MainWindow::visiblityCommand(bool visible)
