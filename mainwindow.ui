@@ -382,7 +382,7 @@
            <item>
             <widget class="QStackedWidget" name="stackedWidgetPeriphery">
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="pageMDVV">
               <layout class="QVBoxLayout" name="verticalLayout">
@@ -2166,7 +2166,7 @@
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_4">
                     <item>
-                     <widget class="QGroupBox" name="groupBoxOutput_13">
+                     <widget class="QGroupBox" name="groupBoxOutput_1">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
