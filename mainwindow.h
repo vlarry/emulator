@@ -66,6 +66,7 @@
             QVector<CIODevice*>         m_output_dev; // массив указателей на выходы устройства
             QVector<QLineEdit*>         m_ain_dev;
             QVector<QString>            m_queue_cmd;
+            QList<QByteArray>           m_queue_request; // очередь запросов (пришел на смену m_queue_cmd
             QTimer*                     m_timerAutoRepeatInput;
             QTimer*                     m_timerAutoRepeatAIN;
             QTimer*                     m_timerTimeoutQuery;
@@ -93,7 +94,7 @@
             void   initDbController(CDbController* controller);
             void   setIO(const QVector<CIODevice*>& io_dev, bool type);
             void   showMessage(const QString& message);
-            quint8 getChecksum(const QByteArray& ba, const quint8 size);
+            quint8 CRC8(const QByteArray& ba, const quint8 size);
             void   cmdParser(const QByteArray& data, const quint8 size);
             void   setChannel(CIODevice *io, quint8 ch_state);
             void   loadSettings();
@@ -106,6 +107,7 @@
             void   unblockSend();
             bool   is_blockSend();
             QByteArray formatSerialNumber(); // форматирование серийного номера
+            void requestWrite(const QByteArray& data);
 
         protected:
             void keyPressEvent(QKeyEvent *event);
@@ -114,6 +116,7 @@
             void refreshSerialPort();
             void ctrlSerialPort(bool state);
             void readData();
+            void send(const QString& cmd, const QByteArray& byteArray = QByteArray());
             void sendCmd(const QString& cmd_str = "");
             void sendData(const QString& data = "");
             void write(const QString& cmd_str = "", const QByteArray& data = QByteArray());
