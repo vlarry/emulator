@@ -1308,6 +1308,14 @@ void MainWindow::write(const QString& cmd_str, const QByteArray& data)
 
         quint8 cmd = static_cast<quint8>(QString(m_cmd_last).remove(QRegExp(tr("0x"))).toInt(Q_NULLPTR, 16));
 
+        if(cmd == 0x01) // если это чтение дискретных каналов выходов, то очищаем состояния выходов
+        {
+            for(CIODevice* io_dev: m_output_dev)
+            {
+                io_dev->set_state(CIODevice::STATE_OFF);
+            }
+        }
+
         cmd |= ui->sbDeviceAddress->value() << 6;
 
         m_query.append(QByteArray::fromHex(QByteArray::number(cmd, 16)));
