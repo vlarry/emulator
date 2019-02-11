@@ -996,6 +996,9 @@ void MainWindow::ctrlInterface(bool state)
         showMessage(ui->cbPortNames->currentText() + " " + tr("открыт"));
 
         fileAinOpen();
+
+        if(ui->sbDeviceAddress->value() == MIK_01)
+            sendCmd("0x04"); // если это МИК-01, то читаем состояние выходов
     }
     else
     {
@@ -1478,6 +1481,9 @@ void MainWindow::addrChanged(int addr)
         out_count = 12;
 
         ui->stackedWidgetPeriphery->setCurrentIndex(1);
+
+        if(m_port->isOpen())
+            sendCmd("0x04");
     }
     else
     {

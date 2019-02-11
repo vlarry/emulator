@@ -46,7 +46,7 @@ CDbController::serial_num_t CDbController::serialNumberRead()
     QSqlQuery query(*m_db);
 
     // выборка последней строки по типу, дате и времени
-    if(query.exec(QString("SELECT * FROM serial ORDER BY date DESC, time DESC LIMIT 1;")))
+    if(query.exec(QString("SELECT * FROM serial ORDER BY dev_num DESC LIMIT 1;")))
     {
         if(query.next()) // если запись существует
         {
