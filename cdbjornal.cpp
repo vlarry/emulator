@@ -74,7 +74,7 @@ void CDbJornal::setDataToTable(const CDbController::serial_num_list_t& list)
         ui->tableWidgetDbSerialNumber->setItem(row, 7, itemModification);
 
         CDbJournalItem* itemRevision = new CDbJournalItem(sn.revision);
-        itemModification->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        itemRevision->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         ui->tableWidgetDbSerialNumber->setItem(row, 8, itemRevision);
 
         CDbJournalItem* itemCustomer = new CDbJournalItem(sn.customer);
