@@ -227,6 +227,11 @@ bool CDbController::findEqualData(const CDbController::serial_num_t& sn)
 
     return false;
 }
+//---------------------------------------------
+const QString &CDbController::lastError() const
+{
+    return m_last_error;
+}
 //--------------------------------------------------------------------------------
 void CDbController::writeDataToTable(const QString table_name, const QString data)
 {

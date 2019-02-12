@@ -58,14 +58,10 @@
             QSerialPort*                m_port; // COM-порт
             QLabel*                     m_lblMessage; // вывод сообщений в статус бар
             QSettings*                  m_settings; // настройки
-            QByteArray                  m_query; // массив байт запроса
-            quint8                      m_query_count; // количество отправленных байт
             QByteArray                  m_responce; // массив байт ответа устройства
-            QString                     m_cmd_last; // последняя отправленная команда
             QVector<CIODevice*>         m_input_dev; // массив указателей на входы устройства
             QVector<CIODevice*>         m_output_dev; // массив указателей на выходы устройства
             QVector<QLineEdit*>         m_ain_dev;
-            QVector<QString>            m_queue_cmd;
             QList<QByteArray>           m_queue_request; // очередь запросов (пришел на смену m_queue_cmd
             QTimer*                     m_timerAutoRepeatInput;
             QTimer*                     m_timerAutoRepeatAIN;
@@ -85,7 +81,7 @@
             CDbController*              m_db_controller;
             CDbJornal*                  m_db_journal;
             AutoAddress_t               m_is_connected; // переменная управляющая разрешением передачи (для автоматического подбора адреса устройства)
-
+            QByteArray                  m_request_last; // последний запрос
 
         private:
             void   initConnect();
@@ -108,6 +104,7 @@
             bool   is_blockSend();
             QByteArray formatSerialNumber(); // форматирование серийного номера
             void requestWrite(const QByteArray& data);
+            QString getCmdFromData(const QByteArray& data);
 
         protected:
             void keyPressEvent(QKeyEvent *event);
@@ -117,10 +114,6 @@
             void ctrlSerialPort(bool state);
             void readData();
             void send(const QString& cmd, const QByteArray& byteArray = QByteArray());
-            void sendCmd(const QString& cmd_str = "");
-            void sendData(const QString& data = "");
-            void write(const QString& cmd_str = "", const QByteArray& data = QByteArray());
-            void BytesWriten(qint64 byte);
             void addrChanged(int addr);
             void outputStateChanged(quint8 id, bool state);
             void autoRepeatInputs(bool state);

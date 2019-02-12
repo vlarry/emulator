@@ -96,6 +96,11 @@ QString CConfigurationModuleWidget::moduleModification() const
     return ui->comboBoxModuleModificationNew->currentText();
 }
 //--------------------------------------------------------
+QString CConfigurationModuleWidget::moduleRevision() const
+{
+    return  ui->comboBoxModuleRevisionNew->currentText();
+}
+//--------------------------------------------------------
 QString CConfigurationModuleWidget::moduleCustomer() const
 {
     return  ui->comboBoxModuleCustomerNew->currentText();
@@ -132,11 +137,14 @@ void CConfigurationModuleWidget::setModuleFirmwareDate(const QString& date, type
     QLineEdit* lineEdit = (type == CURRENT)?ui->lineEditModuleFirmwareDateCurrent:ui->lineEditModuleFirmwareDateNew;
     lineEdit->setText(date);
 }
-//-----------------------------------------------------------------------------------------------------
-void CConfigurationModuleWidget::initLIst(const QStringList& modification, const QStringList& customer)
+//----------------------------------------------------------------------------------------------------------------------------------
+void CConfigurationModuleWidget::initList(const QStringList& modification, const QStringList& revision, const QStringList& customer)
 {
     if(!modification.isEmpty())
         ui->comboBoxModuleModificationNew->insertItems(0, modification);
+
+    if(!revision.isEmpty())
+        ui->comboBoxModuleRevisionNew->insertItems(0, revision);
 
     if(!customer.isEmpty())
         ui->comboBoxModuleCustomerNew->insertItems(0, customer);
@@ -147,7 +155,8 @@ void CConfigurationModuleWidget::appendText()
     QToolButton* button = qobject_cast<QToolButton*>(sender());
     QString title = (button == ui->toolButtonModificationAppend)?tr("Новая модификация"):(button == ui->toolButtonRevisionAppend)?tr("Новая ревизия"):
                                                                  tr("Новый заказчик");
-    QComboBox* combobox = (button == ui->toolButtonModificationAppend)?ui->comboBoxModuleModificationNew:ui->comboBoxModuleCustomerNew;
+    QComboBox* combobox = (button == ui->toolButtonModificationAppend)?ui->comboBoxModuleModificationNew:(button == ui->toolButtonRevisionAppend)?
+                                                                       ui->comboBoxModuleRevisionNew:ui->comboBoxModuleCustomerNew;
     CAppendInfoDialog* dialog = new CAppendInfoDialog(title, this);
 
     if(dialog->exec() == QDialog::Accepted)

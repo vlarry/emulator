@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget* parent):
     ui(new Ui::MainWindow),
     m_port(Q_NULLPTR),
     m_lblMessage(Q_NULLPTR),
-    m_query_count(0),
     m_timerAutoRepeatInput(Q_NULLPTR),
     m_timerAutoRepeatAIN(Q_NULLPTR),
     m_timerTimeoutQuery(Q_NULLPTR),
@@ -106,7 +105,6 @@ void MainWindow::initConnect()
     connect(m_timerRefreshPort, SIGNAL(timeout()), this, SLOT(refreshSerialPort()));
     connect(ui->pbCtrlPort, SIGNAL(clicked(bool)), this, SLOT(ctrlSerialPort(bool)));
     connect(m_port, SIGNAL(readyRead()), this, SLOT(readData()));
-    connect(m_port, SIGNAL(bytesWritten(qint64)), this, SLOT(BytesWriten(qint64)));
     connect(ui->sbDeviceAddress, SIGNAL(valueChanged(int)), SLOT(addrChanged(int)));
 
     connect(m_output_dev.at(0), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
@@ -131,7 +129,7 @@ void MainWindow::initConnect()
     connect(ui->dwTerminal, SIGNAL(visibilityChanged(bool)), this, SLOT(visiblityTerminal(bool)));
     connect(ui->actionTerminal, &QAction::triggered, this, &MainWindow::visiblityTerminal);
     connect(ui->actionCommand, &QAction::triggered, this, &MainWindow::visiblityCommand);
-    connect(m_command, &QCommand::doubleClickCmd, this, &MainWindow::sendCmd);
+    connect(m_command, &QCommand::doubleClickCmd, this, &MainWindow::send);
     connect(m_command, &QCommand::closeCommand, this, &MainWindow::visiblityCommand);
 
     connect(ui->actionDbJournal, &QAction::triggered, this, &MainWindow::openDbJournal);
@@ -225,9 +223,10 @@ void MainWindow::initDbController(CDbController* controller)
     if(controller)
     {
         QStringList listModification = controller->dataListFromTable("modification");
+        QStringList listRevision = controller->dataListFromTable("revision");
         QStringList listCustomer = controller->dataListFromTable("customer");
 
-        m_conf_widget->initLIst(listModification, listCustomer);
+        m_conf_widget->initList(listModification, listRevision, listCustomer);
     }
 }
 //------------------------------------------------------------------
@@ -270,7 +269,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
     if(data.isEmpty())
         return;
 
-    quint8 cmd  = static_cast<quint8>(QString(m_cmd_last).remove(QRegExp("0x")).toInt(Q_NULLPTR, 16));
+    quint8 cmd  = static_cast<quint8>(getCmdFromData(m_request_last).remove("0x").toInt(Q_NULLPTR, 16));
 
     Float_t ain;
     QTextStream in(m_file_ain);
@@ -752,13 +751,15 @@ void MainWindow::fileAinOpen()
 void MainWindow::blockSend()
 {
     m_block_send = true;
-    m_timerTimeoutQuery->start(200); // таймаут отправки 100 мс
+    m_timerTimeoutQuery->start(500); // таймаут отправки 100 мс
 }
 //----------------------------
 void MainWindow::unblockSend()
 {
     m_block_send = false;
     m_timerTimeoutQuery->stop(); // останавливаем таймер таймаута
+    m_request_last.clear();
+    m_responce.clear();
 
     if(!m_queue_request.isEmpty()) // очередь запросов не пуста
     {
@@ -802,15 +803,31 @@ QByteArray MainWindow::formatSerialNumber()
 //---------------------------------------------------
 void MainWindow::requestWrite(const QByteArray& data)
 {
-    // Получаем код команды из данных (первый байт) и удаляем из него адрес устройства (сдвиг адреса на 6 бит влево)
-    quint8 nCmd = static_cast<quint8>(static_cast<quint8>(data[0])^ui->sbDeviceAddress->value() << 6);
-    QString cmd = QString((nCmd < 16)?"0x0":"0x") + QString::number(nCmd, 16).toUpper();
+    if(!m_port->isOpen())
+        return;
+
+    // Получаем код команды из данных
+    QString cmd = getCmdFromData(data);
     ui->pteConsole->appendPlainText(tr("КОМАНДА: ") + QCmd::descrition(cmd));
     ui->pteConsole->appendPlainText(tr("ОТПРАВКА ДАННЫХ: ") + data.toHex().toUpper());
     m_port->setParity(QSerialPort::MarkParity); // enable 9 bit
 
     blockSend(); // блокировка передачи
+    m_request_last = data;
+
+    // Сохранение команды, если она устанавливает параметры на модуле, для автоматического запроса чтения
+    if(m_cmd_bind.find(cmd) != m_cmd_bind.end())
+        m_cmd_save = cmd; // Запись регистра расширения дискретных каналов выходов
+
     m_port->write(data);
+}
+//--------------------------------------------------------
+QString MainWindow::getCmdFromData(const QByteArray& data)
+{
+    quint8 nCmd = static_cast<quint8>(static_cast<quint8>(data[0])^ui->sbDeviceAddress->value() << 6);
+    QString cmd = QString((nCmd < 16)?"0x0":"0x") + QString::number(nCmd, 16).toUpper();
+
+    return cmd;
 }
 //------------------------------------
 void MainWindow::configurationWindow()
@@ -844,21 +861,21 @@ void MainWindow::configurationWindow()
             sn.dev_party    = m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::NEW);
             sn.dev_firmware_var = m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::NEW);
 
-//            QByteArray key = m_conf_widget->moduleKeyCurrent();
-//            QByteArray key_empty = QByteArray::fromHex(QString("00000000").toUtf8());
+            QByteArray key = m_conf_widget->moduleKeyCurrent();
+            QByteArray key_empty = QByteArray::fromHex(QString("00000000").toUtf8());
 
-//            if(key == key_empty ||
-//               m_conf_widget->moduleKeyCurrent().isEmpty())
-//            {
-//                QMessageBox::warning(this, tr("Запись серийного в модуль"), tr("Не валидный ключ разблокировки записи!"));
-//                return;
-//            }
+            if(key == key_empty ||
+               m_conf_widget->moduleKeyCurrent().isEmpty())
+            {
+                QMessageBox::warning(this, tr("Запись серийного в модуль"), tr("Не валидный ключ разблокировки записи!"));
+                return;
+            }
 
-//            if(m_db_controller->findEqualData(sn))
-//            {
-//                QMessageBox::warning(this, tr("Запись серийного номера БД"), tr("Такой серийный номер уже существует!"));
-//                return;
-//            }
+            if(m_db_controller->findEqualData(sn))
+            {
+                QMessageBox::warning(this, tr("Запись серийного номера БД"), tr("Такой серийный номер уже существует!"));
+                return;
+            }
 
             QByteArray sn_data = formatSerialNumber();
 
@@ -932,10 +949,12 @@ void MainWindow::timeoutCmdBindRead()
         sn.date              = QDate::currentDate().toString("yyyy-MM-dd");
         sn.time              = QTime::currentTime().toString("hh:mm:ss");
         sn.modification      = m_conf_widget->moduleModification();
+        sn.revision          = m_conf_widget->moduleRevision();
         sn.customer          = m_conf_widget->moduleCustomer();
 
         if(!m_db_controller->serialNumberWrite(sn))
-            QMessageBox::warning(this, tr("Запись серийного номера БД"), tr("Не удалось записать серийный номер в БД!"));
+            QMessageBox::warning(this, tr("Запись серийного номера БД"), tr("Не удалось записать серийный номер в БД!\n%1").
+                                 arg(m_db_controller->lastError()));
         else
         {
             showMessage(tr("Серийный номер успешно записан в БД!"));
@@ -1014,6 +1033,9 @@ void MainWindow::ctrlInterface(bool state)
 
         showMessage(ui->cbPortNames->currentText() + " " + tr("открыт"));
 
+        m_queue_request.clear();
+        unblockSend();
+
         fileAinOpen();
 
         if(ui->sbDeviceAddress->value() == MIK_01)
@@ -1042,6 +1064,9 @@ void MainWindow::ctrlInterface(bool state)
             m_command->hide();
 
         ui->widgetInterfaceMIK_1->ledReset();
+
+        m_queue_request.clear();
+        unblockSend();
     }
 
     ui->groupBoxCmdFavorit->setEnabled(true);
@@ -1065,7 +1090,6 @@ void MainWindow::autoAddressSelect()
     QTimer::singleShot(100, this, &MainWindow::autoAddressSelect);
     ui->sbDeviceAddress->setValue(m_is_connected.currentAddress);
     m_is_connected.currentAddress++;
-    m_query.clear();
     send("0x1E");
 }
 //-----------------------------------
@@ -1211,13 +1235,12 @@ void MainWindow::readData()
 
     m_responce.append(ba);
 
-    quint8 cmd_size = QCmd::size(m_cmd_last);
+    QString cmd = getCmdFromData(m_request_last);
+    quint8 cmd_size = QCmd::size(cmd);
     quint8 responce_size = static_cast<quint8>(m_responce.size());
 
     if(responce_size == cmd_size)
     {
-        unblockSend();
-
         quint8 checksum_calc = CRC8(m_responce, static_cast<quint8>(m_responce.size()) - 1);
         quint8 checksum_read = static_cast<quint8>(m_responce.at(static_cast<quint8>(m_responce.size()) - 1));
 
@@ -1233,7 +1256,7 @@ void MainWindow::readData()
 
         if(!m_is_connected.state && !ui->checkBoxUseDeviceAddress->isChecked()) // если соединение не активно и подбор адреса автоматический
         {
-            if(m_cmd_last == "0x1E") // если команда "Чтение ID", значит адрес подобран
+            if(cmd == "0x1E") // если команда "Чтение ID", значит адрес подобран
             {
                 ctrlInterface(true);
                 m_is_connected.currentAddress = 0;
@@ -1242,28 +1265,21 @@ void MainWindow::readData()
                 autoAddressSelect(); // иначе перебираем дальше
         }
 
-        m_query.clear();
-        m_query_count = 0;
-        m_responce.clear();
-
         if(!m_cmd_save.isEmpty())
         {
             m_cmd_read_timer.singleShot(10, this, &MainWindow::timeoutCmdBindRead);
         }
+
+        unblockSend();
     }
     else if(m_responce.size() > cmd_size)
     {
-        m_responce.clear();
-        m_cmd_save.clear();
         unblockSend();
     }
 }
 //--------------------------------------------------------------------
 void MainWindow::send(const QString& cmd, const QByteArray& byteArray)
 {
-    if(!m_is_connected.state)
-        return;
-
     // формирование запроса
     quint8 nCmd = static_cast<quint8>(QString(cmd).remove(QRegExp(tr("0x"))).toInt(Q_NULLPTR, 16));
     nCmd |= ui->sbDeviceAddress->value() << 6; // добавляем адрес модуля в команду
@@ -1294,164 +1310,6 @@ void MainWindow::send(const QString& cmd, const QByteArray& byteArray)
 
     // отправка данных
     requestWrite(request);
-}
-//----------------------------------------------
-void MainWindow::sendCmd(const QString& cmd_str)
-{
-    if(!m_port->isOpen())
-        return;
-
-    QString cmd = cmd_str;
-
-    if(cmd == "0x05")
-    {
-        setupExtandOut(); // запись регистра расширения дискретных каналов выходов
-    }
-    else if(cmd == "0x3A") // если команда "Запись серийного номера, то открываем дополнительное окно (команду не отправляем)
-    {
-        if(m_conf_widget->isHidden())
-        {
-            m_conf_widget->show();
-            configurationWindow();
-        }
-        return;
-    }
-    else if(cmd == "0x3E" || cmd == "0x3F") // если команда "Настройки фильтра" или "Настройка входов", то открываем дополнительное окно (команду не отправляем)
-    {
-        m_set_intput_widget->show();
-        return;
-    }
-
-    sendData(cmd);
-}
-//--------------------------------------------
-void MainWindow::sendData(const QString& data)
-{
-    if(!m_port->isOpen())
-        return;
-
-    if(!is_blockSend() || !m_is_connected.state) // если не блокирована передача или соединение не подтверждено
-    {
-        if(!data.isEmpty())
-        {
-            m_cmd_last = data;
-
-            blockSend(); // блокируем передачу
-            write(data); // отправляем данные
-        }
-    }
-    else
-    {
-        if(!data.isEmpty())
-        {
-            m_queue_cmd.append(data);
-        }
-        else
-        {
-            unblockSend(); // снимаем блокировку передачи
-
-            if(!m_queue_cmd.isEmpty())
-            {
-                QString cmd_cur = m_queue_cmd.takeFirst();
-
-                if(!cmd_cur.isEmpty())
-                {
-                    m_cmd_last = cmd_cur;
-
-                    blockSend(); // блокируем передачу
-                    write(cmd_cur);
-                }
-            }
-        }
-    }
-}
-//--------------------------------------------------------------------
-void MainWindow::write(const QString& cmd_str, const QByteArray& data)
-{
-    if(!m_port->isOpen())
-        return;
-
-    if(m_query.isEmpty())
-    {
-        if(cmd_str.isEmpty())
-            return;
-
-        m_cmd_last  = cmd_str;
-
-        quint8 cmd = static_cast<quint8>(QString(m_cmd_last).remove(QRegExp(tr("0x"))).toInt(Q_NULLPTR, 16));
-
-        if(cmd == 0x01) // если это чтение дискретных каналов выходов, то очищаем состояния выходов
-        {
-            for(CIODevice* io_dev: m_output_dev)
-            {
-                io_dev->set_state(CIODevice::STATE_OFF);
-            }
-        }
-
-        cmd |= ui->sbDeviceAddress->value() << 6;
-
-        m_query.append(QByteArray::fromHex(QByteArray::number(cmd, 16)));
-
-        if(data.isEmpty())
-        {
-            qint8 channel_id                 = -1;
-            CIODevice::state_t channel_state = CIODevice::STATE_OFF;
-
-            if(cmd >= 0x06 && cmd <= 0x0D)
-            {
-                channel_id    = static_cast<qint8>(cmd) - 0x06;
-                channel_state = CIODevice::STATE_OFF;
-            }
-            else if(cmd >= 0x0E && cmd <= 0x15)
-            {
-                channel_id    = static_cast<qint8>(cmd) - 0x0E;
-                channel_state = CIODevice::STATE_ON;
-            }
-
-            if(channel_id != -1)
-            {
-                m_output_dev.at(channel_id)->set_state(channel_state);
-            }
-        }
-        else
-        {
-            m_query.append(data);
-        }
-
-        quint8 checksum = CRC8(m_query, static_cast<quint8>(m_query.size())); // создать контрольную сумму
-        m_query.append(QByteArray::fromHex(QByteArray::number(checksum, 16)));
-
-        ui->pteConsole->appendPlainText(tr("КОМАНДА: ") + QCmd::descrition(m_cmd_last));
-        ui->pteConsole->appendPlainText(tr("ОТПРАВКА ДАННЫХ: ") + m_query.toHex().toUpper());
-        m_port->setParity(QSerialPort::MarkParity); // enable 9 bit
-
-        ui->lineEditMessageQueue->setText(QString::number(m_queue_cmd.count()));
-
-        // Сохранение команды, если она устанавливает параметры на модуле, для автоматического запроса чтения
-        if(m_cmd_bind.find(m_cmd_last) != m_cmd_bind.end())
-            m_cmd_save = m_cmd_last; // Запись регистра расширения дискретных каналов выходов
-    }
-
-    m_port->write(m_query);
-    ui->pteConsole->verticalScrollBar()->setValue(ui->pteConsole->verticalScrollBar()->maximum());
-}
-//---------------------------------------
-void MainWindow::BytesWriten(qint64 byte)
-{
-    Q_UNUSED(byte);
-
-    if(m_port->parity() == QSerialPort::MarkParity)
-        m_port->setParity(QSerialPort::SpaceParity); // reset 9bit - this is data
-
-    m_query_count++;
-
-    if(m_query_count == m_query.count())
-    {
-        m_query.clear();
-        m_query_count = 0;
-    }
-    else
-        write();
 }
 //------------------------------------
 void MainWindow::addrChanged(int addr)
@@ -1562,7 +1420,7 @@ void MainWindow::addrChanged(int addr)
 
         ui->stackedWidgetPeriphery->setCurrentIndex(1);
 
-        if(m_port->isOpen())
+        if(m_port->isOpen() && m_is_connected.state)
             send("0x04");
     }
     else

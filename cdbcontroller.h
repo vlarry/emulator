@@ -35,6 +35,7 @@
             bool serialNumberWrite(const serial_num_t& sn);
             QStringList dataListFromTable(const QString &table);
             bool findEqualData(const serial_num_t& sn);
+            const QString &lastError() const;
 
         public slots:
             void writeDataToTable(const QString table_name, const QString data);

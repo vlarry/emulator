@@ -32,7 +32,7 @@
             void closeCommand(bool);
             void clickCmd(const QString&);
             void clickCmdIndex(int);
-            void doubleClickCmd(const QString&);
+            void doubleClickCmd(const QString&, const QByteArray& = QByteArray());
 
         public slots:
             void setCurrentIndex(int index);
