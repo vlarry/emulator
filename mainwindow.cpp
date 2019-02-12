@@ -1250,12 +1250,17 @@ void MainWindow::readData()
 
         ui->pteConsole->verticalScrollBar()->setValue(ui->pteConsole->verticalScrollBar()->maximum());
 
+        unblockSend();
+
         if(!m_is_connected.state && !ui->checkBoxUseDeviceAddress->isChecked()) // если соединение не активно и подбор адреса автоматический
         {
             if(cmd == "0x1E") // если команда "Чтение ID", значит адрес подобран
             {
                 ctrlInterface(true);
                 m_is_connected.currentAddress = 0;
+
+                if(ui->sbDeviceAddress->value() == MIK_01)
+                    send("0x04");
             }
             else
                 autoAddressSelect(); // иначе перебираем дальше
@@ -1265,8 +1270,6 @@ void MainWindow::readData()
         {
             m_cmd_read_timer.singleShot(10, this, &MainWindow::timeoutCmdBindRead);
         }
-
-        unblockSend();
     }
     else if(m_responce.size() > cmd_size)
     {
