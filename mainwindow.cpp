@@ -764,10 +764,9 @@ void MainWindow::unblockSend()
     if(!m_queue_request.isEmpty()) // очередь запросов не пуста
     {
         QByteArray request = m_queue_request.takeFirst();
+        ui->lineEditMessageQueue->setText(QString::number(m_queue_request.count())); // выводим новое значение количества сообщений в очереди запросов
         requestWrite(request);
     }
-
-    ui->lineEditMessageQueue->setText(QString::number(m_queue_request.count())); // выводим новое значение количества сообщений в очереди запросов
 }
 //-----------------------------
 bool MainWindow::is_blockSend()
@@ -905,9 +904,10 @@ void MainWindow::discretInputHelp()
 //-------------------------------
 void MainWindow::setupExtandOut()
 {
+     QByteArray data;
+
     if(ui->sbDeviceAddress->value() == MDVV_02)
     {
-        QByteArray data;
         quint8 channels = 0x00;
 
         for(quint8 i = 0, bits = 0; i < m_output_dev.size(); i++)
@@ -923,14 +923,13 @@ void MainWindow::setupExtandOut()
 
             bits += 2;
         }
-
-        send("0x05", data);
     }
     else if(ui->sbDeviceAddress->value() == MIK_01)
     {
-        QByteArray data = ui->widgetInterfaceMIK_1->ledStates();
-        send("0x05", data);
+        data = ui->widgetInterfaceMIK_1->ledStates();
     }
+
+    send("0x05", data);
 }
 //-----------------------------------
 void MainWindow::timeoutCmdBindRead()
@@ -1300,7 +1299,7 @@ void MainWindow::send(const QString& cmd, const QByteArray& byteArray)
         return;
     }
 
-    if(cmd == "0x01") // если это чтение дискретных каналов выходов, то очищаем состояния выходов
+    if(nCmd >= 0x06 && nCmd <= 0x15) // если это чтение дискретных каналов выходов, то очищаем состояния выходов
     {
         for(CIODevice* io_dev: m_output_dev)
         {
