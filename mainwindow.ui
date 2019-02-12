@@ -382,7 +382,7 @@
            <item>
             <widget class="QStackedWidget" name="stackedWidgetPeriphery">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="pageMDVV">
               <layout class="QVBoxLayout" name="verticalLayout">
@@ -4116,7 +4116,7 @@
               </layout>
              </widget>
              <widget class="QWidget" name="pageMIK_01">
-              <layout class="QHBoxLayout" name="horizontalLayout_45">
+              <layout class="QHBoxLayout" name="horizontalLayout_22">
                <item>
                 <spacer name="horizontalSpacer_48">
                  <property name="orientation">
@@ -4138,24 +4138,33 @@
                  <property name="frameShadow">
                   <enum>QFrame::Plain</enum>
                  </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_44">
-                  <property name="spacing">
-                   <number>0</number>
-                  </property>
-                  <property name="leftMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="topMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="rightMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="bottomMargin">
-                   <number>0</number>
-                  </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_8">
                   <item>
                    <widget class="CBZUInterface" name="widgetInterfaceMIK_1" native="true"/>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_21">
+                    <item>
+                     <widget class="QPushButton" name="pushButtonLedStateWrite">
+                      <property name="text">
+                       <string>Записать</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_10">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
                   </item>
                  </layout>
                 </widget>

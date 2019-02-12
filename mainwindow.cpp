@@ -83,6 +83,7 @@ MainWindow::MainWindow(QWidget* parent):
     ui->pushButtonSerialNumberWrite->setProperty("COMMAND", "0x3A");
     ui->pushButtonInputSetWrite->setProperty("COMMAND", "0x3E"); // также обрабатывает команду 0x3F
     ui->pushButtonDSDINRead->setProperty("COMMAND", "0x1F");
+    ui->pushButtonLedStateWrite->setProperty("COMMAND", "0x05"); // запись состояний светодиодов МИК-01
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -142,6 +143,7 @@ void MainWindow::initConnect()
     connect(ui->pushButtonInputSetWrite, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
     connect(ui->pushButtonDSDINRead, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
     connect(m_set_intput_widget, &CSetInput::setWrite, this, &MainWindow::processDiscretInputSet);
+    connect(ui->pushButtonLedStateWrite, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
 }
 //-------------------------------
 void MainWindow::initSerialPort()
@@ -751,13 +753,12 @@ void MainWindow::fileAinOpen()
 void MainWindow::blockSend()
 {
     m_block_send = true;
-    m_timerTimeoutQuery->start(500); // таймаут отправки 100 мс
+    m_timerTimeoutQuery->start(500); // таймаут отправки 500 мс
 }
 //----------------------------
 void MainWindow::unblockSend()
 {
     m_block_send = false;
-    m_timerTimeoutQuery->stop(); // останавливаем таймер таймаута
     m_request_last.clear();
     m_responce.clear();
 
@@ -806,17 +807,15 @@ void MainWindow::requestWrite(const QByteArray& data)
         return;
 
     // Получаем код команды из данных
-    QString cmd = getCmdFromData(data);
-    ui->pteConsole->appendPlainText(tr("КОМАНДА: ") + QCmd::descrition(cmd));
+    QString cmd_source = getCmdFromData(data);
+    quint8 nCmd = static_cast<quint8>(static_cast<quint8>(data[0]));
+    QString cmd = QString((nCmd < 16)?"0x0":"0x") + QString::number(nCmd, 16).toUpper();
+    ui->pteConsole->appendPlainText(tr("КОМАНДА: ") + QCmd::descrition(cmd_source));
     ui->pteConsole->appendPlainText(tr("ОТПРАВКА ДАННЫХ: ") + data.toHex().toUpper());
     m_port->setParity(QSerialPort::MarkParity); // enable 9 bit
 
     blockSend(); // блокировка передачи
     m_request_last = data;
-
-    // Сохранение команды, если она устанавливает параметры на модуле, для автоматического запроса чтения
-    if(m_cmd_bind.find(cmd) != m_cmd_bind.end())
-        m_cmd_save = cmd; // Запись регистра расширения дискретных каналов выходов
 
     m_port->write(data);
 }
@@ -1036,9 +1035,6 @@ void MainWindow::ctrlInterface(bool state)
         unblockSend();
 
         fileAinOpen();
-
-        if(ui->sbDeviceAddress->value() == MIK_01)
-            send("0x04"); // если это МИК-01, то читаем состояние выходов
     }
     else
     {
@@ -1089,6 +1085,7 @@ void MainWindow::autoAddressSelect()
     QTimer::singleShot(100, this, &MainWindow::autoAddressSelect);
     ui->sbDeviceAddress->setValue(m_is_connected.currentAddress);
     m_is_connected.currentAddress++;
+    unblockSend();
     send("0x1E");
 }
 //-----------------------------------
@@ -1307,6 +1304,10 @@ void MainWindow::send(const QString& cmd, const QByteArray& byteArray)
         }
     }
 
+    // Сохранение команды, если она устанавливает параметры на модуле, для автоматического запроса чтения
+    if(m_cmd_bind.find(cmd) != m_cmd_bind.end())
+        m_cmd_save = cmd; // Запись регистра расширения дискретных каналов выходов
+
     // отправка данных
     requestWrite(request);
 }
@@ -1518,6 +1519,7 @@ void MainWindow::autoRepeatTimAIN()
 //---------------------------
 void MainWindow::timeoutTim()
 {
+    m_timerTimeoutQuery->stop(); // останавливаем таймер таймаута
     unblockSend();
 }
 //----------------------------------------------

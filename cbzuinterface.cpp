@@ -60,7 +60,6 @@ CBZUInterface::CBZUInterface(QWidget* parent):
 
     setFixedSize(this->width(), this->height());
 
-    connect(ui->pushButtonSaveLed, &QPushButton::clicked, this, &CBZUInterface::ledStateSave);
     connect(&m_timer_flash, &QTimer::timeout, this, &CBZUInterface::timeoutLedFlash);
 }
 //-----------------------------

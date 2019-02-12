@@ -30,7 +30,6 @@
 
         signals:
             void closed(bool);
-            void ledStateSave();
 
         protected:
             void closeEvent(QCloseEvent* event);
