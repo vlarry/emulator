@@ -403,7 +403,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
         case 0x03: // чтение регистра расширения дискретных каналов входов
             if(ui->sbDeviceAddress->value() == MIK_01)
             {
-                ui->widgetInterfaceMIK_1->setKeyboardState(data);
+                ui->frameInterfaceMIK->setKeyboardState(data);
             }
         break;
 
@@ -431,7 +431,7 @@ void MainWindow::cmdParser(const QByteArray& data, const quint8 size)
             }
             else if(ui->sbDeviceAddress->value() == MIK_01)
             {
-                ui->widgetInterfaceMIK_1->setLedState(data);
+                ui->frameInterfaceMIK->setLedState(data);
             }
         break;
 
@@ -925,7 +925,7 @@ void MainWindow::setupExtandOut()
     }
     else if(ui->sbDeviceAddress->value() == MIK_01)
     {
-        data = ui->widgetInterfaceMIK_1->ledStates();
+        data = ui->frameInterfaceMIK->ledStates();
     }
 
     send("0x05", data);
@@ -1058,7 +1058,7 @@ void MainWindow::ctrlInterface(bool state)
         if(!m_command->isHidden())
             m_command->hide();
 
-        ui->widgetInterfaceMIK_1->ledReset();
+        ui->frameInterfaceMIK->ledReset();
 
         m_queue_request.clear();
         unblockSend();

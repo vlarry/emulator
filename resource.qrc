@@ -19,5 +19,24 @@
         <file>resource/images/led_green.png</file>
         <file>resource/images/led_red.png</file>
         <file>resource/images/led_yellow.png</file>
+        <file>resource/images/key_0.png</file>
+        <file>resource/images/key_1.png</file>
+        <file>resource/images/key_2.png</file>
+        <file>resource/images/key_3.png</file>
+        <file>resource/images/key_4.png</file>
+        <file>resource/images/key_5.png</file>
+        <file>resource/images/key_6.png</file>
+        <file>resource/images/key_7.png</file>
+        <file>resource/images/key_8.png</file>
+        <file>resource/images/key_9.png</file>
+        <file>resource/images/key_arrow_down.png</file>
+        <file>resource/images/key_arrow_left.png</file>
+        <file>resource/images/key_arrow_right.png</file>
+        <file>resource/images/key_arrow_up.png</file>
+        <file>resource/images/key_dp.png</file>
+        <file>resource/images/key_esc.png</file>
+        <file>resource/images/key_ok.png</file>
+        <file>resource/images/key_reset.png</file>
+        <file>resource/images/interfacemik.png</file>
     </qresource>
 </RCC>

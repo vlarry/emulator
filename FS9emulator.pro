@@ -32,12 +32,12 @@ SOURCES += main.cpp\
     cconfigurationmodulewidget.cpp \
     csetinput.cpp \
     cinputhelp.cpp \
-    cbzuinterface.cpp \
     qled.cpp \
     cdbcontroller.cpp \
     cdbjornal.cpp \
     cappendinfodialog.cpp \
-    cdbjournalitem.cpp
+    cdbjournalitem.cpp \
+    cinterfacemik.cpp
 
 HEADERS  += mainwindow.h \
     qcmd.h \
@@ -47,12 +47,12 @@ HEADERS  += mainwindow.h \
     cconfigurationmodulewidget.h \
     csetinput.h \
     cinputhelp.h \
-    cbzuinterface.h \
     qled.h \
     cdbcontroller.h \
     cdbjornal.h \
     cappendinfodialog.h \
-    cdbjournalitem.h
+    cdbjournalitem.h \
+    cinterfacemik.h
 
 FORMS    += mainwindow.ui \
     command.ui \
@@ -61,7 +61,8 @@ FORMS    += mainwindow.ui \
     inputhelp.ui \
     bzuinterface.ui \
     dbjornal.ui \
-    appendinfodialog.ui
+    appendinfodialog.ui \
+    cinterfacemik.ui
 
 win32::RC_FILE = \
                  resource/icon.rc

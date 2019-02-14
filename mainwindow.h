@@ -21,9 +21,9 @@
     #include "cconfigurationmodulewidget.h"
     #include "csetinput.h"
     #include "cinputhelp.h"
-    #include "cbzuinterface.h"
     #include "cdbcontroller.h"
     #include "cdbjornal.h"
+    #include "cinterfacemik.h"
     #include <windows.h> // для вызова задержки Sleep();
     //----------
     namespace Ui

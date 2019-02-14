@@ -1,7 +1,7 @@
-#ifndef CBZUINTERFACE_H
-    #define CBZUINTERFACE_H
-    //----------------
-    #include <QWidget>
+#ifndef CINTERFACEMIK_H
+    #define CINTERFACEMIK_H
+    //---------------
+    #include <QFrame>
     #include <QCloseEvent>
     #include <QShowEvent>
     #include <QByteArray>
@@ -10,16 +10,16 @@
     //----------
     namespace Ui
     {
-        class CBZUInterface;
+        class CInterfaceMIK;
     }
-    //---------------------------------
-    class CBZUInterface: public QWidget
+
+    class CInterfaceMIK: public QFrame
     {
         Q_OBJECT
 
         public:
-            explicit CBZUInterface(QWidget* parent = Q_NULLPTR);
-            ~CBZUInterface();
+            explicit CInterfaceMIK(QWidget *parent = nullptr);
+            ~CInterfaceMIK();
             void ledReset();
             QByteArray ledStates();
             void setKeyboardState(const QByteArray& keyboards);
@@ -36,10 +36,10 @@
             void showEvent(QShowEvent* event);
 
         private:
-            Ui::CBZUInterface* ui;
+            Ui::CInterfaceMIK *ui;
             QVector<QKey*>     m_keyboard;
             QVector<QLed*>     m_led;
             QTimer             m_timer_flash;
             QLed::LedState     m_state_flash;
     };
-#endif // CBZUINTERFACE_H
+#endif // CINTERFACEMIK_H
