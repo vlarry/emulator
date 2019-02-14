@@ -132,10 +132,10 @@ bool CDbController::serialNumberWrite(const CDbController::serial_num_t& sn)
 
     return true;
 }
-//----------------------------------------------------------------
-QStringList CDbController::dataListFromTable(const QString& table)
+//-------------------------------------------------------------------------------
+CDbController::data_list_t CDbController::dataListFromTable(const QString& table)
 {
-    QStringList list;
+    CDbController::data_list_t list;
 
     if(m_db && m_db->isOpen())
     {
@@ -145,7 +145,8 @@ QStringList CDbController::dataListFromTable(const QString& table)
         {
             while(query.next())
             {
-                list << query.value("data").toString();
+                CDbController::data_t data = CDbController::data_t({ query.value("id").toInt(), query.value("data").toString() });
+                list.append(data);
             }
         }
         else

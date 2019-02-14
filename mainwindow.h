@@ -79,7 +79,10 @@
             CmdBind_t                   m_cmd_bind; // хранение связанных команд
             QTimer                      m_cmd_read_timer; // таймер для чтения данных после записи
             CDbController*              m_db_controller;
-            CDbJornal*                  m_db_journal;
+            CDbJornal*                  m_db_journal_serial; // журнал серийных номеров
+            CDbJornal*                  m_db_journal_modification; // журнал модификаций
+            CDbJornal*                  m_db_journal_revision; // журнал ревизий
+            CDbJornal*                  m_db_journal_customer; // журнал заказчиков
             AutoAddress_t               m_is_connected; // переменная управляющая разрешением передачи (для автоматического подбора адреса устройства)
             QByteArray                  m_request_last; // последний запрос
 
@@ -136,7 +139,7 @@
             void autoAddressSelect();
             void processCmdFavorite();
             void processDiscretInputSet();
-            void removeSerialNumber(int id);
+            void deleteDataFromDb(int id);
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

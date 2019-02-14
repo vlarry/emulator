@@ -388,7 +388,7 @@
               </sizepolicy>
              </property>
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="pageMDVV">
               <layout class="QVBoxLayout" name="verticalLayout">
@@ -3916,7 +3916,7 @@
                     <item>
                      <widget class="QGroupBox" name="groupBoxAIN_3">
                       <property name="title">
-                       <string>AIN3</string>
+                       <string>Температура ЦПУ </string>
                       </property>
                       <property name="alignment">
                        <set>Qt::AlignCenter</set>
@@ -3950,7 +3950,7 @@
                     <item>
                      <widget class="QGroupBox" name="groupBoxAIN_4">
                       <property name="title">
-                       <string>AIN3</string>
+                       <string>Температура блока</string>
                       </property>
                       <property name="alignment">
                        <set>Qt::AlignCenter</set>
@@ -4628,7 +4628,10 @@
     <property name="title">
      <string>Инструменты</string>
     </property>
-    <addaction name="actionDbJournal"/>
+    <addaction name="actionDbSerial"/>
+    <addaction name="actionDbModification"/>
+    <addaction name="actionDbRevision"/>
+    <addaction name="actionDbCustomer"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -4695,12 +4698,36 @@
     <string>Alt+Shift+C</string>
    </property>
   </action>
-  <action name="actionDbJournal">
+  <action name="actionDbSerial">
    <property name="text">
     <string>Журнал БД</string>
    </property>
    <property name="shortcut">
-    <string>Alt+Shift+J</string>
+    <string>Alt+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionDbModification">
+   <property name="text">
+    <string>Журнал модификаций</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Shift+M</string>
+   </property>
+  </action>
+  <action name="actionDbRevision">
+   <property name="text">
+    <string>Журнал ревизий</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Shift+R</string>
+   </property>
+  </action>
+  <action name="actionDbCustomer">
+   <property name="text">
+    <string>Журнал заказчиков</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Shift+C</string>
    </property>
   </action>
  </widget>

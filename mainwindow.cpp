@@ -17,7 +17,10 @@ MainWindow::MainWindow(QWidget* parent):
     m_input_help_widget(Q_NULLPTR),
     m_cmd_save(""),
     m_db_controller(Q_NULLPTR),
-    m_db_journal(Q_NULLPTR),
+    m_db_journal_serial(Q_NULLPTR),
+    m_db_journal_modification(Q_NULLPTR),
+    m_db_journal_revision(Q_NULLPTR),
+    m_db_journal_customer(Q_NULLPTR),
     m_is_connected( { false, 0 } )
 {
     ui->setupUi(this);
@@ -133,7 +136,10 @@ void MainWindow::initConnect()
     connect(m_command, &QCommand::doubleClickCmd, this, &MainWindow::send);
     connect(m_command, &QCommand::closeCommand, this, &MainWindow::visiblityCommand);
 
-    connect(ui->actionDbJournal, &QAction::triggered, this, &MainWindow::openDbJournal);
+    connect(ui->actionDbSerial, &QAction::triggered, this, &MainWindow::openDbJournal);
+    connect(ui->actionDbModification, &QAction::triggered, this, &MainWindow::openDbJournal);
+    connect(ui->actionDbRevision, &QAction::triggered, this, &MainWindow::openDbJournal);
+    connect(ui->actionDbCustomer, &QAction::triggered, this, &MainWindow::openDbJournal);
     connect(m_conf_widget, &CConfigurationModuleWidget::newValueAppend, this, &MainWindow::writeDataToDb);
     connect(ui->checkBoxUseDeviceAddress, &QCheckBox::clicked, this, &MainWindow::useDeviceAddress);
 
@@ -224,9 +230,22 @@ void MainWindow::initDbController(CDbController* controller)
 {
     if(controller)
     {
-        QStringList listModification = controller->dataListFromTable("modification");
-        QStringList listRevision = controller->dataListFromTable("revision");
-        QStringList listCustomer = controller->dataListFromTable("customer");
+        CDbController::data_list_t dataListModification = controller->dataListFromTable("modification");
+        CDbController::data_list_t dataListRevision = controller->dataListFromTable("revision");
+        CDbController::data_list_t dataListCustomer = controller->dataListFromTable("customer");
+
+        QStringList listModification;
+        QStringList listRevision;
+        QStringList listCustomer;
+
+        for(const CDbController::data_t& data: dataListModification)
+            listModification << data.text;
+
+        for(const CDbController::data_t& data: dataListRevision)
+            listModification << data.text;
+
+        for(const CDbController::data_t& data: dataListCustomer)
+            listModification << data.text;
 
         m_conf_widget->initList(listModification, listRevision, listCustomer);
     }
@@ -956,10 +975,10 @@ void MainWindow::timeoutCmdBindRead()
         else
         {
             showMessage(tr("Серийный номер успешно записан в БД!"));
-            if(m_db_journal && !m_db_journal->isHidden())
+            if(m_db_journal_serial && !m_db_journal_serial->isHidden())
             {
                 CDbController::serial_num_list_t list = m_db_controller->serialNumberListRead();
-                m_db_journal->setDataToTable(list);
+                m_db_journal_serial->setDataToTable(list);
             }
         }
     }
@@ -970,25 +989,83 @@ void MainWindow::timeoutCmdBindRead()
 //------------------------------
 void MainWindow::openDbJournal()
 {
-    if(!m_db_journal)
+    QAction *action = qobject_cast<QAction*>(sender());
+
+    if(action)
     {
-        m_db_journal = new CDbJornal(this);
-        connect(m_db_journal, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
-        connect(m_db_journal, &CDbJornal::deleteJournalRow, this, &MainWindow::removeSerialNumber);
-        CDbController::serial_num_list_t list = m_db_controller->serialNumberListRead();
-        m_db_journal->setDataToTable(list);
-        m_db_journal->show();
+        if(!m_db_journal_serial && action == ui->actionDbSerial)
+        {
+            m_db_journal_serial = new CDbJornal(CDbJornal::DataBase::SERIAL_DB, this);
+            CDbController::serial_num_list_t list = m_db_controller->serialNumberListRead();
+            m_db_journal_serial->setDataToTable(list);
+            connect(m_db_journal_serial, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
+            connect(m_db_journal_serial, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            m_db_journal_serial->show();
+        }
+        else if(!m_db_journal_modification && action == ui->actionDbModification)
+        {
+            m_db_journal_modification = new CDbJornal(CDbJornal::DataBase::MODIFICATION_DB, this);
+            CDbController::data_list_t list = m_db_controller->dataListFromTable("modification");
+            m_db_journal_modification->setDataToTable(list);
+            connect(m_db_journal_modification, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
+            connect(m_db_journal_modification, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            m_db_journal_modification->show();
+        }
+        else if(!m_db_journal_revision && action == ui->actionDbRevision)
+        {
+            m_db_journal_revision = new CDbJornal(CDbJornal::DataBase::REVISION_DB, this);
+            CDbController::data_list_t list = m_db_controller->dataListFromTable("revision");
+            m_db_journal_revision->setDataToTable(list);
+            connect(m_db_journal_revision, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
+            connect(m_db_journal_revision, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            m_db_journal_revision->show();
+        }
+        else if(!m_db_journal_customer && action == ui->actionDbCustomer)
+        {
+            m_db_journal_customer = new CDbJornal(CDbJornal::DataBase::CUSTOMER_DB, this);
+            CDbController::data_list_t list = m_db_controller->dataListFromTable("customer");
+            m_db_journal_customer->setDataToTable(list);
+            connect(m_db_journal_customer, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
+            connect(m_db_journal_customer, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            m_db_journal_customer->show();
+        }
     }
 }
 //-------------------------------
 void MainWindow::closeDbJournal()
 {
-    if(m_db_journal)
+    CDbJornal *journal = qobject_cast<CDbJornal*>(sender());
+
+    if(journal)
     {
-        disconnect(m_db_journal, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
-        disconnect(m_db_journal, &CDbJornal::deleteJournalRow, this, &MainWindow::removeSerialNumber);
-        delete m_db_journal;
-        m_db_journal = Q_NULLPTR;
+        if(journal == m_db_journal_serial)
+        {
+            disconnect(m_db_journal_serial, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
+            disconnect(m_db_journal_serial, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            delete m_db_journal_serial;
+            m_db_journal_serial = Q_NULLPTR;
+        }
+        else if(journal == m_db_journal_modification)
+        {
+            disconnect(m_db_journal_modification, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
+            disconnect(m_db_journal_modification, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            delete m_db_journal_modification;
+            m_db_journal_modification = Q_NULLPTR;
+        }
+        else if(journal == m_db_journal_revision)
+        {
+            disconnect(m_db_journal_revision, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
+            disconnect(m_db_journal_revision, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            delete m_db_journal_revision;
+            m_db_journal_revision = Q_NULLPTR;
+        }
+        else if(journal == m_db_journal_customer)
+        {
+            disconnect(m_db_journal_customer, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
+            disconnect(m_db_journal_customer, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            delete m_db_journal_customer;
+            m_db_journal_customer = Q_NULLPTR;
+        }
     }
 }
 //--------------------------------------------------------------------------
@@ -1133,7 +1210,7 @@ void MainWindow::processDiscretInputSet()
         send("0x3F", setIndividual);
 }
 //-----------------------------------------
-void MainWindow::removeSerialNumber(int id)
+void MainWindow::deleteDataFromDb(int id)
 {
     m_db_controller->deleteDataFromTable("serial", id);
 }

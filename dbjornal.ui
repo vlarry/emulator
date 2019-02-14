@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1360</width>
-    <height>692</height>
+    <width>454</width>
+    <height>363</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,7 +69,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QTableWidget" name="tableWidgetDbSerialNumber">
+    <widget class="QTableWidget" name="tableWidgetDbJournal">
      <property name="font">
       <font>
        <pointsize>8</pointsize>

@@ -24,9 +24,19 @@
         Q_OBJECT
 
         public:
-            explicit CDbJornal(QWidget* parent = Q_NULLPTR);
+            enum class DataBase
+            {
+                SERIAL_DB,
+                MODIFICATION_DB,
+                REVISION_DB,
+                CUSTOMER_DB
+            };
+
+        public:
+            explicit CDbJornal(const DataBase& db_type, QWidget* parent = Q_NULLPTR);
             ~CDbJornal();
-            void setDataToTable(const CDbController::serial_num_list_t& list);
+            void setDataToTable(const CDbController::serial_num_list_t &list);
+            void setDataToTable(const CDbController::data_list_t &list);
 
         public slots:
             void filterSlot(const QString& text);
@@ -41,5 +51,6 @@
 
         private:
             Ui::CDbJornal* ui;
+            DataBase       m_db_type;
     };
 #endif // CDBJORNAL_H

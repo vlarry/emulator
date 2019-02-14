@@ -24,8 +24,15 @@
                 QString revision; // ревизия платы
                 QString customer; // заказчик
             };
+            //-----------
+            struct data_t
+            {
+                int id;
+                QString text;
+            };
             //----------------------------------------------
             typedef QVector<serial_num_t> serial_num_list_t;
+            typedef QVector<data_t> data_list_t;
 
         public:
             CDbController(const QString& path);
@@ -33,7 +40,7 @@
             serial_num_t serialNumberRead();
             serial_num_list_t serialNumberListRead();
             bool serialNumberWrite(const serial_num_t& sn);
-            QStringList dataListFromTable(const QString &table);
+            data_list_t dataListFromTable(const QString &table);
             bool findEqualData(const serial_num_t& sn);
             const QString &lastError() const;
 
