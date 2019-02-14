@@ -29,6 +29,19 @@ CInterfaceMIK::CInterfaceMIK(QWidget *parent):
     QKey *key_on    = new QKey(this);
     QKey *key_reset = new QKey(this);
 
+    QLed *led_1          = new QLed(this);
+    QLed *led_2          = new QLed(this);
+    QLed *led_3          = new QLed(this);
+    QLed *led_4          = new QLed(this);
+    QLed *led_5          = new QLed(this);
+    QLed *led_6          = new QLed(this);
+    QLed *led_7          = new QLed(this);
+    QLed *led_8          = new QLed(this);
+    QLed *led_protection = new QLed(this);
+    QLed *led_block      = new QLed(this);
+    QLed *led_off        = new QLed(this);
+    QLed *led_on         = new QLed(this);
+
     key_0->setIcon(QIcon(QPixmap(":/images/resource/images/key_0.png")));
     key_1->setIcon(QIcon(QPixmap(":/images/resource/images/key_1.png")));
     key_2->setIcon(QIcon(QPixmap(":/images/resource/images/key_2.png")));
@@ -91,6 +104,32 @@ CInterfaceMIK::CInterfaceMIK(QWidget *parent):
     key_off->setIconSize(QSize(39, 39));
     key_on->setIconSize(QSize(39, 39));
     key_reset->setIconSize(QSize(39, 39));
+
+    led_1->setGeometry(14, 232, 16, 16);
+    led_2->setGeometry(14, 258, 16, 16);
+    led_3->setGeometry(14, 285, 16, 16);
+    led_4->setGeometry(14, 311, 16, 16);
+    led_5->setGeometry(14, 338, 16, 16);
+    led_6->setGeometry(14, 364, 16, 16);
+    led_7->setGeometry(14, 391, 16, 16);
+    led_8->setGeometry(14, 417, 16, 16);
+    led_protection->setGeometry(96, 14, 16, 16);
+    led_block->setGeometry(188, 14, 16, 16);
+    led_off->setGeometry(468, 134, 16, 16);
+    led_on->setGeometry(468, 218, 16, 16);
+
+    led_1->setIconSize(QSize(16, 16));
+    led_2->setIconSize(QSize(16, 16));
+    led_3->setIconSize(QSize(16, 16));
+    led_4->setIconSize(QSize(16, 16));
+    led_5->setIconSize(QSize(16, 16));
+    led_6->setIconSize(QSize(16, 16));
+    led_7->setIconSize(QSize(16, 16));
+    led_8->setIconSize(QSize(16, 16));
+    led_protection->setIconSize(QSize(16, 16));
+    led_block->setIconSize(QSize(16, 16));
+    led_off->setIconSize(QSize(16, 16));
+    led_on->setIconSize(QSize(16, 16));
 
     connect(&m_timer_flash, &QTimer::timeout, this, &CInterfaceMIK::timeoutLedFlash);
 }

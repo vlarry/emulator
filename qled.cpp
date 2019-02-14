@@ -7,6 +7,12 @@ QLed::QLed(QWidget* parent):
     m_color(LED_RED),
     m_id(0)
 {
+    setStyleSheet("border-color: gray;"
+                  "border-width: 2px;"
+                  "border-style: solid;"
+                  "border-radius: 8px;"
+                  "margin: 0px;"
+                  "padding: 0px;");
     setState(LED_OFF);
     connect(this, &QLed::clicked, this, &QLed::ledClick);
 }
