@@ -1,7 +1,7 @@
 #include "cdbjornal.h"
 #include "ui_dbjornal.h"
-//-------------------------------------------------------------
-CDbJornal::CDbJornal(const DataBase &db_type, QWidget* parent):
+//---------------------------------------------------------------
+CDbJournal::CDbJournal(const DataBase &db_type, QWidget* parent):
     QWidget(parent),
     ui(new Ui::CDbJornal),
     m_db_type(db_type)
@@ -51,15 +51,15 @@ CDbJornal::CDbJornal(const DataBase &db_type, QWidget* parent):
     if(m_db_type == DataBase::SERIAL_DB)
         showMaximized();
 
-    connect(ui->lineEditFilter, &QLineEdit::textChanged, this, &CDbJornal::filterSlot);
+    connect(ui->lineEditFilter, &QLineEdit::textChanged, this, &CDbJournal::filterSlot);
 }
-//---------------------
-CDbJornal::~CDbJornal()
+//-----------------------
+CDbJournal::~CDbJournal()
 {
     delete ui;
 }
-//--------------------------------------------------------------------------
-void CDbJornal::setDataToTable(const CDbController::serial_num_list_t &list)
+//---------------------------------------------------------------------------
+void CDbJournal::setDataToTable(const CDbController::serial_num_list_t &list)
 {
     ui->tableWidgetDbJournal->clearContents();
     ui->tableWidgetDbJournal->setRowCount(list.count());
@@ -119,8 +119,8 @@ void CDbJornal::setDataToTable(const CDbController::serial_num_list_t &list)
 
     ui->tableWidgetDbJournal->resizeColumnsToContents();
 }
-//--------------------------------------------------------------------
-void CDbJornal::setDataToTable(const CDbController::data_list_t &list)
+//---------------------------------------------------------------------
+void CDbJournal::setDataToTable(const CDbController::data_list_t &list)
 {
     ui->tableWidgetDbJournal->clearContents();
     ui->tableWidgetDbJournal->setRowCount(list.count());
@@ -142,8 +142,8 @@ void CDbJornal::setDataToTable(const CDbController::data_list_t &list)
         row++;
     }
 }
-//---------------------------------------------
-void CDbJornal::filterSlot(const QString& text)
+//----------------------------------------------
+void CDbJournal::filterSlot(const QString& text)
 {
     int column = ui->comboBoxColumnFilter->currentIndex();
 
@@ -162,21 +162,45 @@ void CDbJornal::filterSlot(const QString& text)
         }
     }
 }
-//--------------------------------------------
-void CDbJornal::closeEvent(QCloseEvent* event)
+//---------------------------------------------
+void CDbJournal::closeEvent(QCloseEvent* event)
 {
     ui->tableWidgetDbJournal->clear();
     QWidget::closeEvent(event);
     emit closeJournal();
 }
-//---------------------------------------------
-void CDbJornal::keyPressEvent(QKeyEvent* event)
+//----------------------------------------------
+void CDbJournal::keyPressEvent(QKeyEvent* event)
 {
     if(event->key() == Qt::Key_Delete)
     {
+        QString title;
+        QString message;
+
         if(ui->tableWidgetDbJournal->rowCount() == 0)
         {
-            QMessageBox::warning(this, tr("Удаление серийных номеров"), tr("Список серийных номеров пуст!"));
+            if(m_db_type == DataBase::SERIAL_DB)
+            {
+                title = tr("Удаление серийных номеров");
+                message = tr("Список серийных номеров пуст!");
+            }
+            else if(m_db_type == DataBase::MODIFICATION_DB)
+            {
+                title = tr("Удаление модификаций");
+                message = tr("Список модификаций пуст!");
+            }
+            else if(m_db_type == DataBase::REVISION_DB)
+            {
+                title = tr("Удаление ревизий");
+                message = tr("Список ревизий пуст!");
+            }
+            else if(m_db_type == DataBase::CUSTOMER_DB)
+            {
+                title = tr("Удаление заказчиков");
+                message = tr("Список заказчиков пуст!");
+            }
+
+            QMessageBox::warning(this, title, message);
             return;
         }
 
@@ -184,15 +208,55 @@ void CDbJornal::keyPressEvent(QKeyEvent* event)
 
         if(rowList.isEmpty())
         {
-            QMessageBox::warning(this, tr("Удаление серийных номеров"), tr("Вы не выбрали ни одного серийного номера!\nПопробуйте ещё раз."));
+            if(m_db_type == DataBase::SERIAL_DB)
+            {
+                title = tr("Удаление серийных номеров");
+                message = tr("Вы не выбрали ни одного серийного номера!\nПопробуйте ещё раз.");
+            }
+            else if(m_db_type == DataBase::MODIFICATION_DB)
+            {
+                title = tr("Удаление модификаций");
+                message = tr("Вы не выбрали ни одной модификации!\nПопробуйте ещё раз.");
+            }
+            else if(m_db_type == DataBase::REVISION_DB)
+            {
+                title = tr("Удаление ревизий");
+                message = tr("Вы не выбрали ни одной ревизии!\nПопробуйте ещё раз.");
+            }
+            else if(m_db_type == DataBase::CUSTOMER_DB)
+            {
+                title = tr("Удаление заказчиков");
+                message = tr("Вы не выбрали ни одного заказчика!\nПопробуйте ещё раз.");
+            }
+
+            QMessageBox::warning(this, title, message);
             return;
         }
 
-        QString text = (rowList.count() == 1)?tr("выбранный серийный номер"):tr("выбранные серийные номера");
+        if(m_db_type == DataBase::SERIAL_DB)
+        {
+            title = tr("Удаление серийных номеров");
+            message = (rowList.count() == 1)?tr("выбранный серийный номер"):tr("выбранные серийные номера");
+        }
+        else if(m_db_type == DataBase::MODIFICATION_DB)
+        {
+            title = tr("Удаление модификаций");
+            message = (rowList.count() == 1)?tr("выбранную модификацию"):tr("выбранные модификации");
+        }
+        else if(m_db_type == DataBase::REVISION_DB)
+        {
+            title = tr("Удаление ревизий");
+            message = (rowList.count() == 1)?tr("выбранную ревизию"):tr("выбранные ревизии");
+        }
+        else if(m_db_type == DataBase::CUSTOMER_DB)
+        {
+            title = tr("Удаление заказчиков");
+            message = (rowList.count() == 1)?tr("выбранного заказчика"):tr("выбранных заказчиков");
+        }
 
         QMessageBox messageBox;
-        messageBox.setWindowTitle(tr("Удаление серийных номеров"));
-        messageBox.setText(tr("Вы действительно хотите удалить %1?").arg(text));
+        messageBox.setWindowTitle(title);
+        messageBox.setText(tr("Вы действительно хотите удалить %1?").arg(message));
         QPushButton* buttonDelete = messageBox.addButton(tr("Удалить"), QMessageBox::ActionRole);
         messageBox.setStandardButtons(QMessageBox::Cancel);
         messageBox.setButtonText(QMessageBox::Cancel, tr("Отмена"));
@@ -208,7 +272,7 @@ void CDbJornal::keyPressEvent(QKeyEvent* event)
                 QTableWidgetItem* item = ui->tableWidgetDbJournal->item(index.row(), 0);
 
                 if(item)
-                    emit deleteJournalRow(item->data(Qt::UserRole).toInt());
+                    emit deleteJournalRow(m_db_type, item->data(Qt::UserRole).toInt());
 
                 ui->tableWidgetDbJournal->removeRow(index.row());
             }

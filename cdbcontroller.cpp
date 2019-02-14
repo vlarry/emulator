@@ -141,7 +141,7 @@ CDbController::data_list_t CDbController::dataListFromTable(const QString& table
     {
         QSqlQuery query(*m_db);
 
-        if(query.exec(QString("SELECT data FROM %1;").arg(table)))
+        if(query.exec(QString("SELECT * FROM %1;").arg(table)))
         {
             while(query.next())
             {
@@ -253,10 +253,6 @@ void CDbController::deleteDataFromTable(const QString& table_name, int id)
     QSqlQuery query(*m_db);
     QString query_str = QString("DELETE FROM %1 WHERE id=%2").arg(table_name).arg(id);
 
-    if(query.exec(query_str))
-    {
-        qDebug() << "Запись успешно удалена";
-    }
-    else
-        qDebug() << "Не удалось удалить запись из БД.";
+    if(!query.exec(query_str))
+        m_last_error = m_db->lastError().text();
 }

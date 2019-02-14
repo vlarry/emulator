@@ -18,8 +18,8 @@
     {
         class CDbJornal;
     }
-    //-----------------------------
-    class CDbJornal: public QWidget
+    //------------------------------
+    class CDbJournal: public QWidget
     {
         Q_OBJECT
 
@@ -33,8 +33,8 @@
             };
 
         public:
-            explicit CDbJornal(const DataBase& db_type, QWidget* parent = Q_NULLPTR);
-            ~CDbJornal();
+            explicit CDbJournal(const DataBase& db_type, QWidget* parent = Q_NULLPTR);
+            ~CDbJournal();
             void setDataToTable(const CDbController::serial_num_list_t &list);
             void setDataToTable(const CDbController::data_list_t &list);
 
@@ -43,7 +43,7 @@
 
         signals:
             void closeJournal();
-            void deleteJournalRow(int);
+            void deleteJournalRow(DataBase, int);
 
         protected:
             void closeEvent(QCloseEvent* event);

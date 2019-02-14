@@ -995,38 +995,38 @@ void MainWindow::openDbJournal()
     {
         if(!m_db_journal_serial && action == ui->actionDbSerial)
         {
-            m_db_journal_serial = new CDbJornal(CDbJornal::DataBase::SERIAL_DB, this);
+            m_db_journal_serial = new CDbJournal(CDbJournal::DataBase::SERIAL_DB, this);
             CDbController::serial_num_list_t list = m_db_controller->serialNumberListRead();
             m_db_journal_serial->setDataToTable(list);
-            connect(m_db_journal_serial, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
-            connect(m_db_journal_serial, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            connect(m_db_journal_serial, &CDbJournal::closeJournal, this, &MainWindow::closeDbJournal);
+            connect(m_db_journal_serial, &CDbJournal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
             m_db_journal_serial->show();
         }
         else if(!m_db_journal_modification && action == ui->actionDbModification)
         {
-            m_db_journal_modification = new CDbJornal(CDbJornal::DataBase::MODIFICATION_DB, this);
+            m_db_journal_modification = new CDbJournal(CDbJournal::DataBase::MODIFICATION_DB, this);
             CDbController::data_list_t list = m_db_controller->dataListFromTable("modification");
             m_db_journal_modification->setDataToTable(list);
-            connect(m_db_journal_modification, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
-            connect(m_db_journal_modification, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            connect(m_db_journal_modification, &CDbJournal::closeJournal, this, &MainWindow::closeDbJournal);
+            connect(m_db_journal_modification, &CDbJournal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
             m_db_journal_modification->show();
         }
         else if(!m_db_journal_revision && action == ui->actionDbRevision)
         {
-            m_db_journal_revision = new CDbJornal(CDbJornal::DataBase::REVISION_DB, this);
+            m_db_journal_revision = new CDbJournal(CDbJournal::DataBase::REVISION_DB, this);
             CDbController::data_list_t list = m_db_controller->dataListFromTable("revision");
             m_db_journal_revision->setDataToTable(list);
-            connect(m_db_journal_revision, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
-            connect(m_db_journal_revision, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            connect(m_db_journal_revision, &CDbJournal::closeJournal, this, &MainWindow::closeDbJournal);
+            connect(m_db_journal_revision, &CDbJournal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
             m_db_journal_revision->show();
         }
         else if(!m_db_journal_customer && action == ui->actionDbCustomer)
         {
-            m_db_journal_customer = new CDbJornal(CDbJornal::DataBase::CUSTOMER_DB, this);
+            m_db_journal_customer = new CDbJournal(CDbJournal::DataBase::CUSTOMER_DB, this);
             CDbController::data_list_t list = m_db_controller->dataListFromTable("customer");
             m_db_journal_customer->setDataToTable(list);
-            connect(m_db_journal_customer, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
-            connect(m_db_journal_customer, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            connect(m_db_journal_customer, &CDbJournal::closeJournal, this, &MainWindow::closeDbJournal);
+            connect(m_db_journal_customer, &CDbJournal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
             m_db_journal_customer->show();
         }
     }
@@ -1034,35 +1034,35 @@ void MainWindow::openDbJournal()
 //-------------------------------
 void MainWindow::closeDbJournal()
 {
-    CDbJornal *journal = qobject_cast<CDbJornal*>(sender());
+    CDbJournal *journal = qobject_cast<CDbJournal*>(sender());
 
     if(journal)
     {
         if(journal == m_db_journal_serial)
         {
-            disconnect(m_db_journal_serial, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
-            disconnect(m_db_journal_serial, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            disconnect(m_db_journal_serial, &CDbJournal::closeJournal, this, &MainWindow::closeDbJournal);
+            disconnect(m_db_journal_serial, &CDbJournal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
             delete m_db_journal_serial;
             m_db_journal_serial = Q_NULLPTR;
         }
         else if(journal == m_db_journal_modification)
         {
-            disconnect(m_db_journal_modification, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
-            disconnect(m_db_journal_modification, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            disconnect(m_db_journal_modification, &CDbJournal::closeJournal, this, &MainWindow::closeDbJournal);
+            disconnect(m_db_journal_modification, &CDbJournal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
             delete m_db_journal_modification;
             m_db_journal_modification = Q_NULLPTR;
         }
         else if(journal == m_db_journal_revision)
         {
-            disconnect(m_db_journal_revision, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
-            disconnect(m_db_journal_revision, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            disconnect(m_db_journal_revision, &CDbJournal::closeJournal, this, &MainWindow::closeDbJournal);
+            disconnect(m_db_journal_revision, &CDbJournal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
             delete m_db_journal_revision;
             m_db_journal_revision = Q_NULLPTR;
         }
         else if(journal == m_db_journal_customer)
         {
-            disconnect(m_db_journal_customer, &CDbJornal::closeJournal, this, &MainWindow::closeDbJournal);
-            disconnect(m_db_journal_customer, &CDbJornal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
+            disconnect(m_db_journal_customer, &CDbJournal::closeJournal, this, &MainWindow::closeDbJournal);
+            disconnect(m_db_journal_customer, &CDbJournal::deleteJournalRow, this, &MainWindow::deleteDataFromDb);
             delete m_db_journal_customer;
             m_db_journal_customer = Q_NULLPTR;
         }
@@ -1209,10 +1209,21 @@ void MainWindow::processDiscretInputSet()
     if(!setIndividual.isEmpty())
         send("0x3F", setIndividual);
 }
-//-----------------------------------------
-void MainWindow::deleteDataFromDb(int id)
+//---------------------------------------------------------------------
+void MainWindow::deleteDataFromDb(CDbJournal::DataBase db_type, int id)
 {
-    m_db_controller->deleteDataFromTable("serial", id);
+    QString table_name;
+
+    if(db_type == CDbJournal::DataBase::SERIAL_DB)
+        table_name = "serial";
+    else if(db_type == CDbJournal::DataBase::MODIFICATION_DB)
+        table_name = "modification";
+    else if(db_type == CDbJournal::DataBase::REVISION_DB)
+        table_name = "revision";
+    else if(db_type == CDbJournal::DataBase::CUSTOMER_DB)
+        table_name = "customer";
+
+    m_db_controller->deleteDataFromTable(table_name, id);
 }
 //----------------------------------
 void MainWindow::refreshSerialPort()
