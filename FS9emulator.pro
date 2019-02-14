@@ -59,7 +59,6 @@ FORMS    += mainwindow.ui \
     configurationmodulewidget.ui \
     setinput.ui \
     inputhelp.ui \
-    bzuinterface.ui \
     dbjornal.ui \
     appendinfodialog.ui \
     cinterfacemik.ui

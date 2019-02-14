@@ -36,6 +36,9 @@
             void showEvent(QShowEvent* event);
 
         private:
+            void init();
+
+        private:
             Ui::CInterfaceMIK *ui;
             QVector<QKey*>     m_keyboard;
             QVector<QLed*>     m_led;
