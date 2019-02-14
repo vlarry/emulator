@@ -58,9 +58,6 @@ QCommand::~QCommand()
 //-----------------------------------------
 void QCommand::showEvent(QShowEvent* event)
 {
-    this->setGeometry(m_parent->x(), m_parent->y(), this->maximumWidth(), m_parent->height()/3);
-    this->move(m_parent->x(), m_parent->y());
-
     QWidget::showEvent(event);
 }
 //-------------------------------------------

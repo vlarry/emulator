@@ -730,9 +730,13 @@ void MainWindow::keyReleaseEvent(QKeyEvent *evt)
 //-----------------------------------------
 void MainWindow::showEvent(QShowEvent* evt)
 {
+    QMainWindow::showEvent(evt);
+
     if(m_command == Q_NULLPTR)
     {
         m_command = new QCommand(this);
+        QRect widgetRect = m_command->geometry();
+        widgetRect.moveTopLeft(m_command->parentWidget()->mapToGlobal(widgetRect.topLeft()));
         m_command->hide();
     }
 
@@ -747,8 +751,6 @@ void MainWindow::showEvent(QShowEvent* evt)
     ui->twPeriphery->setCurrentIndex(0);
     addrChanged(ui->sbDeviceAddress->value());
     useDeviceAddress(false);
-
-    QMainWindow::showEvent(evt);
 }
 //----------------------------
 void MainWindow::fileAinOpen()
