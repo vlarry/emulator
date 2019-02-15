@@ -117,3 +117,20 @@ void CSetInput::groupEnabled(bool state)
     if(checkBox)
         checkBox->setEnabled(state);
 }
+/*!
+ * \brief CSetInput::setInputCount
+ * \param addr Количество входов исходя из адреса устройства
+ */
+void CSetInput::setInputCount(int addr)
+{
+    if(addr == 0) // МДВВ-01 - 12 входов
+    {
+        ui->checkBoxInput_11->setEnabled(true);
+        ui->checkBoxInput_12->setEnabled(true);
+    }
+    else // МДВВ-02 - 10 входов
+    {
+        ui->checkBoxInput_11->setDisabled(true);
+        ui->checkBoxInput_12->setDisabled(true);
+    }
+}

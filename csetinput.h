@@ -24,6 +24,7 @@
         public slots:
             void typeInput(const QString& text);
             void groupEnabled(bool state);
+            void setInputCount(int addr);
 
         signals:
             void setWrite();

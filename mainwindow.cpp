@@ -1181,7 +1181,7 @@ void MainWindow::processDiscretInputSet()
     if(!setGeneral.isEmpty())
     {
         send("0x3E", setGeneral);
-        Sleep(100);
+        Sleep(500);
     }
 
     if(!setIndividual.isEmpty())
@@ -1431,6 +1431,8 @@ void MainWindow::addrChanged(int addr)
         ui->groupBoxOutputs->setEnabled(true);
         ui->groupBoxDSDIN->show();
 
+        m_set_intput_widget->setInputCount(0);
+
         out_count = 6;
 
         ui->stackedWidgetPeriphery->setCurrentIndex(0);
@@ -1476,6 +1478,8 @@ void MainWindow::addrChanged(int addr)
         ui->groupBoxMDVV_1_11_12->hide();
         ui->groupBoxInputs->setEnabled(true);
         ui->groupBoxOutputs->setEnabled(true);
+
+        m_set_intput_widget->setInputCount(1);
 
         out_count = 7;
 
