@@ -11,7 +11,7 @@ void QKey::setState(bool state)
 {
     m_state = state;
 
-    QString color_str = ((m_state)?"QToolButton { background: green }":"QToolButton { background: gray; }");
+    QString color_str = ((m_state)?"QToolButton { border: 3px solid red; }":"QToolButton { border: 0px; }");
 
     this->setStyleSheet(color_str);
 }
