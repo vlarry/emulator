@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>413</width>
-    <height>542</height>
+    <height>571</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Конфигурирование модуля</string>
+   <string>Запись серийного номера</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>

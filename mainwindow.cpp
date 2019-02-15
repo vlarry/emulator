@@ -242,10 +242,10 @@ void MainWindow::initDbController(CDbController* controller)
             listModification << data.text;
 
         for(const CDbController::data_t& data: dataListRevision)
-            listModification << data.text;
+            listRevision << data.text;
 
         for(const CDbController::data_t& data: dataListCustomer)
-            listModification << data.text;
+            listCustomer << data.text;
 
         m_conf_widget->initList(listModification, listRevision, listCustomer);
     }
