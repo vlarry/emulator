@@ -1392,7 +1392,9 @@ void MainWindow::addrChanged(int addr)
         ui->groupDevices->setTitle(tr("Устройство МДВВ-01"));
         ui->groupBoxAIN_1->setTitle(tr("Напряжение"));
         ui->groupBoxAIN_2->setTitle(tr("Ток"));
-        ui->groupBoxAIN_3->setTitle(tr("Температура"));
+        ui->groupBoxAIN_3->setTitle(tr("Температура ЦПУ"));
+        ui->groupBoxAIN_4->setTitle(tr("Температура блока"));
+        ui->groupBoxAIN_4->show();
         ui->groupBoxInputMDVV_1_1_4->setTitle(tr("Искробезопасные входы"));
         ui->groupBoxInputMDVV_1_5->setTitle(tr("С запом."));
         ui->groupBoxInput_6_10->setTitle(tr("Обычные"));
@@ -1430,6 +1432,7 @@ void MainWindow::addrChanged(int addr)
         ui->groupBoxInputs->setEnabled(true);
         ui->groupBoxOutputs->setEnabled(true);
         ui->groupBoxDSDIN->show();
+        ui->pushButtonDSDINRead->show();
 
         m_set_intput_widget->setInputCount(0);
 
@@ -1442,7 +1445,8 @@ void MainWindow::addrChanged(int addr)
         ui->groupDevices->setTitle(tr("Устройство МДВВ-02"));
         ui->groupBoxAIN_1->setTitle(tr("Температура"));
         ui->groupBoxAIN_2->setTitle(tr("Температура"));
-        ui->groupBoxAIN_3->setTitle(tr("Температура"));
+        ui->groupBoxAIN_3->setTitle(tr("Температура ЦПУ"));
+        ui->groupBoxAIN_4->hide();
         ui->groupBoxInputMDVV_1_1_4->setTitle("");
         ui->groupBoxInputMDVV_1_5->setTitle("");
         ui->groupBoxInput_6_10->setTitle("");
@@ -1478,6 +1482,7 @@ void MainWindow::addrChanged(int addr)
         ui->groupBoxMDVV_1_11_12->hide();
         ui->groupBoxInputs->setEnabled(true);
         ui->groupBoxOutputs->setEnabled(true);
+        ui->pushButtonDSDINRead->hide();
 
         m_set_intput_widget->setInputCount(1);
 
