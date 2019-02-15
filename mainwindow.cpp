@@ -106,6 +106,8 @@ MainWindow::MainWindow(QWidget* parent):
 
     addrChanged(ui->sbDeviceAddress->value());
     useDeviceAddress(false);
+
+    ui->gboxAutorepeatInputMIK->setEnabled(true);
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -144,6 +146,7 @@ void MainWindow::initConnect()
     connect(m_output_dev.at(11), SIGNAL(stateChanged(quint8, bool)), this, SLOT(outputStateChanged(quint8, bool)));
 
     connect(ui->cboxRepeatInputs, SIGNAL(clicked(bool)), this, SLOT(autoRepeatInputs(bool)));
+    connect(ui->cboxRepeatInputsMIK, SIGNAL(clicked(bool)), this, SLOT(autoRepeatInputs(bool)));
     connect(ui->cboxRepeatAIN, SIGNAL(clicked(bool)), this, SLOT(autoRepeatAIN(bool)));
     connect(m_timerAutoRepeatInput, SIGNAL(timeout()), this, SLOT(autoRepeatTimInputs()));
     connect(m_timerAutoRepeatAIN, SIGNAL(timeout()), this, SLOT(autoRepeatTimAIN()));
@@ -1540,7 +1543,12 @@ void MainWindow::autoRepeatInputs(bool state)
 {
     if(state)
     {
-        m_timerAutoRepeatInput->start(ui->sbRepeatInputs->value());
+        int time = ui->sbRepeatInputs->value();
+
+        if(ui->sbDeviceAddress->value() == MIK_01)
+            time = ui->sbRepeatInputsMIK->value();
+
+        m_timerAutoRepeatInput->start(time);
     }
     else
     {
@@ -1565,14 +1573,17 @@ void MainWindow::autoRepeatTimInputs()
     if(ui->sbDeviceAddress->value() != MIK_01) // устройство не МИК-01
     {
         send("0x00"); // чтение дискретных каналов входов
+
+        if(ui->cboxRepeatInputs->isChecked())
+            m_timerAutoRepeatInput->start(ui->sbRepeatInputs->value());
     }
     else // устройство МИК-01
     {
         send("0x03"); // чтение регистра расширения дискретных каналов входов (клавиатура)
-    }
 
-    if(ui->cboxRepeatInputs->isChecked())
-        m_timerAutoRepeatInput->start(ui->sbRepeatInputs->value());
+        if(ui->cboxRepeatInputsMIK->isChecked())
+            m_timerAutoRepeatInput->start(ui->sbRepeatInputsMIK->value());
+    }
 }
 //---------------------------------
 void MainWindow::autoRepeatTimAIN()
