@@ -87,6 +87,25 @@ MainWindow::MainWindow(QWidget* parent):
     ui->pushButtonInputSetWrite->setProperty("COMMAND", "0x3E"); // также обрабатывает команду 0x3F
     ui->pushButtonDSDINRead->setProperty("COMMAND", "0x1F");
     ui->pushButtonLedStateWrite->setProperty("COMMAND", "0x05"); // запись состояний светодиодов МИК-01
+
+    if(m_command == Q_NULLPTR)
+    {
+        m_command = new QCommand(this);
+        QRect widgetRect = m_command->geometry();
+        widgetRect.moveTopLeft(m_command->parentWidget()->mapToGlobal(widgetRect.topLeft()));
+        m_command->hide();
+    }
+
+    initSerialPort();
+    initIO();
+    initConnect();
+    initDbController(m_db_controller);
+
+    loadSettings();
+    refreshSerialPort();
+
+    addrChanged(ui->sbDeviceAddress->value());
+    useDeviceAddress(false);
 }
 //-----------------------
 MainWindow::~MainWindow()
@@ -130,7 +149,7 @@ void MainWindow::initConnect()
     connect(m_timerAutoRepeatAIN, SIGNAL(timeout()), this, SLOT(autoRepeatTimAIN()));
     connect(m_timerTimeoutQuery, SIGNAL(timeout()), this, SLOT(timeoutTim()));
 
-    connect(ui->dwTerminal, SIGNAL(visibilityChanged(bool)), this, SLOT(visiblityTerminal(bool)));
+//    connect(ui->dwTerminal, SIGNAL(visibilityChanged(bool)), this, SLOT(visiblityTerminal(bool)));
     connect(ui->actionTerminal, &QAction::triggered, this, &MainWindow::visiblityTerminal);
     connect(ui->actionCommand, &QAction::triggered, this, &MainWindow::visiblityCommand);
     connect(m_command, &QCommand::doubleClickCmd, this, &MainWindow::processCmdSend);
@@ -723,31 +742,6 @@ void MainWindow::keyReleaseEvent(QKeyEvent *evt)
 {
     CIODevice::set_modifier(0);
     QMainWindow::keyReleaseEvent(evt);
-}
-//-----------------------------------------
-void MainWindow::showEvent(QShowEvent* evt)
-{
-    QMainWindow::showEvent(evt);
-
-    if(m_command == Q_NULLPTR)
-    {
-        m_command = new QCommand(this);
-        QRect widgetRect = m_command->geometry();
-        widgetRect.moveTopLeft(m_command->parentWidget()->mapToGlobal(widgetRect.topLeft()));
-        m_command->hide();
-    }
-
-    initSerialPort();
-    initIO();
-    initConnect();
-    initDbController(m_db_controller);
-
-    loadSettings();
-    refreshSerialPort();
-
-    ui->twPeriphery->setCurrentIndex(0);
-    addrChanged(ui->sbDeviceAddress->value());
-    useDeviceAddress(false);
 }
 //----------------------------
 void MainWindow::fileAinOpen()

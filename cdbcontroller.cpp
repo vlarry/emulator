@@ -164,7 +164,7 @@ void CDbController::createDb()
                         "date STRING NOT NULL, "                             // дата записи серийного номера
                         "time STRING NOT NULL, "                             // время записи серийного номера
                         "dev_code INTEGER NOT NULL, "                        // код изделия (0х48 - МДВВ-01, 0х49 - МДВВ-02, 0х50 - МИК-01)
-                        "dev_num INTEGER NOT NULL, "                         // номер устройства (0 - 999)
+                        "dev_num INTEGER NOT NULL UNIQUE, "                  // номер устройства (0 - 999)
                         "dev_party INTEGER NOT NULL, "                       // номер в партии (0 - 99)
                         "dev_firmware_var INTEGER NOT NULL, "                // вариант прошивки (0 - 99)
                         "dev_firmware_date STRING NOT NULL, "                // дата прошивки
