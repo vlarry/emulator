@@ -267,7 +267,7 @@ void CInterfaceMIK::init()
     m_keyboard.append(key_2);
     m_keyboard.append(key_9);
     m_keyboard.append(key_3);
-    m_keyboard.append(key_on);
+    m_keyboard.append(key_off);
     m_keyboard.append(key_up);
     m_keyboard.append(key_ok);
     m_keyboard.append(key_right);
@@ -277,7 +277,7 @@ void CInterfaceMIK::init()
     m_keyboard.append(key_0);
     m_keyboard.append(key_6);
     m_keyboard.append(key_dp);
-    m_keyboard.append(key_off);
+    m_keyboard.append(key_on);
     m_keyboard.append(key_left);
     m_keyboard.append(key_down);
     m_keyboard.append(key_reset);
@@ -295,7 +295,7 @@ void CInterfaceMIK::init()
     led_on->setID(10);
     led_off->setID(11);
 
-    led_off->setColor(QLed::LED_GREEN);
+    led_on->setColor(QLed::LED_GREEN);
     led_protection->setColor(QLed::LED_YELLOW);
 
     m_led.append(led_1);
