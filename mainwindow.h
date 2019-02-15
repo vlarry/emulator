@@ -127,7 +127,6 @@
             void visiblityTerminal(bool visible);
             void visiblityCommand(bool visible);
             void configurationWindow();
-            void visiblitySerialNumber(bool state = false);
             void discretInputHelp();
             void setupExtandOut();
             void timeoutCmdBindRead();
@@ -138,6 +137,7 @@
             void ctrlInterface(bool state);
             void autoAddressSelect();
             void processCmdFavorite();
+            void processCmdSend(const QString &cmd);
             void processDiscretInputSet();
             void deleteDataFromDb(CDbJournal::DataBase db_type, int id);
     };

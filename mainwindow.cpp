@@ -133,7 +133,7 @@ void MainWindow::initConnect()
     connect(ui->dwTerminal, SIGNAL(visibilityChanged(bool)), this, SLOT(visiblityTerminal(bool)));
     connect(ui->actionTerminal, &QAction::triggered, this, &MainWindow::visiblityTerminal);
     connect(ui->actionCommand, &QAction::triggered, this, &MainWindow::visiblityCommand);
-    connect(m_command, &QCommand::doubleClickCmd, this, &MainWindow::send);
+    connect(m_command, &QCommand::doubleClickCmd, this, &MainWindow::processCmdSend);
     connect(m_command, &QCommand::closeCommand, this, &MainWindow::visiblityCommand);
 
     connect(ui->actionDbSerial, &QAction::triggered, this, &MainWindow::openDbJournal);
@@ -141,6 +141,7 @@ void MainWindow::initConnect()
     connect(ui->actionDbRevision, &QAction::triggered, this, &MainWindow::openDbJournal);
     connect(ui->actionDbCustomer, &QAction::triggered, this, &MainWindow::openDbJournal);
     connect(m_conf_widget, &CConfigurationModuleWidget::newValueAppend, this, &MainWindow::writeDataToDb);
+    connect(m_conf_widget, &CConfigurationModuleWidget::accepted, this, &MainWindow::configurationWindow);
     connect(ui->checkBoxUseDeviceAddress, &QCheckBox::clicked, this, &MainWindow::useDeviceAddress);
 
     connect(ui->pushButtonIDRead, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
@@ -713,10 +714,6 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
                 ui->pteConsole->clear();
             }
         break;
-
-        case Qt::Key_F7:
-            configurationWindow();
-        break;
     }
 
     QMainWindow::keyPressEvent(event);
@@ -851,69 +848,30 @@ QString MainWindow::getCmdFromData(const QByteArray& data)
 //------------------------------------
 void MainWindow::configurationWindow()
 {
-    if(!m_conf_widget->isHidden())
+    CDbController::serial_num_t sn;
+
+    sn.dev_num = m_conf_widget->moduleNumber(CConfigurationModuleWidget::NEW);
+    sn.dev_party = m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::NEW);
+    sn.dev_firmware_var = m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::NEW);
+
+    QByteArray key = m_conf_widget->moduleKeyCurrent();
+    QByteArray key_empty = QByteArray::fromHex(QString("00000000").toUtf8());
+
+    if(key == key_empty || m_conf_widget->moduleKeyCurrent().isEmpty())
     {
-        send("0x1E");
-        Sleep(100); // засыпаем на 10мс, чтобы данные были прочитаны и записаны
-
-        CDbController::serial_num_t sn = m_db_controller->serialNumberRead();
-
-        m_conf_widget->setModuleType(m_conf_widget->moduleType(CConfigurationModuleWidget::CURRENT), CConfigurationModuleWidget::NEW);
-        m_conf_widget->setModuleFirmwareDate(QDate::currentDate().toString("dd.MM.yyyy"), CConfigurationModuleWidget::NEW);
-
-        if(sn.dev_code != -1) // если данные в базе присутствуют
-        {
-            m_conf_widget->setModuleNumber(sn.dev_num + 1, CConfigurationModuleWidget::NEW);
-            m_conf_widget->setModuleNumberParty(sn.dev_party, CConfigurationModuleWidget::NEW);
-            m_conf_widget->setModuleFirmwareVariant(sn.dev_firmware_var, CConfigurationModuleWidget::NEW);
-        }
-        else // данных в базе нет
-        {
-            m_conf_widget->setModuleNumber(m_conf_widget->moduleNumber(CConfigurationModuleWidget::CURRENT) + 1, CConfigurationModuleWidget::NEW);
-            m_conf_widget->setModuleNumberParty(m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::CURRENT), CConfigurationModuleWidget::NEW);
-            m_conf_widget->setModuleFirmwareVariant(m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::CURRENT), CConfigurationModuleWidget::NEW);
-        }
-
-        if(m_conf_widget->exec() == QDialog::Accepted)
-        {
-            sn.dev_num      = m_conf_widget->moduleNumber(CConfigurationModuleWidget::NEW);
-            sn.dev_party    = m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::NEW);
-            sn.dev_firmware_var = m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::NEW);
-
-            QByteArray key = m_conf_widget->moduleKeyCurrent();
-            QByteArray key_empty = QByteArray::fromHex(QString("00000000").toUtf8());
-
-            if(key == key_empty ||
-               m_conf_widget->moduleKeyCurrent().isEmpty())
-            {
-                QMessageBox::warning(this, tr("Запись серийного в модуль"), tr("Не валидный ключ разблокировки записи!"));
-                return;
-            }
-
-            if(m_db_controller->findEqualData(sn))
-            {
-                QMessageBox::warning(this, tr("Запись серийного номера БД"), tr("Такой серийный номер уже существует!"));
-                return;
-            }
-
-            QByteArray sn_data = formatSerialNumber();
-
-            send("0x3A", sn_data);
-        }
+        QMessageBox::warning(this, tr("Запись серийного в модуль"), tr("Не валидный ключ разблокировки записи!"));
+        return;
     }
-}
-//------------------------------------------------
-void MainWindow::visiblitySerialNumber(bool state)
-{
-    if(!state)
+
+    if(m_db_controller->findEqualData(sn))
     {
-        if(m_conf_widget->isVisible())
-            m_conf_widget->hide();
+        QMessageBox::warning(this, tr("Запись серийного номера БД"), tr("Такой серийный номер уже существует!"));
+        return;
     }
-    else
-    {
-        configurationWindow();
-    }
+
+    QByteArray sn_data = formatSerialNumber();
+
+    send("0x3A", sn_data);
 }
 //---------------------------------
 void MainWindow::discretInputHelp()
@@ -1175,26 +1133,47 @@ void MainWindow::processCmdFavorite()
     if(button)
     {
         QString cmd = button->property("COMMAND").toString();
-
-        if(cmd == "0x05")
-        {
-            setupExtandOut(); // запись регистра расширения дискретных каналов выходов
-        }
-        else if(cmd == "0x3A") // если команда "Запись серийного номера, то открываем дополнительное окно (команду не отправляем)
-        {
-            if(m_conf_widget->isHidden())
-            {
-                m_conf_widget->show();
-                configurationWindow();
-            }
-        }
-        else if(cmd == "0x3E" || cmd == "0x3F") // если команда "Настройки фильтра" или "Настройка входов", то открываем дополнительное окно (команду не отправляем)
-        {
-            m_set_intput_widget->show();
-        }
-        else
-            send(cmd);
+        processCmdSend(cmd);
     }
+}
+//-------------------------------------------------
+void MainWindow::processCmdSend(const QString &cmd)
+{
+    if(cmd == "0x05")
+    {
+        setupExtandOut(); // запись регистра расширения дискретных каналов выходов
+    }
+    else if(cmd == "0x3A") // если команда "Запись серийного номера, то открываем дополнительное окно (команду не отправляем)
+    {
+        send("0x1E");
+        Sleep(100); // засыпаем на 10мс, чтобы данные были прочитаны и записаны
+
+        CDbController::serial_num_t sn = m_db_controller->serialNumberRead();
+
+        m_conf_widget->setModuleType(m_conf_widget->moduleType(CConfigurationModuleWidget::CURRENT), CConfigurationModuleWidget::NEW);
+        m_conf_widget->setModuleFirmwareDate(QDate::currentDate().toString("dd.MM.yyyy"), CConfigurationModuleWidget::NEW);
+
+        if(sn.dev_code != -1) // если данные в базе присутствуют
+        {
+            m_conf_widget->setModuleNumber(sn.dev_num + 1, CConfigurationModuleWidget::NEW);
+            m_conf_widget->setModuleNumberParty(sn.dev_party, CConfigurationModuleWidget::NEW);
+            m_conf_widget->setModuleFirmwareVariant(sn.dev_firmware_var, CConfigurationModuleWidget::NEW);
+        }
+        else // данных в базе нет
+        {
+            m_conf_widget->setModuleNumber(m_conf_widget->moduleNumber(CConfigurationModuleWidget::CURRENT) + 1, CConfigurationModuleWidget::NEW);
+            m_conf_widget->setModuleNumberParty(m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::CURRENT), CConfigurationModuleWidget::NEW);
+            m_conf_widget->setModuleFirmwareVariant(m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::CURRENT), CConfigurationModuleWidget::NEW);
+        }
+
+        m_conf_widget->show();
+    }
+    else if(cmd == "0x3E" || cmd == "0x3F") // если команда "Настройки фильтра" или "Настройка входов", то открываем дополнительное окно (команду не отправляем)
+    {
+        m_set_intput_widget->show();
+    }
+    else
+        send(cmd);
 }
 //---------------------------------------
 void MainWindow::processDiscretInputSet()

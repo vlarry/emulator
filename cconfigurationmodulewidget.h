@@ -3,6 +3,7 @@
     //----------------
     #include <QDialog>
     #include <QDate>
+    #include <QDebug>
     #include "cappendinfodialog.h"
     //----------
     namespace Ui

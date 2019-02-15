@@ -39,8 +39,6 @@ CConfigurationModuleWidget::CConfigurationModuleWidget(QWidget* parent):
     connect(ui->toolButtonModificationAppend, &QToolButton::clicked, this, &CConfigurationModuleWidget::appendText);
     connect(ui->toolButtonCustomerAppend, &QToolButton::clicked, this, &CConfigurationModuleWidget::appendText);
     connect(ui->toolButtonRevisionAppend, &QToolButton::clicked, this, &CConfigurationModuleWidget::appendText);
-
-
 }
 //-------------------------------------------------------
 CConfigurationModuleWidget::~CConfigurationModuleWidget()
