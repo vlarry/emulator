@@ -13,6 +13,7 @@
     #include <QTextStream>
     #include <QDir>
     #include <QShowEvent>
+    #include <QCloseEvent>
     #include <QEvent>
     #include <QScrollBar>
     #include "qcmd.h"
@@ -107,6 +108,7 @@
             QByteArray formatSerialNumber(); // форматирование серийного номера
             void requestWrite(const QByteArray& data);
             QString getCmdFromData(const QByteArray& data);
+            void windowDestroyed();
 
         protected:
             void keyPressEvent(QKeyEvent *event);

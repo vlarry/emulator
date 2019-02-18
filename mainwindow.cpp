@@ -110,15 +110,6 @@ MainWindow::MainWindow(QWidget* parent):
 //-----------------------
 MainWindow::~MainWindow()
 {
-    if(m_file_ain->isOpen())
-        m_file_ain->close();
-
-    if(m_db_controller)
-    {
-        delete m_db_controller;
-        m_db_controller = Q_NULLPTR;
-    }
-
     delete ui;
 }
 //----------------------------
@@ -714,6 +705,8 @@ void MainWindow::saveSettings()
 void MainWindow::closeEvent(QCloseEvent* evt)
 {
     saveSettings();
+    windowDestroyed();
+
     QMainWindow::closeEvent(evt);
 }
 //----------------------------------------------
@@ -838,6 +831,42 @@ QString MainWindow::getCmdFromData(const QByteArray& data)
 
     return cmd;
 }
+//--------------------------
+void MainWindow::windowDestroyed()
+{
+    if(m_file_ain->isOpen())
+        m_file_ain->close();
+
+    if(m_db_journal_serial)
+    {
+        delete m_db_journal_serial;
+        m_db_journal_serial = Q_NULLPTR;
+    }
+
+    if(m_db_journal_modification)
+    {
+        delete m_db_journal_modification;
+        m_db_journal_modification = Q_NULLPTR;
+    }
+
+    if(m_db_journal_revision)
+    {
+        delete m_db_journal_revision;
+        m_db_journal_revision = Q_NULLPTR;
+    }
+
+    if(m_db_journal_customer)
+    {
+        delete m_db_journal_customer;
+        m_db_journal_customer = Q_NULLPTR;
+    }
+
+    if(m_db_controller)
+    {
+        delete m_db_controller;
+        m_db_controller = Q_NULLPTR;
+    }
+}
 //------------------------------------
 void MainWindow::configurationWindow()
 {
@@ -948,7 +977,7 @@ void MainWindow::openDbJournal()
     {
         if(!m_db_journal_serial && action == ui->actionDbSerial)
         {
-            m_db_journal_serial = new CDbJournal(CDbJournal::DataBase::SERIAL_DB, this);
+            m_db_journal_serial = new CDbJournal(CDbJournal::DataBase::SERIAL_DB);
             CDbController::serial_num_list_t list = m_db_controller->serialNumberListRead();
             m_db_journal_serial->setDataToTable(list);
             connect(m_db_journal_serial, &CDbJournal::closeJournal, this, &MainWindow::closeDbJournal);
@@ -957,7 +986,7 @@ void MainWindow::openDbJournal()
         }
         else if(!m_db_journal_modification && action == ui->actionDbModification)
         {
-            m_db_journal_modification = new CDbJournal(CDbJournal::DataBase::MODIFICATION_DB, this);
+            m_db_journal_modification = new CDbJournal(CDbJournal::DataBase::MODIFICATION_DB);
             CDbController::data_list_t list = m_db_controller->dataListFromTable("modification");
             m_db_journal_modification->setDataToTable(list);
             connect(m_db_journal_modification, &CDbJournal::closeJournal, this, &MainWindow::closeDbJournal);
@@ -966,7 +995,7 @@ void MainWindow::openDbJournal()
         }
         else if(!m_db_journal_revision && action == ui->actionDbRevision)
         {
-            m_db_journal_revision = new CDbJournal(CDbJournal::DataBase::REVISION_DB, this);
+            m_db_journal_revision = new CDbJournal(CDbJournal::DataBase::REVISION_DB);
             CDbController::data_list_t list = m_db_controller->dataListFromTable("revision");
             m_db_journal_revision->setDataToTable(list);
             connect(m_db_journal_revision, &CDbJournal::closeJournal, this, &MainWindow::closeDbJournal);
@@ -975,7 +1004,7 @@ void MainWindow::openDbJournal()
         }
         else if(!m_db_journal_customer && action == ui->actionDbCustomer)
         {
-            m_db_journal_customer = new CDbJournal(CDbJournal::DataBase::CUSTOMER_DB, this);
+            m_db_journal_customer = new CDbJournal(CDbJournal::DataBase::CUSTOMER_DB);
             CDbController::data_list_t list = m_db_controller->dataListFromTable("customer");
             m_db_journal_customer->setDataToTable(list);
             connect(m_db_journal_customer, &CDbJournal::closeJournal, this, &MainWindow::closeDbJournal);
