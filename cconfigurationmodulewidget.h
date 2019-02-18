@@ -30,8 +30,6 @@
             int        moduleNumberParty(type_t type) const;
             int        moduleFirmwareVariant(type_t type) const;
             QString    moduleFirmwareDate(type_t type) const;
-            QByteArray moduleKeyCurrent() const;
-            QByteArray moduleKeyNew() const;
             QString    moduleModification() const;
             QString    moduleRevision() const;
             QString    moduleCustomer() const;
@@ -52,9 +50,6 @@
         protected:
             void showEvent(QShowEvent* event);
             void close();
-
-        private slots:
-            void newKeyStateChanged(bool state);
 
         private:
             Ui::CConfigurationModuleWidget* ui;

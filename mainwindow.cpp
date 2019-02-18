@@ -781,8 +781,8 @@ bool MainWindow::is_blockSend()
 //-----------------------------------------
 QByteArray MainWindow::formatSerialNumber()
 {
-    QByteArray keyCurrent   = m_conf_widget->moduleKeyCurrent();
-    QByteArray keyNew       = m_conf_widget->moduleKeyNew();
+    QByteArray keyCurrent   = QByteArray::fromHex(QString("AABBCCDD").toUtf8());
+    QByteArray keyNew       = QByteArray::fromHex(QString("00000000").toUtf8());
     int        num          = m_conf_widget->moduleNumber(CConfigurationModuleWidget::NEW);
     int        numParty     = m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::NEW);
     int        firmwareVar  = m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::NEW);
@@ -875,15 +875,6 @@ void MainWindow::configurationWindow()
     sn.dev_num = m_conf_widget->moduleNumber(CConfigurationModuleWidget::NEW);
     sn.dev_party = m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::NEW);
     sn.dev_firmware_var = m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::NEW);
-
-    QByteArray key = m_conf_widget->moduleKeyCurrent();
-    QByteArray key_empty = QByteArray::fromHex(QString("00000000").toUtf8());
-
-    if(key == key_empty || m_conf_widget->moduleKeyCurrent().isEmpty())
-    {
-        QMessageBox::warning(this, tr("Запись серийного номера в модуль"), tr("Не валидный ключ разблокировки записи!"));
-        return;
-    }
 
     if(m_db_controller->findEqualData(sn.dev_num))
     {

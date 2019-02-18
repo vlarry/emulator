@@ -7,27 +7,22 @@ CConfigurationModuleWidget::CConfigurationModuleWidget(QWidget* parent):
 {
     ui->setupUi(this);
 
-    ui->lineEditModuleKeyCurrent->setInputMask("HH HH HH HH");
-    ui->lineEditModuleKeyNew->setInputMask("HH HH HH HH");
     ui->lineEditModuleNumberCurrent->setValidator(new QIntValidator(0, 9999));
     ui->lineEditModuleNumberPartyCurrent->setValidator(new QIntValidator(0, 99));
     ui->lineEditModuleFirmwareVariantCurrent->setValidator(new QIntValidator(0, 99));
 
-    ui->lineEditModuleKeyCurrent->setText("00000000");
-    ui->lineEditModuleKeyNew->setText("00000000");
+
     ui->lineEditModuleNumberCurrent->setText("0000");
     ui->lineEditModuleNumberPartyCurrent->setText("00");
     ui->lineEditModuleFirmwareVariantCurrent->setText("00");
     ui->lineEditModuleFirmwareDateCurrent->setText(QDate::currentDate().toString("dd.MM.yyyy"));
 
-    ui->lineEditModuleKeyCurrent->setInputMask("HH HH HH HH");
-    ui->lineEditModuleKeyNew->setInputMask("HH HH HH HH");
+
     ui->lineEditModuleNumberNew->setValidator(new QIntValidator(0, 9999));
     ui->lineEditModuleNumberPartyNew->setValidator(new QIntValidator(0, 99));
     ui->lineEditModuleFirmwareVariantNew->setValidator(new QIntValidator(0, 99));
 
-    ui->lineEditModuleKeyCurrent->setText("00000000");
-    ui->lineEditModuleKeyNew->setText("00000000");
+
     ui->lineEditModuleNumberNew->setText("0000");
     ui->lineEditModuleNumberPartyNew->setText("00");
     ui->lineEditModuleFirmwareVariantNew->setText("00");
@@ -35,7 +30,6 @@ CConfigurationModuleWidget::CConfigurationModuleWidget(QWidget* parent):
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(ui->checkBoxNewKey, &QCheckBox::clicked, this, &CConfigurationModuleWidget::newKeyStateChanged);
     connect(ui->toolButtonModificationAppend, &QToolButton::clicked, this, &CConfigurationModuleWidget::appendText);
     connect(ui->toolButtonCustomerAppend, &QToolButton::clicked, this, &CConfigurationModuleWidget::appendText);
     connect(ui->toolButtonRevisionAppend, &QToolButton::clicked, this, &CConfigurationModuleWidget::appendText);
@@ -69,26 +63,6 @@ int CConfigurationModuleWidget::moduleFirmwareVariant(type_t type) const
 QString CConfigurationModuleWidget::moduleFirmwareDate(CConfigurationModuleWidget::type_t type) const
 {
     return (type == CURRENT)?ui->lineEditModuleFirmwareDateCurrent->text():ui->lineEditModuleFirmwareDateNew->text();
-}
-//-------------------------------------------------------------
-QByteArray CConfigurationModuleWidget::moduleKeyCurrent() const
-{
-    QString hex = ui->lineEditModuleKeyCurrent->text();
-    hex.remove(" ");
-    return QByteArray::fromHex(hex.toUtf8());
-}
-//---------------------------------------------------------
-QByteArray CConfigurationModuleWidget::moduleKeyNew() const
-{
-    QString hex;
-
-    if(ui->checkBoxNewKey->isChecked())
-        hex = ui->lineEditModuleKeyNew->text();
-    else
-        hex = "00 00 00 00";
-
-    hex.remove(" ");
-    return QByteArray::fromHex(hex.toUtf8());
 }
 //------------------------------------------------------------
 QString CConfigurationModuleWidget::moduleModification() const
@@ -190,17 +164,10 @@ void CConfigurationModuleWidget::appendText()
 void CConfigurationModuleWidget::showEvent(QShowEvent* event)
 {
     QDialog::showEvent(event);
-    ui->checkBoxNewKey->setChecked(false);
-    ui->lineEditModuleKeyNew->setEnabled(false);
 }
 //--------------------------------------
 void CConfigurationModuleWidget::close()
 {
     if(!isHidden())
         hide();
-}
-//-------------------------------------------------------------
-void CConfigurationModuleWidget::newKeyStateChanged(bool state)
-{
-    ui->lineEditModuleKeyNew->setEnabled(state);
 }
