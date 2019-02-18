@@ -103,8 +103,6 @@ MainWindow::MainWindow(QWidget* parent):
 
     loadSettings();
     refreshSerialPort();
-
-    addrChanged(ui->sbDeviceAddress->value());
     useDeviceAddress(false);
 
     ui->gboxAutorepeatInputMIK->setEnabled(true);
@@ -684,8 +682,6 @@ void MainWindow::loadSettings()
 
         ui->cbBaudrate->setCurrentIndex(index);
     }
-
-    addrChanged(ui->sbDeviceAddress->value());
 }
 //-----------------------------
 void MainWindow::saveSettings()
@@ -856,11 +852,11 @@ void MainWindow::configurationWindow()
 
     if(key == key_empty || m_conf_widget->moduleKeyCurrent().isEmpty())
     {
-        QMessageBox::warning(this, tr("Запись серийного в модуль"), tr("Не валидный ключ разблокировки записи!"));
+        QMessageBox::warning(this, tr("Запись серийного номера в модуль"), tr("Не валидный ключ разблокировки записи!"));
         return;
     }
 
-    if(m_db_controller->findEqualData(sn))
+    if(m_db_controller->findEqualData(sn.dev_num))
     {
         QMessageBox::warning(this, tr("Запись серийного номера БД"), tr("Такой серийный номер уже существует!"));
         return;
@@ -1158,9 +1154,9 @@ void MainWindow::processCmdSend(const QString &cmd)
         }
         else // данных в базе нет
         {
-            m_conf_widget->setModuleNumber(m_conf_widget->moduleNumber(CConfigurationModuleWidget::CURRENT) + 1, CConfigurationModuleWidget::NEW);
-            m_conf_widget->setModuleNumberParty(m_conf_widget->moduleNumberParty(CConfigurationModuleWidget::CURRENT), CConfigurationModuleWidget::NEW);
-            m_conf_widget->setModuleFirmwareVariant(m_conf_widget->moduleFirmwareVariant(CConfigurationModuleWidget::CURRENT), CConfigurationModuleWidget::NEW);
+            m_conf_widget->setModuleNumber(1, CConfigurationModuleWidget::NEW);
+            m_conf_widget->setModuleNumberParty(1, CConfigurationModuleWidget::NEW);
+            m_conf_widget->setModuleFirmwareVariant(0, CConfigurationModuleWidget::NEW);
         }
 
         m_conf_widget->show();
@@ -1387,6 +1383,8 @@ void MainWindow::addrChanged(int addr)
     quint8 out_count = 0;
 
     ui->groupBoxDSDIN->hide();
+    ui->pushButtonInputSetWrite->hide();
+    ui->pushButtonDSDINRead->hide();
 
     if(addr == MDVV_01)
     {
@@ -1434,6 +1432,7 @@ void MainWindow::addrChanged(int addr)
         ui->groupBoxOutputs->setEnabled(true);
         ui->groupBoxDSDIN->show();
         ui->pushButtonDSDINRead->show();
+        ui->pushButtonInputSetWrite->show();
 
         m_set_intput_widget->setInputCount(0);
 
@@ -1483,7 +1482,7 @@ void MainWindow::addrChanged(int addr)
         ui->groupBoxMDVV_1_11_12->hide();
         ui->groupBoxInputs->setEnabled(true);
         ui->groupBoxOutputs->setEnabled(true);
-        ui->pushButtonDSDINRead->hide();
+        ui->pushButtonInputSetWrite->show();
 
         m_set_intput_widget->setInputCount(1);
 

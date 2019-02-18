@@ -41,7 +41,7 @@
             serial_num_list_t serialNumberListRead();
             bool serialNumberWrite(const serial_num_t& sn);
             data_list_t dataListFromTable(const QString &table);
-            bool findEqualData(const serial_num_t& sn);
+            bool findEqualData(int num);
             const QString &lastError() const;
 
         public slots:

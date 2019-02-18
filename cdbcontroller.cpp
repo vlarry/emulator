@@ -212,16 +212,15 @@ void CDbController::createDb()
         return;
     }
 }
-//----------------------------------------------------------------------
-bool CDbController::findEqualData(const CDbController::serial_num_t& sn)
+//----------------------------------------
+bool CDbController::findEqualData(int num)
 {
     if(!m_db || !m_db->isOpen())
         return false;
 
     QSqlQuery query(*m_db);
 
-    if(query.exec(QString("SELECT * FROM serial WHERE dev_num = %1 AND dev_party = %2 AND dev_firmware_var = %3;").arg(sn.dev_num).arg(sn.dev_party).
-                                                                                                                   arg(sn.dev_firmware_var)))
+    if(query.exec(QString("SELECT * FROM serial WHERE dev_num = %1;").arg(num)))
     {
         return query.next();
     }
