@@ -141,13 +141,22 @@ void CConfigurationModuleWidget::setModuleFirmwareDate(const QString& date, type
 void CConfigurationModuleWidget::initList(const QStringList& modification, const QStringList& revision, const QStringList& customer)
 {
     if(!modification.isEmpty())
+    {
+        ui->comboBoxModuleModificationNew->clear();
         ui->comboBoxModuleModificationNew->insertItems(0, modification);
+    }
 
     if(!revision.isEmpty())
+    {
+        ui->comboBoxModuleRevisionNew->clear();
         ui->comboBoxModuleRevisionNew->insertItems(0, revision);
+    }
 
     if(!customer.isEmpty())
+    {
+        ui->comboBoxModuleCustomerNew->clear();
         ui->comboBoxModuleCustomerNew->insertItems(0, customer);
+    }
 }
 //-------------------------------------------
 void CConfigurationModuleWidget::appendText()

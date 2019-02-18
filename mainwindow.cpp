@@ -166,12 +166,12 @@ void MainWindow::initConnect()
     connect(m_conf_widget, &CConfigurationModuleWidget::accepted, this, &MainWindow::configurationWindow);
     connect(ui->checkBoxUseDeviceAddress, &QCheckBox::clicked, this, &MainWindow::useDeviceAddress);
 
+    connect(m_set_intput_widget, &CSetInput::setWrite, this, &MainWindow::processDiscretInputSet);
     connect(ui->pushButtonIDRead, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
     connect(ui->pushButtonErrorRead, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
     connect(ui->pushButtonSerialNumberWrite, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
     connect(ui->pushButtonInputSetWrite, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
     connect(ui->pushButtonDSDINRead, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
-    connect(m_set_intput_widget, &CSetInput::setWrite, this, &MainWindow::processDiscretInputSet);
     connect(ui->pushButtonLedStateWrite, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
 }
 //-------------------------------
@@ -1202,6 +1202,7 @@ void MainWindow::deleteDataFromDb(CDbJournal::DataBase db_type, int id)
         table_name = "customer";
 
     m_db_controller->deleteDataFromTable(table_name, id);
+    initDbController(m_db_controller);
 }
 //----------------------------------
 void MainWindow::refreshSerialPort()
