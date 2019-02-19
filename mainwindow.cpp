@@ -659,6 +659,8 @@ void MainWindow::loadSettings()
         restoreGeometry(m_settings->value("main_window").toByteArray());
     m_settings->endGroup();
 
+    addrChanged(ui->sbDeviceAddress->value());
+
     if(!baudrate.isEmpty())
     {
         int index = ui->cbBaudrate->findText(baudrate);
