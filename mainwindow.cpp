@@ -1170,7 +1170,12 @@ void MainWindow::processCmdSend(const QString &cmd)
 
         if(sn.dev_code != -1) // если данные в базе присутствуют
         {
-            m_conf_widget->setModuleNumber(sn.dev_num + 1, CConfigurationModuleWidget::NEW);
+            int num = sn.dev_num + 1;
+
+            if(num == 10000) // дошли до максимального порядкового номера (9999)
+                num = 1; // начинаем с начала
+
+            m_conf_widget->setModuleNumber(num, CConfigurationModuleWidget::NEW);
             m_conf_widget->setModuleNumberParty(sn.dev_party, CConfigurationModuleWidget::NEW);
             m_conf_widget->setModuleFirmwareVariant(sn.dev_firmware_var, CConfigurationModuleWidget::NEW);
         }
