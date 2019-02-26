@@ -1087,6 +1087,24 @@ void MainWindow::ctrlInterface(bool state)
         unblockSend();
 
         fileAinOpen();
+
+        if(ui->sbDeviceAddress->value() == MIK_01)
+        {
+            send("0x04");
+
+            if(ui->cboxRepeatInputsMIK->isChecked())
+            {
+                autoRepeatTimInputs();
+            }
+        }
+        else
+        {
+            if(ui->cboxRepeatInputs->isChecked())
+                autoRepeatTimInputs();
+
+            if(ui->cboxRepeatAIN->isChecked())
+                autoRepeatTimAIN();
+        }
     }
     else
     {
@@ -1348,24 +1366,6 @@ void MainWindow::readData()
             {
                 ctrlInterface(true);
                 m_is_connected.currentAddress = 0;
-
-                if(ui->sbDeviceAddress->value() == MIK_01)
-                {
-                    send("0x04");
-
-                    if(ui->cboxRepeatInputsMIK->isChecked())
-                    {
-                        autoRepeatTimInputs();
-                    }
-                }
-                else
-                {
-                    if(ui->cboxRepeatInputs->isChecked())
-                        autoRepeatTimInputs();
-
-                    if(ui->cboxRepeatAIN->isChecked())
-                        autoRepeatTimAIN();
-                }
             }
             else
                 autoAddressSelect(); // иначе перебираем дальше
