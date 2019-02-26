@@ -110,6 +110,12 @@ MainWindow::MainWindow(QWidget* parent):
 //-----------------------
 MainWindow::~MainWindow()
 {
+    if(m_port)
+    {
+        ctrlInterface(false);
+        delete m_port;
+    }
+
     delete ui;
 }
 //----------------------------
