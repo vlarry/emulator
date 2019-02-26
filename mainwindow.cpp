@@ -1115,9 +1115,6 @@ void MainWindow::ctrlInterface(bool state)
         ui->gboxAutorepeatInput->setDisabled(true);
         ui->twPeriphery->setDisabled(true);
 
-        ui->cboxRepeatInputs->setChecked(false);
-        ui->cboxRepeatAIN->setChecked(false);
-
         m_timerAutoRepeatInput->stop();
         m_timerAutoRepeatAIN->stop();
 
