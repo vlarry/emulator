@@ -141,6 +141,9 @@
             void processCmdSend(const QString &cmd);
             void processDiscretInputSet();
             void deleteDataFromDb(CDbJournal::DataBase db_type, int id);
+            void clearMessageWidget();
+            void autoRepeatEnabled();
+            void autoRepeatDisabled();
     };
     //--------------
     #define EMULATOR // для эмуляции на PC (Rx замкнут на Tx)

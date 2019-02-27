@@ -285,6 +285,7 @@ void MainWindow::setIO(const QVector<CIODevice*>& io_dev, bool type)
 void MainWindow::showMessage(const QString& message)
 {
     m_lblMessage->setText(message);
+    QTimer::singleShot(3000, this, &MainWindow::clearMessageWidget);
 }
 //--------------------------------------------------------------
 quint8 MainWindow::CRC8(const QByteArray& ba, const quint8 size)
@@ -893,6 +894,8 @@ void MainWindow::configurationWindow()
     QByteArray sn_data = formatSerialNumber();
 
     send("0x3A", sn_data);
+    Sleep(100);
+    autoRepeatEnabled(); // включаем автоповтор, если он был подключен
 }
 //---------------------------------
 void MainWindow::discretInputHelp()
@@ -1207,10 +1210,12 @@ void MainWindow::processCmdSend(const QString &cmd)
             m_conf_widget->setModuleFirmwareVariant(0, CConfigurationModuleWidget::NEW);
         }
 
+        autoRepeatDisabled();
         m_conf_widget->show();
     }
     else if(cmd == "0x3E" || cmd == "0x3F") // если команда "Настройки фильтра" или "Настройка входов", то открываем дополнительное окно (команду не отправляем)
     {
+        autoRepeatDisabled();
         m_set_intput_widget->show();
     }
     else
@@ -1230,6 +1235,9 @@ void MainWindow::processDiscretInputSet()
 
     if(!setIndividual.isEmpty())
         send("0x3F", setIndividual);
+
+    Sleep(100);
+    autoRepeatEnabled();
 }
 //---------------------------------------------------------------------
 void MainWindow::deleteDataFromDb(CDbJournal::DataBase db_type, int id)
@@ -1247,6 +1255,26 @@ void MainWindow::deleteDataFromDb(CDbJournal::DataBase db_type, int id)
 
     m_db_controller->deleteDataFromTable(table_name, id);
     initDbController(m_db_controller);
+}
+//-----------------------------------
+void MainWindow::clearMessageWidget()
+{
+    m_lblMessage->clear();
+}
+//----------------------------------
+void MainWindow::autoRepeatEnabled()
+{
+    if(ui->cboxRepeatAIN->isChecked() && !m_timerAutoRepeatAIN->isActive())
+        autoRepeatAIN(true);
+
+    if((ui->cboxRepeatInputs->isChecked() || ui->cboxRepeatInputsMIK->isChecked()) && !m_timerAutoRepeatInput->isActive())
+        autoRepeatInputs(true);
+}
+//-----------------------------------
+void MainWindow::autoRepeatDisabled()
+{
+    autoRepeatAIN(false);
+    autoRepeatInputs(false);
 }
 //----------------------------------
 void MainWindow::refreshSerialPort()
