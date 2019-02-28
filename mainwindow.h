@@ -70,7 +70,6 @@
             QTimer*                     m_timerRefreshPort;
             QFile*                      m_file_ain;
             bool                        m_block_send;
-            QString                     m_port_name; // имя порта по умолчанию
             QCommand*                   m_command;
             CConfigurationModuleWidget* m_conf_widget;
             CSetInput*                  m_set_intput_widget;

@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget* parent):
     m_is_connected( { false, 0 } )
 {
     ui->setupUi(this);
-
+    qInfo() << tr("Запуск программы...");
     QPalette p = ui->pteConsole->palette();
 
     p.setColor(QPalette::Base, QColor(Qt::black));
@@ -110,13 +110,18 @@ MainWindow::MainWindow(QWidget* parent):
 //-----------------------
 MainWindow::~MainWindow()
 {
+    qInfo() << tr("Завершение программы...");
     if(m_port)
     {
-        ctrlInterface(false);
+        if(m_port->isOpen())
+            m_port->close();
+
         delete m_port;
+        m_port = Q_NULLPTR;
     }
 
     delete ui;
+    ui = Q_NULLPTR;
 }
 //----------------------------
 void MainWindow::initConnect()
@@ -642,7 +647,6 @@ void MainWindow::loadSettings()
     QString baudrate;
 
     m_settings->beginGroup("COM");
-        m_port_name = m_settings->value(tr("port"), "").toString();
         baudrate    = m_settings->value(tr("baudrate"), 115200).toString();
     m_settings->endGroup();
 
@@ -1090,7 +1094,9 @@ void MainWindow::ctrlInterface(bool state)
         ui->gboxAutorepeatInput->setEnabled(true);
         ui->twPeriphery->setEnabled(true);
 
-        showMessage(ui->cbPortNames->currentText() + " " + tr("открыт"));
+        QString text = ui->cbPortNames->currentText() + " " + tr("открыт");
+        showMessage(text);
+        qInfo() << text;
 
         m_queue_request.clear();
         unblockSend();
@@ -1117,7 +1123,6 @@ void MainWindow::ctrlInterface(bool state)
     }
     else
     {
-        m_port->close();
         ui->pbCtrlPort->setText(tr("Открыть"));
 
         ui->groupDevices->setDisabled(true);
@@ -1129,7 +1134,12 @@ void MainWindow::ctrlInterface(bool state)
 
         m_file_ain->close();
 
-        showMessage(ui->cbPortNames->currentText() + " " + tr("закрыт"));
+        if(ui->cbPortNames->count() > 0)
+        {
+            QString text = ui->cbPortNames->currentText() + " " + tr("закрыт");
+            showMessage(text);
+            qInfo() << text;
+        }
 
         if(!m_command->isHidden())
             m_command->hide();
@@ -1138,6 +1148,9 @@ void MainWindow::ctrlInterface(bool state)
 
         m_queue_request.clear();
         unblockSend();
+
+        if(m_port->isOpen())
+            m_port->close();
     }
 
     ui->groupBoxCmdFavorit->setEnabled(true);
@@ -1279,53 +1292,44 @@ void MainWindow::autoRepeatDisabled()
 //----------------------------------
 void MainWindow::refreshSerialPort()
 {
-    quint8 count = 0;
     QStringList port_list;
 
     foreach(const QSerialPortInfo& port_info, QSerialPortInfo::availablePorts())
     {
         port_list << port_info.portName();
-        count++;
     }
 
-    if(count == 0)
+    if(port_list.isEmpty())
     {
         ui->cbPortNames->clear();
         ui->pbCtrlPort->setDisabled(true);
 
         if(m_port->isOpen())
         {
+            m_port->close();
             ctrlSerialPort(false);
         }
     }
-    else if(count != 0 && ui->cbPortNames->count() == 0)
+    else if(!port_list.isEmpty())
     {
-        int index = -1;
+        QString port_cur = ui->cbPortNames->currentText();
 
-        if(!port_list.isEmpty())
-            ui->cbPortNames->addItems(port_list);
-
-        if(m_port_name.isEmpty())
-        {
-            index = ui->cbPortNames->findText(m_port_name);
-
-            if(index == -1)
-            {
-                index = 0;
-            }
-        }
-        else
-            index = 0;
-
-        ui->cbPortNames->setCurrentIndex(index);
-        ui->pbCtrlPort->setEnabled(true);
-
-        m_port_name = ui->cbPortNames->currentText(); // сохраняем порт
-    }
-    else if(count != 0 && ui->cbPortNames->count() != 0)
-    {
         ui->cbPortNames->clear();
         ui->cbPortNames->addItems(port_list);
+
+        ui->pbCtrlPort->setEnabled(true);
+
+        if(!port_cur.isEmpty())
+        {
+            int index = ui->cbPortNames->findText(port_cur);
+
+            if(index != -1)
+            {
+                ui->cbPortNames->setCurrentIndex(index);
+            }
+            else
+                ui->cbPortNames->setCurrentIndex(0);
+        }
     }
 
     m_timerRefreshPort->start(500); // опрос наличия подлкюченных последовательных портов каждые 500мс
@@ -1339,7 +1343,12 @@ void MainWindow::ctrlSerialPort(bool state)
 
         if(!m_port->open(QSerialPort::ReadOnly | QSerialPort::WriteOnly))
         {
-            QMessageBox::critical(this, tr("Открытие последовательного порта"), m_port->errorString());
+            ui->pbCtrlPort->setChecked(false);
+
+            QString error = m_port->errorString();
+            QMessageBox::critical(this, tr("Открытие последовательного порта"), error);
+            qCritical() << tr("Открытие последовательного порта: %1").arg(error);
+
             return;
         }
 
