@@ -11,17 +11,14 @@ CConfigurationModuleWidget::CConfigurationModuleWidget(QWidget* parent):
     ui->lineEditModuleNumberPartyCurrent->setValidator(new QIntValidator(0, 99));
     ui->lineEditModuleFirmwareVariantCurrent->setValidator(new QIntValidator(0, 99));
 
-
     ui->lineEditModuleNumberCurrent->setText("0000");
     ui->lineEditModuleNumberPartyCurrent->setText("00");
     ui->lineEditModuleFirmwareVariantCurrent->setText("00");
     ui->lineEditModuleFirmwareDateCurrent->setText(QDate::currentDate().toString("dd.MM.yyyy"));
 
-
     ui->lineEditModuleNumberNew->setValidator(new QIntValidator(0, 9999));
     ui->lineEditModuleNumberPartyNew->setValidator(new QIntValidator(0, 99));
     ui->lineEditModuleFirmwareVariantNew->setValidator(new QIntValidator(0, 99));
-
 
     ui->lineEditModuleNumberNew->setText("0000");
     ui->lineEditModuleNumberPartyNew->setText("00");

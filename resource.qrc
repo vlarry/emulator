@@ -39,4 +39,7 @@
         <file>resource/images/key_reset.png</file>
         <file>resource/images/interfacemik.png</file>
     </qresource>
+    <qresource prefix="/translations">
+        <file alias="russian">resource/translations/qt_ru.qm</file>
+    </qresource>
 </RCC>
