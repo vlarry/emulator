@@ -164,9 +164,11 @@ void MainWindow::initConnect()
     connect(ui->actionDbCustomer, &QAction::triggered, this, &MainWindow::openDbJournal);
     connect(m_conf_widget, &CConfigurationModuleWidget::newValueAppend, this, &MainWindow::writeDataToDb);
     connect(m_conf_widget, &CConfigurationModuleWidget::accepted, this, &MainWindow::configurationWindow);
+    connect(m_conf_widget, &CConfigurationModuleWidget::rejected, this, &MainWindow::autoRepeatEnabled);
     connect(ui->checkBoxUseDeviceAddress, &QCheckBox::clicked, this, &MainWindow::useDeviceAddress);
 
-    connect(m_set_intput_widget, &CSetInput::setWrite, this, &MainWindow::processDiscretInputSet);
+    connect(m_set_intput_widget, &CSetInput::accepted, this, &MainWindow::processDiscretInputSet);
+    connect(m_set_intput_widget, &CSetInput::rejected, this, &MainWindow::autoRepeatEnabled);
     connect(ui->pushButtonIDRead, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
     connect(ui->pushButtonErrorRead, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
     connect(ui->pushButtonSerialNumberWrite, &QPushButton::clicked, this, &MainWindow::processCmdFavorite);
@@ -892,6 +894,7 @@ void MainWindow::configurationWindow()
     if(m_db_controller->findEqualData(sn.dev_num))
     {
         QMessageBox::warning(this, tr("Запись серийного номера БД"), tr("Такой серийный номер уже существует!"));
+        autoRepeatEnabled(); // включаем автоповтор, если он был подключен
         return;
     }
 
@@ -1277,6 +1280,7 @@ void MainWindow::clearMessageWidget()
 //----------------------------------
 void MainWindow::autoRepeatEnabled()
 {
+    qDebug() << "enabled->" << sender();
     if(ui->cboxRepeatAIN->isChecked() && !m_timerAutoRepeatAIN->isActive())
         autoRepeatAIN(true);
 
@@ -1286,6 +1290,7 @@ void MainWindow::autoRepeatEnabled()
 //-----------------------------------
 void MainWindow::autoRepeatDisabled()
 {
+    qDebug() << "disabled->"  << sender();
     autoRepeatAIN(false);
     autoRepeatInputs(false);
 }

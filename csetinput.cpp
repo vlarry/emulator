@@ -2,7 +2,7 @@
 #include "ui_setinput.h"
 //------------------------------------
 CSetInput::CSetInput(QWidget* parent):
-    QWidget(parent),
+    QDialog(parent),
     ui(new Ui::CSetInput)
 {
     ui->setupUi(this);
@@ -22,12 +22,16 @@ CSetInput::CSetInput(QWidget* parent):
     m_inputs.append(ui->checkBoxInput_12);
 
     ui->comboBoxInputType->addItems(QStringList() << tr("Аналоговый")  << tr("Цифровой"));
-    setWindowFlags((windowFlags() & ~Qt::WindowContextHelpButtonHint) | Qt::Window);
+
+    setWindowFlags(windowFlags() & (Qt::Dialog | Qt::WindowCloseButtonHint | Qt::MSWindowsFixedSizeDialogHint));
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    setFixedSize(size());
 
     connect(ui->comboBoxInputType, &QComboBox::currentTextChanged, this, &CSetInput::typeInput);
-    connect(ui->pushButtonWrite, &QPushButton::clicked, this, &CSetInput::setWrite);
-    connect(this, &CSetInput::setWrite, this, &CSetInput::hide);
-    connect(ui->pushButtonCancel, &QPushButton::clicked, this, &CSetInput::hide);
+    connect(ui->pushButtonWrite, &QPushButton::clicked, this, &CSetInput::accepted);
+    connect(ui->pushButtonCancel, &QPushButton::clicked, this, &CSetInput::rejected);
+    connect(this, &CSetInput::accepted, this, &CSetInput::hide);
+    connect(this, &CSetInput::rejected, this, &CSetInput::hide);
     connect(ui->groupBoxInputSetIndividual, &QGroupBox::clicked, this, &CSetInput::groupEnabled);
     connect(ui->groupBoxInputSetGeneral, &QGroupBox::clicked, this, &CSetInput::groupEnabled);
 }

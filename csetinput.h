@@ -1,15 +1,16 @@
 #ifndef CSETINPUT_H
     #define CSETINPUT_H
     //----------------
-    #include <QWidget>
+    #include <QDialog>
     #include <QCheckBox>
+    #include <QShowEvent>
     //----------
     namespace Ui
     {
         class CSetInput;
     }
     //-----------------------------
-    class CSetInput: public QWidget
+    class CSetInput: public QDialog
     {
         Q_OBJECT
 
@@ -25,9 +26,6 @@
             void typeInput(const QString& text);
             void groupEnabled(bool state);
             void setInputCount(int addr);
-
-        signals:
-            void setWrite();
 
         private:
             Ui::CSetInput*      ui;

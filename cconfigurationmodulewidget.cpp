@@ -25,11 +25,17 @@ CConfigurationModuleWidget::CConfigurationModuleWidget(QWidget* parent):
     ui->lineEditModuleFirmwareVariantNew->setText("00");
     ui->lineEditModuleFirmwareDateNew->setText(QDate::currentDate().toString("dd.MM.yyyy"));
 
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() & (Qt::Dialog | Qt::WindowCloseButtonHint | Qt::MSWindowsFixedSizeDialogHint));
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    setFixedSize(size());
 
     connect(ui->toolButtonModificationAppend, &QToolButton::clicked, this, &CConfigurationModuleWidget::appendText);
     connect(ui->toolButtonCustomerAppend, &QToolButton::clicked, this, &CConfigurationModuleWidget::appendText);
     connect(ui->toolButtonRevisionAppend, &QToolButton::clicked, this, &CConfigurationModuleWidget::appendText);
+    connect(ui->pushButtonWrite, &QPushButton::clicked, this, &CConfigurationModuleWidget::accepted);
+    connect(ui->pushButtonCancel, &QPushButton::clicked, this, &CConfigurationModuleWidget::rejected);
+    connect(this, &CConfigurationModuleWidget::accepted, this, &CConfigurationModuleWidget::hide);
+    connect(this, &CConfigurationModuleWidget::rejected, this, &CConfigurationModuleWidget::hide);
 }
 //-------------------------------------------------------
 CConfigurationModuleWidget::~CConfigurationModuleWidget()
