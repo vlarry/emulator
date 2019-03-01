@@ -663,8 +663,10 @@ void MainWindow::loadSettings()
 
     m_settings->beginGroup("INTERFACE");
         ui->cboxRepeatInputs->setChecked(m_settings->value("inputs", false).toBool());
+        ui->cboxRepeatInputsMIK->setChecked(m_settings->value("input_mik", false).toBool());
         ui->cboxRepeatAIN->setChecked(m_settings->value("ain", false).toBool());
         ui->sbRepeatInputs->setValue(m_settings->value("inputs_timer", 200).toInt());
+        ui->sbRepeatInputsMIK->setValue(m_settings->value("input_mik_timer", 200).toInt());
         ui->sbRepeatAIN->setValue(m_settings->value("ain_timer", 200).toInt());
     m_settings->endGroup();
 
@@ -707,8 +709,10 @@ void MainWindow::saveSettings()
 
     m_settings->beginGroup("INTERFACE");
         m_settings->setValue("inputs", ui->cboxRepeatInputs->isChecked());
+        m_settings->setValue("input_mik", ui->cboxRepeatInputsMIK->isChecked());
         m_settings->setValue("ain", ui->cboxRepeatAIN->isChecked());
         m_settings->setValue("inputs_timer", ui->sbRepeatInputs->value());
+        m_settings->setValue("input_mik_timer", ui->sbRepeatInputsMIK->value());
         m_settings->setValue("ain_timer", ui->sbRepeatAIN->value());
     m_settings->endGroup();
 
@@ -1109,20 +1113,9 @@ void MainWindow::ctrlInterface(bool state)
         if(ui->sbDeviceAddress->value() == MIK_01)
         {
             send("0x04");
-
-            if(ui->cboxRepeatInputsMIK->isChecked())
-            {
-                autoRepeatTimInputs();
-            }
         }
-        else
-        {
-            if(ui->cboxRepeatInputs->isChecked())
-                autoRepeatTimInputs();
 
-            if(ui->cboxRepeatAIN->isChecked())
-                autoRepeatTimAIN();
-        }
+        autoRepeatEnabled();
     }
     else
     {
@@ -1280,7 +1273,6 @@ void MainWindow::clearMessageWidget()
 //----------------------------------
 void MainWindow::autoRepeatEnabled()
 {
-    qDebug() << "enabled->" << sender();
     if(ui->cboxRepeatAIN->isChecked() && !m_timerAutoRepeatAIN->isActive())
         autoRepeatAIN(true);
 
@@ -1290,7 +1282,6 @@ void MainWindow::autoRepeatEnabled()
 //-----------------------------------
 void MainWindow::autoRepeatDisabled()
 {
-    qDebug() << "disabled->"  << sender();
     autoRepeatAIN(false);
     autoRepeatInputs(false);
 }
@@ -1644,6 +1635,9 @@ void MainWindow::autoRepeatInputs(bool state)
         if(ui->sbDeviceAddress->value() == MIK_01)
             time = ui->sbRepeatInputsMIK->value();
 
+        if(time < 20) // минимальная скорость опроса 20мс
+            time = 20;
+
         m_timerAutoRepeatInput->start(time);
     }
     else
@@ -1656,7 +1650,12 @@ void MainWindow::autoRepeatAIN(bool state)
 {
     if(state)
     {
-        m_timerAutoRepeatAIN->start(ui->sbRepeatAIN->value());
+        int time = ui->sbRepeatAIN->value();
+
+        if(time < 20)
+            time = 20;
+
+        m_timerAutoRepeatAIN->start(time);
     }
     else
     {
@@ -1671,14 +1670,28 @@ void MainWindow::autoRepeatTimInputs()
         send("0x00"); // чтение дискретных каналов входов
 
         if(ui->cboxRepeatInputs->isChecked())
-            m_timerAutoRepeatInput->start(ui->sbRepeatInputs->value());
+        {
+            int time = ui->sbRepeatInputs->value();
+
+            if(time < 20)
+                time = 20;
+
+            m_timerAutoRepeatInput->start();
+        }
     }
     else // устройство МИК-01
     {
         send("0x03"); // чтение регистра расширения дискретных каналов входов (клавиатура)
 
         if(ui->cboxRepeatInputsMIK->isChecked())
-            m_timerAutoRepeatInput->start(ui->sbRepeatInputsMIK->value());
+        {
+            int time = ui->sbRepeatInputsMIK->value();
+
+            if(time < 20)
+                time = 20;
+
+            m_timerAutoRepeatInput->start(time);
+        }
     }
 }
 //---------------------------------
@@ -1687,7 +1700,14 @@ void MainWindow::autoRepeatTimAIN()
     send("0x02");
 
     if(ui->cboxRepeatAIN->isChecked())
-        m_timerAutoRepeatAIN->start(ui->sbRepeatAIN->value());
+    {
+        int time = ui->sbRepeatAIN->value();
+
+        if(time < 20)
+            time = 20;
+
+        m_timerAutoRepeatAIN->start(time);
+    }
 }
 //---------------------------
 void MainWindow::timeoutTim()
